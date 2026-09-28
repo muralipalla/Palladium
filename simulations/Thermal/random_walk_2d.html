@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore unbiased and biased random walks on a two-dimensional square lattice.">
+  <title>Biased 2D Random Walk | Palladium</title>
+  <link rel="stylesheet" href="css/random_walk_2d.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="back-link" href="../../index.html#physics">&larr; Back to Palladium</a>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Thermal physics &middot; diffusion</p>
+      <h1 id="page-title">Biased 2D Random Walk</h1>
+      <p class="subtitle">
+        Follow one walker step by step, then compare it with a large ensemble. Change the four
+        directional weights to turn an ordinary diffusive walk into directed drift.
+      </p>
+    </section>
+  </header>
+
+  <main>
+    <section class="simulation-card" aria-label="Random-walk visualizations">
+      <div class="visual-grid">
+        <article class="visual-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">One realization</p>
+              <h2>Single walker path</h2>
+            </div>
+            <span class="panel-chip" id="singlePosition">(0, 0)</span>
+          </div>
+          <canvas id="pathCanvas" width="760" height="540" role="img"
+            aria-label="A single random walker at the origin on a square lattice."></canvas>
+          <p class="canvas-caption">The lattice viewport expands with the path. The amber arrow shows the expected drift direction.</p>
+        </article>
+
+        <article class="visual-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="panel-kicker">Many realizations</p>
+              <h2>Ensemble endpoints</h2>
+            </div>
+            <span class="panel-chip" id="walkerCountChip">1,000 walkers</span>
+          </div>
+          <canvas id="cloudCanvas" width="760" height="540" role="img"
+            aria-label="One thousand random-walker endpoints at the origin."></canvas>
+          <p class="canvas-caption">Dots are endpoints. The solid ring marks measured RMS distance; the dashed ring marks theory.</p>
+        </article>
+      </div>
+
+      <dl class="metrics" aria-label="Random-walk measurements">
+        <div class="metric">
+          <dt>Current step, N</dt>
+          <dd id="stepMetric">0 / 200</dd>
+        </div>
+        <div class="metric">
+          <dt>Ensemble mean</dt>
+          <dd id="meanMetric">(0.00, 0.00)</dd>
+        </div>
+        <div class="metric">
+          <dt>Measured r<sub>rms</sub></dt>
+          <dd id="rmsMetric">0.00 a</dd>
+        </div>
+        <div class="metric">
+          <dt>Theory r<sub>rms</sub></dt>
+          <dd id="theoryMetric">0.00 a</dd>
+        </div>
+        <div class="metric">
+          <dt>Expected mean</dt>
+          <dd id="expectedMetric">(0.00, 0.00)</dd>
+        </div>
+      </dl>
+
+      <p class="status-message" id="statusMessage" role="status" aria-live="polite">
+        Ready. All walkers begin at the origin.
+      </p>
+    </section>
+
+    <aside class="side-panel" aria-label="Simulation controls and explanation">
+      <section class="control-card">
+        <div class="card-heading">
+          <div>
+            <p class="panel-kicker">Experiment setup</p>
+            <h2>Controls</h2>
+          </div>
+          <button class="text-button" id="unbiasedButton" type="button">Set unbiased</button>
+        </div>
+
+        <div class="control-group">
+          <label for="stepsControl">Number of steps <output id="stepsValue">200</output></label>
+          <input id="stepsControl" type="range" min="10" max="1000" step="10" value="200">
+        </div>
+
+        <div class="control-group">
+          <label for="populationControl">Endpoint walkers <output id="populationValue">1,000</output></label>
+          <input id="populationControl" type="range" min="100" max="5000" step="100" value="1000">
+        </div>
+
+        <div class="control-group">
+          <label for="speedControl">Animation speed</label>
+          <select id="speedControl">
+            <option value="14000">Slow &middot; about 14 s</option>
+            <option value="7000" selected>Normal &middot; about 7 s</option>
+            <option value="2500">Fast &middot; about 2.5 s</option>
+          </select>
+        </div>
+
+        <div class="button-row" aria-label="Playback controls">
+          <button class="primary-button" id="playButton" type="button">Animate</button>
+          <button id="stepButton" type="button">One step</button>
+          <button id="resetButton" type="button">Reset</button>
+          <button id="newTrialButton" type="button">New trial</button>
+        </div>
+      </section>
+
+      <section class="control-card bias-card" aria-labelledby="bias-title">
+        <div class="card-heading">
+          <div>
+            <p class="panel-kicker">Directional probability weights</p>
+            <h2 id="bias-title">Bias the jumps</h2>
+          </div>
+          <span class="bias-badge" id="biasBadge">Unbiased</span>
+        </div>
+        <p class="hint">Weights are normalized automatically, so they do not need to add to 100.</p>
+
+        <div class="weight-control direction-positive-x">
+          <label for="weightPositiveX"><span>+x &middot; right</span><output id="weightPositiveXValue">25 &rarr; 25.0%</output></label>
+          <input id="weightPositiveX" data-direction="px" type="range" min="0" max="100" step="1" value="25">
+        </div>
+        <div class="weight-control direction-negative-x">
+          <label for="weightNegativeX"><span>&minus;x &middot; left</span><output id="weightNegativeXValue">25 &rarr; 25.0%</output></label>
+          <input id="weightNegativeX" data-direction="nx" type="range" min="0" max="100" step="1" value="25">
+        </div>
+        <div class="weight-control direction-positive-y">
+          <label for="weightPositiveY"><span>+y &middot; up</span><output id="weightPositiveYValue">25 &rarr; 25.0%</output></label>
+          <input id="weightPositiveY" data-direction="py" type="range" min="0" max="100" step="1" value="25">
+        </div>
+        <div class="weight-control direction-negative-y">
+          <label for="weightNegativeY"><span>&minus;y &middot; down</span><output id="weightNegativeYValue">25 &rarr; 25.0%</output></label>
+          <input id="weightNegativeY" data-direction="ny" type="range" min="0" max="100" step="1" value="25">
+        </div>
+
+        <div class="bias-summary">
+          <div class="bias-vector" aria-hidden="true">
+            <span class="axis-x"></span>
+            <span class="axis-y"></span>
+            <span class="bias-arrow" id="biasArrow"></span>
+            <span class="origin-dot"></span>
+          </div>
+          <div>
+            <span>Mean step vector</span>
+            <strong id="driftVector">&mu; = (0.000, 0.000)</strong>
+            <small id="driftMagnitude">Drift magnitude: 0.000 a/step</small>
+          </div>
+        </div>
+
+        <div class="preset-row" aria-label="Bias presets">
+          <button type="button" data-preset="right">Drift +x</button>
+          <button type="button" data-preset="up">Drift +y</button>
+          <button type="button" data-preset="diagonal">Diagonal</button>
+        </div>
+      </section>
+
+      <section class="note-card">
+        <p class="panel-kicker">What to notice</p>
+        <h2>Diffusion plus drift</h2>
+        <p>
+          Equal directional probabilities give no preferred direction and
+          <span class="formula">r<sub>rms</sub> = &radic;N</span>. A bias moves the centre of the cloud by
+          <span class="formula">N&mu;</span> while random fluctuations continue to broaden it.
+        </p>
+        <div class="equation" aria-label="Theoretical root mean square distance">
+          r<sub>rms</sub> = &radic;<span class="radicand">N + N(N &minus; 1)|&mu;|<sup>2</sup></span>
+        </div>
+        <p class="note-foot">Each jump is exactly one lattice spacing, a, along one of the four axes.</p>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    Palladium &middot; Interactive simulations and learning tools
+  </footer>
+
+  <script type="module" src="js/random_walk_2d.mjs"></script>
+</body>
+</html>
