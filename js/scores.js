@@ -8,7 +8,8 @@
   const body = document.getElementById("scoresBody");
   const refresh = document.getElementById("refreshScoresButton");
   const labels = {
-    "general-chemistry-v1": "Custom Chemistry Quiz", "ionic-formula-v1": "Ionic Formula Quiz",
+    "general-chemistry-v1": "Custom Chemistry Quiz", "physics-daily-practice-v1": "Physics Daily Practice Quiz",
+    "ionic-formula-v1": "Ionic Formula Quiz",
     "multiplication-practice-v1": "Multiplication Practice", "oxidation-numbers-v1": "Oxidation Numbers",
     "trig-angles-v1": "Trigonometric Angles", "units-and-dimensions-v1": "Units and Dimensions",
     "vector-addition-v1": "Vector Addition", "vector-subtraction-v1": "Vector Subtraction",

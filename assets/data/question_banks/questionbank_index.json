@@ -10,6 +10,14 @@
       "format": "latex",
       "file": "../assets/data/question_banks/chapter1.json",
       "description": "Mole concept, empirical formula, limiting reagent, POAC, equivalents, concentration terms, electrolysis, redox, n-factor, and titrations."
+    },
+    {
+      "id": "physics-motion",
+      "title": "Motion: Distance, Displacement, Speed and Velocity",
+      "subject": "Physics",
+      "format": "latex",
+      "file": "../assets/data/question_banks/physics_motion.json",
+      "description": "Introductory questions on distance, displacement, average speed and average velocity."
     }
   ]
 }

@@ -24,6 +24,34 @@
   </script>
 
   <style>
+    .physics-review {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .physics-review h3 {
+      margin: 0;
+    }
+
+    .physics-review details {
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #f8fafc;
+    }
+
+    .physics-review summary {
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .physics-review p {
+      margin: 10px 0 0;
+      line-height: 1.5;
+    }
+
     .quiz-options-panel {
       background: #f8fafc;
       border: 2px solid #cbd5e1;
@@ -322,13 +350,13 @@
   <div class="container">
     <a class="back-link" href="../index.html">← Back to Palladium</a>
 
-    <h1>General Chemistry Quiz</h1>
-    <div class="subtitle">
+    <h1 id="quizTitle">General Chemistry Quiz</h1>
+    <div class="subtitle" id="quizSubtitle">
       LaTeX question bank &nbsp; | &nbsp; Topic-wise selection &nbsp; | &nbsp; One question at a time
     </div>
 
     <div id="setupArea">
-      <div class="setup-note">
+      <div class="setup-note" id="setupNote">
         Select the number of questions from each topic. The answer is not checked until the student clicks
         <strong>Check Answer</strong>.
       </div>
@@ -7650,6 +7678,16 @@
 
     const LOCAL_MATHJAX = "../vendor/mathjax/tex-mml-chtml.js";
     const CDN_MATHJAX = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+    const isPhysicsQuiz = new URLSearchParams(window.location.search).get("subject")?.toLowerCase() === "physics";
+    const quizSubject = isPhysicsQuiz ? "Physics" : "Chemistry";
+
+    if (isPhysicsQuiz) {
+      document.title = "Physics Daily Practice Quiz | Palladium";
+      document.getElementById("quizTitle").textContent = "Physics Daily Practice Quiz";
+      document.getElementById("quizSubtitle").textContent = "Choose topics and the number of questions for your practice.";
+      document.getElementById("setupNote").textContent = "Up to 10 questions are selected for you. Change the number beside each topic to choose what to practise. Check Answer shows an explanation.";
+      document.getElementById("toolsToggleBtn").style.display = "none";
+    }
 
     const SHOW_CHEAT_WARNING_TO_STUDENT = false;
     const CHEAT_COOLDOWN = 1500;
@@ -7786,7 +7824,12 @@
       setStatus("loadStatus", "Loading question banks...");
 
       try {
-        bankIndex = await loadJson("../assets/data/question_banks/questionbank_index.json");
+        const index = await loadJson("../assets/data/question_banks/questionbank_index.json");
+        bankIndex = {
+          ...index,
+          banks: index.banks.filter(bank => bank.subject === quizSubject)
+        };
+        if (!bankIndex.banks.length) throw new Error("No question banks found for " + quizSubject);
 
         const loaded = await Promise.all(bankIndex.banks.map(async bank => {
           const bankData = await loadJson(bank.file);
@@ -7801,6 +7844,17 @@
         allQuestions = loaded.flat();
         setStatus("loadStatus", "Question banks loaded from JSON files.", "ok");
       } catch (error) {
+        if (isPhysicsQuiz) {
+          console.error("Could not load the Physics question bank.", error);
+          bankIndex = { banks: [] };
+          allQuestions = [];
+          setStatus("loadStatus", "Could not load the Physics question bank. Please reload the banks or refresh the page.", "error");
+          buildTopicGroups();
+          renderTopicList();
+          updateSummary();
+          return;
+        }
+
         bankIndex = EMBEDDED_INDEX;
 
         const loaded = bankIndex.banks.map(bank => {
@@ -7823,6 +7877,7 @@
 
       buildTopicGroups();
       renderTopicList();
+      if (isPhysicsQuiz) setCounts("daily");
       updateSummary();
     }
 
@@ -7887,6 +7942,10 @@
 
       document.querySelectorAll(".topic-count").forEach(input => {
         input.addEventListener("input", updateSelectedCount);
+        input.addEventListener("change", () => {
+          input.value = questionCountFor(input);
+          updateSelectedCount();
+        });
       });
 
       updateSelectedCount();
@@ -7899,14 +7958,40 @@
       updateSelectedCount();
     }
 
+    function questionCountFor(input) {
+      const count = Number(input.value);
+      if (!Number.isFinite(count)) return 0;
+      return Math.min(Number(input.max), Math.max(0, Math.floor(count)));
+    }
+
     function updateSelectedCount() {
       const total = [...document.querySelectorAll(".topic-count")]
-        .reduce((sum, input) => sum + Number(input.value || 0), 0);
+        .reduce((sum, input) => sum + questionCountFor(input), 0);
       document.getElementById("selectedCount").textContent = total;
     }
 
     function setCounts(mode) {
-      document.querySelectorAll(".topic-count").forEach(input => {
+      const inputs = [...document.querySelectorAll(".topic-count")];
+      if (mode === "daily") {
+        inputs.forEach(input => { input.value = 0; });
+        let remaining = 10;
+        while (remaining > 0) {
+          let added = false;
+          for (const input of inputs) {
+            if (remaining === 0) break;
+            if (questionCountFor(input) < Number(input.max)) {
+              input.value = questionCountFor(input) + 1;
+              remaining--;
+              added = true;
+            }
+          }
+          if (!added) break;
+        }
+        updateSelectedCount();
+        return;
+      }
+
+      inputs.forEach(input => {
         const max = Number(input.max);
         if (mode === "five") input.value = Math.min(5, max);
         if (mode === "all") input.value = max;
@@ -7919,7 +8004,7 @@
       return [...document.querySelectorAll(".topic-count")]
         .map(input => ({
           index: Number(input.dataset.index),
-          count: Math.max(0, Number(input.value || 0))
+          count: questionCountFor(input)
         }))
         .filter(item => item.count > 0);
     }
@@ -7940,7 +8025,9 @@
       selectedItems.forEach(item => {
         const group = topicGroups[item.index];
         if (!group) return;
-        selected.push(...shuffle(group.questions).slice(0, Math.min(item.count, group.questions.length)));
+        selected.push(...shuffle(group.questions)
+          .slice(0, Math.min(item.count, group.questions.length))
+          .map(question => ({ ...question, shuffledOptionsForAttempt: undefined })));
       });
 
       if (!selected.length) {
@@ -8285,7 +8372,7 @@
 
         void window.ProgressStore.recordAttempt({
           clientAttemptId: cloudAttemptId,
-          quizId: "general-chemistry-v1",
+          quizId: isPhysicsQuiz ? "physics-daily-practice-v1" : "general-chemistry-v1",
           score: finalScore,
           total: currentQuiz.length,
           details: {
@@ -8304,13 +8391,13 @@
       let message = "Good practice. Review the mistakes and try another set.";
 
       if (percentage >= 85) {
-        message = "Excellent work. Your mole-concept understanding is strong.";
+        message = isPhysicsQuiz ? "Excellent work. Keep practising your physics concepts." : "Excellent work. Your mole-concept understanding is strong.";
       } else if (percentage >= 65) {
         message = "Good work. Revise the mistakes and practise a few more.";
       } else if (percentage >= 40) {
         message = "Fair attempt. Focus on formulas and unit conversions.";
       } else {
-        message = "Revise the basics carefully: moles, molar mass, gas equation, and equivalents.";
+        message = isPhysicsQuiz ? "Review the basic concepts and try another set." : "Revise the basics carefully: moles, molar mass, gas equation, and equivalents.";
       }
 
       let summary = `
@@ -8353,6 +8440,18 @@
       });
 
       summary += `</table>`;
+
+      if (isPhysicsQuiz) {
+        summary += `<section class="physics-review" aria-label="Question explanations"><h3>Review questions</h3>`;
+        currentQuiz.forEach((q, i) => {
+          const answer = getCorrectAnswerFor(q);
+          const explanation = q.explanationLatex || q.explanationMd || q.explanation || "";
+          const prompt = q.promptLatex || q.promptMd || q.prompt || "";
+          summary += `<details><summary>${i + 1}. ${prompt}</summary><p><strong>Correct answer:</strong> ${answer}</p><p>${explanation}</p></details>`;
+        });
+        summary += `</section>`;
+      }
+
       resultArea.innerHTML = summary;
 
       await typesetWholePage();

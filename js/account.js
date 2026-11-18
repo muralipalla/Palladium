@@ -43,6 +43,7 @@
 
   const quizLabels = {
     "general-chemistry-v1": "Custom Chemistry Quiz",
+    "physics-daily-practice-v1": "Physics Daily Practice Quiz",
     "ionic-formula-v1": "Ionic Formula Quiz",
     "multiplication-practice-v1": "Multiplication Practice",
     "oxidation-numbers-v1": "Oxidation Numbers",
