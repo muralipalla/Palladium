@@ -5,6 +5,7 @@
   const indicator = document.getElementById("signedInIndicator");
   const scoresLink = document.getElementById("scoresLink");
   const adminLink = document.getElementById("adminLink");
+  const adminResultsLink = document.getElementById("adminResultsLink");
   const accountLink = document.getElementById("accountLink");
 
   function displayName(user) {
@@ -17,13 +18,17 @@
     indicator.hidden = !user;
     scoresLink.hidden = !user;
     adminLink.hidden = true;
+    adminResultsLink.hidden = true;
     accountLink.textContent = user ? "Account" : "Sign in";
 
     if (!user) return;
     indicator.textContent = `Signed in as ${displayName(user)}`;
 
     const { data, error } = await client.rpc("is_site_admin");
-    if (!error && data === true) adminLink.hidden = false;
+    if (!error && data === true) {
+      adminLink.hidden = false;
+      adminResultsLink.hidden = false;
+    }
   }
 
   if (!client) return;

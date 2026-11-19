@@ -153,6 +153,50 @@ begin
 end;
 $$;
 
+create or replace function public.admin_list_quiz_attempts(
+  p_limit integer default 100,
+  p_offset integer default 0
+)
+returns table (
+  attempt_id uuid,
+  display_name text,
+  email text,
+  quiz_id text,
+  score integer,
+  total integer,
+  completed_at timestamptz,
+  details jsonb
+)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+begin
+  if not public.is_site_admin() then
+    raise exception 'Administrator access required' using errcode = '42501';
+  end if;
+
+  return query
+  select
+    attempts.id,
+    profiles.display_name,
+    users.email::text,
+    attempts.quiz_id,
+    attempts.score,
+    attempts.total,
+    attempts.completed_at,
+    attempts.details
+  from public.quiz_attempts as attempts
+  join auth.users as users on users.id = attempts.user_id
+  left join public.profiles as profiles on profiles.user_id = attempts.user_id
+  where attempts.quiz_id in ('physics-daily-practice-v1', 'general-chemistry-v1')
+  order by attempts.completed_at desc, attempts.id desc
+  limit least(greatest(coalesce(p_limit, 101), 1), 101)
+  offset greatest(coalesce(p_offset, 0), 0);
+end;
+$$;
+
 drop policy if exists profiles_select_own on public.profiles;
 create policy profiles_select_own
 on public.profiles for select to authenticated
@@ -210,6 +254,7 @@ from anon;
 revoke all on table public.admin_allowlist from authenticated;
 revoke all on function public.is_site_admin() from public;
 revoke all on function public.admin_list_users() from public;
+revoke all on function public.admin_list_quiz_attempts(integer, integer) from public, anon;
 
 grant usage on schema public to authenticated;
 grant select, update on table public.profiles to authenticated;
@@ -217,3 +262,4 @@ grant select, insert, delete on table public.quiz_attempts to authenticated;
 grant select, insert, update, delete on table public.activity_state to authenticated;
 grant execute on function public.is_site_admin() to authenticated;
 grant execute on function public.admin_list_users() to authenticated;
+grant execute on function public.admin_list_quiz_attempts(integer, integer) to authenticated;

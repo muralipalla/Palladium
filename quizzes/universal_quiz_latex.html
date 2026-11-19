@@ -7712,6 +7712,7 @@
 
     let cheatCounter = 0;
     let cheatLog = [];
+    let tabHiddenCount = 0;
     let lastCheatTime = 0;
 
     function escapeHtml(value) {
@@ -8379,6 +8380,7 @@
             percent: percentage,
             attempted: statusObj.attempted,
             markedForLater: marked,
+            tabHiddenCount,
             topicIds,
             difficulties,
             bankIds
@@ -8487,6 +8489,7 @@
     function resetCheatLog() {
       cheatCounter = 0;
       cheatLog = [];
+      tabHiddenCount = 0;
       lastCheatTime = 0;
       document.getElementById("teacherReport").style.display = "none";
       document.getElementById("cheatWarning").style.display = "none";
@@ -8531,6 +8534,7 @@
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
+        if (quizActive) tabHiddenCount++;
         logCheat("Tab changed or browser minimized");
       }
     });
