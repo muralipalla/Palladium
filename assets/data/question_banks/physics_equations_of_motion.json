@@ -217,7 +217,7 @@
     "difficulty": "Level 1",
     "difficultyLevel": 1,
     "questionType": "mcq",
-    "promptLatex": "A car changes velocity from u to v over a nonzero displacement s. Which equation can you use to find its constant acceleration without knowing the time?",
+    "promptLatex": "A car moves along a straight line with constant acceleration. Its signed velocity changes from u to v over a nonzero signed displacement s. Which equation can you use to find its acceleration without knowing the time?",
     "optionsLatex": ["v = u + at", "v² − u² = 2as", "s = ut + ½at²", "v² − u² = as"],
     "answerLatex": "v² − u² = 2as",
     "explanationLatex": "The equation v² − u² = 2as links both velocities to acceleration and displacement. Dividing both sides by 2s gives the acceleration.",
@@ -269,7 +269,7 @@
     "optionsLatex": ["21 m", "39 m", "30 m", "12 m"],
     "answerLatex": "21 m",
     "explanationLatex": "Take the direction of motion as positive, so a = −2 m/s². Then s = ut + ½at² = 10 × 3 + ½ × (−2) × 3² = 21 m. The skater is still moving forward after 3 s.",
-    "hintsLatex": ["Use a negative acceleration if the initial velocity is positive."]
+    "hintsLatex": ["Take the initial direction as positive. Because the skater is slowing down, use a = −2 m/s²."]
   },
   {
     "id": "PH-M1-C3-L1-Q18",

@@ -25,6 +25,7 @@
       "subject": "Physics",
       "format": "latex",
       "file": "../assets/data/question_banks/physics_equations_of_motion.json",
+      "instructions": "Assume straight-line motion, with acceleration constant within each described stage. Use signed velocity and displacement. Distance is the total path length.",
       "description": "Level 1 and Level 2 practice with the three equations for straight-line motion at constant acceleration."
     }
   ]

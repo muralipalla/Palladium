@@ -182,6 +182,15 @@
       min-width: 0;
     }
 
+    .question-instructions {
+      margin: 12px 0;
+      padding: 12px 14px;
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      color: #1e3a8a;
+      line-height: 1.55;
+    }
+
     .palette-panel {
       position: sticky;
       top: 12px;
@@ -406,6 +415,7 @@
           </div>
 
           <div class="category" id="category"></div>
+          <p class="question-instructions" id="questionInstructions" hidden></p>
           <div class="question" id="question"></div>
 
           <button class="hint-btn" id="hintBtn" type="button" aria-controls="hint" aria-expanded="false">Show Hint</button>
@@ -7837,6 +7847,7 @@
             ...q,
             bankId: bank.id,
             bankTitle: bank.title,
+            bankInstructions: bank.instructions || "",
             uniqueId: bank.id + ":" + q.id
           }));
         }));
@@ -8077,6 +8088,10 @@
 
       document.getElementById("category").innerHTML =
         `${escapeHtml(q.topicId || "")} · ${escapeHtml(q.topic || "")}`;
+
+      const instructions = document.getElementById("questionInstructions");
+      instructions.textContent = q.bankInstructions || "";
+      instructions.hidden = !q.bankInstructions;
 
       await renderLatexText(q.promptLatex || q.promptMd || q.prompt || "", document.getElementById("question"));
 
