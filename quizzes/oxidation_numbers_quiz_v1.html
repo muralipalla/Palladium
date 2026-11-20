@@ -2193,6 +2193,7 @@
 
     function startQuiz() {
       const filteredBank = getFilteredBank();
+      window.ProgressStore?.startTabTracking();
       const count = getQuestionCount(filteredBank);
 
       currentSet = shuffle(filteredBank).slice(0, count);
@@ -2338,6 +2339,7 @@
 
     function saveResult(percent, scoreValue, total, filter) {
       const history = JSON.parse(localStorage.getItem("oxidation_numbers_quiz_history_v1") || "[]");
+      const tabDetails = window.ProgressStore?.finishTabTracking() || {};
       const clientAttemptId = window.ProgressStore?.createAttemptId();
       const completedAt = new Date().toISOString();
 
@@ -2349,7 +2351,8 @@
         percent,
         score: scoreValue,
         total,
-        filter
+        filter,
+        ...tabDetails
       });
 
       localStorage.setItem("oxidation_numbers_quiz_history_v1", JSON.stringify(history.slice(0, 8)));
@@ -2363,7 +2366,8 @@
           total,
           details: {
             percent,
-            difficulty: filter
+            difficulty: filter,
+            ...tabDetails
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

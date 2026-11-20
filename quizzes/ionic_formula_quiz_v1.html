@@ -1230,6 +1230,7 @@ Aluminate,AlO2(-)`;
       }
 
       buildQuiz();
+      window.ProgressStore?.startTabTracking();
       showScreen(quizScreen);
       showQuestion();
     }
@@ -1338,7 +1339,8 @@ Aluminate,AlO2(-)`;
           total: currentQuiz.length,
           details: {
             percent: pct,
-            mode: selectedMode
+            mode: selectedMode,
+            ...window.ProgressStore.finishTabTracking()
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

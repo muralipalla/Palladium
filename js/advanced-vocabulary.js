@@ -465,6 +465,7 @@
       typeOrder: shuffle(["meaning", "context", "synonym", "antonym"])
     };
     session.questions = words.map((word, index) => buildQuestion(word, index));
+    window.ProgressStore?.startTabTracking();
 
     elements.setupPanel.hidden = true;
     elements.resultPanel.hidden = true;
@@ -633,6 +634,14 @@
     state.lastPracticeDate = today;
   }
 
+  function tabDetailsFromLog(log) {
+    const details = {};
+    for (const key of ["tabHiddenCount", "focusLossCount"]) {
+      if (Number.isInteger(log[key]) && log[key] >= 0) details[key] = log[key];
+    }
+    return details;
+  }
+
   function attemptPayload(log) {
     return {
       clientAttemptId: log.clientAttemptId,
@@ -647,7 +656,8 @@
         xp: Number(log.xp) || 0,
         bestCombo: Number(log.bestCombo) || 0,
         endedEarly: Boolean(log.endedEarly),
-        wrongWords: Array.isArray(log.mistakes) ? log.mistakes : []
+        wrongWords: Array.isArray(log.mistakes) ? log.mistakes : [],
+        ...tabDetailsFromLog(log)
       }
     };
   }
@@ -697,6 +707,7 @@
     if (!session || resetInProgress) return;
     const answeredCount = session.index + (session.answered ? 1 : 0);
     if (answeredCount === 0) {
+      window.ProgressStore?.finishTabTracking();
       session = null;
       elements.questionPanel.hidden = true;
       elements.setupPanel.hidden = false;
@@ -717,6 +728,7 @@
     const durationSeconds = Math.max(0, Math.round((Date.now() - session.startedAt) / 1000));
     const accuracy = Math.round((session.score / answeredCount) * 100);
     const completedSession = session;
+    const tabDetails = window.ProgressStore?.finishTabTracking() || {};
     updateStreak();
 
     state.logs.unshift({
@@ -733,7 +745,8 @@
       durationSeconds,
       xp: completedSession.xp,
       bestCombo: completedSession.bestCombo,
-      mistakes: completedSession.mistakes
+      mistakes: completedSession.mistakes,
+      ...tabDetails
     });
     state.logs = state.logs.slice(0, 100);
     saveState();

@@ -833,6 +833,7 @@
 
     function startGame() {
       generateQuestions();
+      window.ProgressStore?.startTabTracking();
 
       currentIndex = 0;
       correctCount = 0;
@@ -973,6 +974,7 @@
 
     function saveResult(speed, accuracy, count, bestStreakValue) {
       const history = JSON.parse(localStorage.getItem("multiplication_practice_history_v1") || "[]");
+      const tabDetails = window.ProgressStore?.finishTabTracking() || {};
       const clientAttemptId = window.ProgressStore?.createAttemptId();
       const completedAt = new Date().toISOString();
 
@@ -984,7 +986,8 @@
         speed: speed.toFixed(2),
         accuracy: accuracy.toFixed(0),
         count,
-        bestStreak: bestStreakValue
+        bestStreak: bestStreakValue,
+        ...tabDetails
       });
 
       localStorage.setItem("multiplication_practice_history_v1", JSON.stringify(history.slice(0, 8)));
@@ -1000,7 +1003,8 @@
           details: {
             averageSeconds: Number(speed.toFixed(2)),
             accuracyPercent: Number(accuracy.toFixed(0)),
-            bestStreak: bestStreakValue
+            bestStreak: bestStreakValue,
+            ...tabDetails
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

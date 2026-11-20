@@ -1098,6 +1098,7 @@
       }
 
       currentQuiz = pool.map(makeQuestion);
+      window.ProgressStore?.startTabTracking();
       currentIndex = 0;
       score = 0;
       sessionWrong = [];
@@ -1216,6 +1217,7 @@
     }
 
     function finishQuiz(endedEarly = false) {
+      const tabDetails = window.ProgressStore?.finishTabTracking() || {};
       document.getElementById("progBar").style.width = "100%";
       document.getElementById("quizPanel").classList.add("hidden");
       document.getElementById("resultPanel").classList.remove("hidden");
@@ -1247,7 +1249,8 @@
         endedEarly,
         xp,
         wrong: sessionWrong,
-        correct: sessionCorrect
+        correct: sessionCorrect,
+        ...tabDetails
       });
 
       state.logs = state.logs.slice(0, 120);
@@ -1266,7 +1269,8 @@
               xp,
               answeredCount,
               endedEarly,
-              wrongWords: sessionWrong
+              wrongWords: sessionWrong,
+              ...tabDetails
             }
           }),
           maySaveActivityState
@@ -1516,6 +1520,7 @@
     }
 
     function resetOpenQuiz() {
+      window.ProgressStore?.finishTabTracking();
       document.getElementById("quizPanel").classList.add("hidden");
       document.getElementById("resultPanel").classList.add("hidden");
       document.getElementById("startPanel").classList.remove("hidden");

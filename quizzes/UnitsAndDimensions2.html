@@ -772,7 +772,8 @@
           score,
           total: questions.length,
           details: {
-            percent: Math.round(percentage)
+            percent: Math.round(percentage),
+            ...window.ProgressStore.finishTabTracking()
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);
@@ -833,6 +834,7 @@
       checked = false;
       quizActive = true;
       cloudAttemptId = window.ProgressStore?.createAttemptId() || null;
+      window.ProgressStore?.startTabTracking();
 
       cheatCounter = 0;
       cheatLog = [];
@@ -847,6 +849,7 @@
       loadQuestion();
     }
 
+    window.addEventListener("DOMContentLoaded", () => window.ProgressStore?.startTabTracking());
     loadQuestion();
   </script>
 </body>

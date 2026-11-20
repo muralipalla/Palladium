@@ -134,6 +134,7 @@
     current = 0;
     answers = Array(quiz.length).fill(null);
     cloudAttemptId = window.ProgressStore?.createAttemptId?.() || null;
+    window.ProgressStore?.startTabTracking();
 
     elements.resultScreen.hidden = true;
     elements.quizScreen.hidden = false;
@@ -204,7 +205,8 @@
         details: {
           percent,
           topicId: topic.id,
-          questionIds: quiz.map(item => item.id)
+          questionIds: quiz.map(item => item.id),
+          ...window.ProgressStore.finishTabTracking()
         }
       }).catch(error => {
         console.warn("Cloud progress could not be saved.", error);

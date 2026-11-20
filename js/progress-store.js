@@ -6,6 +6,24 @@
   const VOCABULARY_KEY = "sat_vocab_daily_quiz_v1";
   const ADVANCED_VOCABULARY_KEY = "gre_vocabulary_trainer_v1";
   let cachedUserId = null;
+  let tabTracking = null;
+
+  document.addEventListener("visibilitychange", () => {
+    if (tabTracking && document.hidden) tabTracking.tabHiddenCount++;
+  });
+  window.addEventListener("blur", () => {
+    if (tabTracking && !document.hidden) tabTracking.focusLossCount++;
+  });
+
+  function startTabTracking() {
+    tabTracking = { tabHiddenCount: 0, focusLossCount: 0 };
+  }
+
+  function finishTabTracking() {
+    const result = tabTracking ? { ...tabTracking } : {};
+    tabTracking = null;
+    return result;
+  }
 
   function client() {
     if (!window.supabaseClient) {
@@ -293,6 +311,14 @@
       : entries.filter(entry => Boolean(entry.ownerId));
   }
 
+  function tabDetails(entry) {
+    const details = {};
+    for (const key of ["tabHiddenCount", "focusLossCount"]) {
+      if (Number.isInteger(entry[key]) && entry[key] >= 0) details[key] = entry[key];
+    }
+    return details;
+  }
+
   function multiplicationRows(history, userId) {
     return history.filter(entry => belongsToUserOrGuest(entry, userId)).flatMap(entry => {
       const total = boundedInteger(entry.count, 0, 10000);
@@ -313,6 +339,7 @@
           averageSeconds: Number(entry.speed) || null,
           accuracyPercent: accuracy,
           bestStreak: boundedInteger(entry.bestStreak, 0, 10000),
+          ...tabDetails(entry),
           originalLocalDate: entry.date || null,
           importedFromLocalStorage: true
         }
@@ -340,6 +367,7 @@
         details: {
           percent: boundedInteger(entry.percent, 0, 100),
           difficulty: entry.filter || "all",
+          ...tabDetails(entry),
           originalLocalDate: entry.date || null,
           importedFromLocalStorage: true
         }
@@ -373,6 +401,7 @@
           answeredCount: boundedInteger(log.answeredCount ?? log.total, 0, total),
           endedEarly: Boolean(log.endedEarly),
           wrongWords: Array.isArray(log.wrong) ? log.wrong : [],
+          ...tabDetails(log),
           importedFromLocalStorage: true
         }
       };
@@ -405,6 +434,7 @@
           bestCombo: boundedInteger(log.bestCombo, 0, 10000),
           endedEarly: Boolean(log.endedEarly),
           wrongWords: Array.isArray(log.mistakes) ? log.mistakes : [],
+          ...tabDetails(log),
           importedFromLocalStorage: true
         }
       }];
@@ -647,6 +677,8 @@
 
   window.ProgressStore = Object.freeze({
     createAttemptId,
+    startTabTracking,
+    finishTabTracking,
     currentOwnerId,
     getCurrentUserId,
     visibleLocalEntries,

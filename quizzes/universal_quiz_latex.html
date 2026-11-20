@@ -7712,7 +7712,6 @@
 
     let cheatCounter = 0;
     let cheatLog = [];
-    let tabHiddenCount = 0;
     let lastCheatTime = 0;
 
     function escapeHtml(value) {
@@ -8057,6 +8056,7 @@
       hintsEnabledForAttempt = document.getElementById("enableHints").checked;
 
       if (!createQuiz()) return;
+      window.ProgressStore?.startTabTracking();
 
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("resultArea").style.display = "none";
@@ -8380,7 +8380,7 @@
             percent: percentage,
             attempted: statusObj.attempted,
             markedForLater: marked,
-            tabHiddenCount,
+            ...window.ProgressStore.finishTabTracking(),
             topicIds,
             difficulties,
             bankIds
@@ -8489,7 +8489,6 @@
     function resetCheatLog() {
       cheatCounter = 0;
       cheatLog = [];
-      tabHiddenCount = 0;
       lastCheatTime = 0;
       document.getElementById("teacherReport").style.display = "none";
       document.getElementById("cheatWarning").style.display = "none";
@@ -8534,7 +8533,6 @@
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        if (quizActive) tabHiddenCount++;
         logCheat("Tab changed or browser minimized");
       }
     });

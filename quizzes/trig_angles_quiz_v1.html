@@ -843,6 +843,7 @@
       current = 0;
       seconds = 0;
       cloudAttemptId = window.ProgressStore?.createAttemptId() || null;
+      window.ProgressStore?.startTabTracking();
 
       clearInterval(timerInterval);
       timerInterval = setInterval(updateTimer, 1000);
@@ -937,7 +938,8 @@
           details: {
             percent,
             angleMode,
-            answerStyle: document.getElementById("answerStyle").value
+            answerStyle: document.getElementById("answerStyle").value,
+            ...window.ProgressStore.finishTabTracking()
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

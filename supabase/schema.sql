@@ -190,7 +190,6 @@ begin
   from public.quiz_attempts as attempts
   join auth.users as users on users.id = attempts.user_id
   left join public.profiles as profiles on profiles.user_id = attempts.user_id
-  where attempts.quiz_id in ('physics-daily-practice-v1', 'general-chemistry-v1')
   order by attempts.completed_at desc, attempts.id desc
   limit least(greatest(coalesce(p_limit, 101), 1), 101)
   offset greatest(coalesce(p_offset, 0), 0);

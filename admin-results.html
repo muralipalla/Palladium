@@ -17,13 +17,13 @@
     </nav>
   </header>
   <main class="dashboard-main">
-    <div class="dashboard-heading"><div><p class="section-kicker">Administrator</p><h1>Quiz results</h1><p>Completed Custom Physics and Chemistry quizzes. Times are shown in your local time zone.</p></div><button id="refreshResultsButton" class="secondary-action" type="button" hidden>Refresh</button></div>
+    <div class="dashboard-heading"><div><p class="section-kicker">Administrator</p><h1>Quiz results</h1><p>Completed quizzes across Palladium. Times are shown in your local time zone.</p></div><button id="refreshResultsButton" class="secondary-action" type="button" hidden>Refresh</button></div>
     <section class="dashboard-card" aria-live="polite">
       <p id="resultsStatus" class="dashboard-status">Checking administrator access&hellip;</p>
       <div id="resultsTableWrap" class="score-table-wrap" hidden>
-        <table class="data-table"><thead><tr><th>Student</th><th>Email</th><th>Quiz</th><th>Date</th><th>Time</th><th>Score</th><th>Tab hidden</th></tr></thead><tbody id="resultsBody"></tbody></table>
+        <table class="data-table"><thead><tr><th>Student</th><th>Email</th><th>Quiz</th><th>Date</th><th>Time</th><th>Score</th><th>Tab hidden</th><th>Focus lost</th></tr></thead><tbody id="resultsBody"></tbody></table>
         <div class="results-pagination"><button id="previousResultsButton" class="secondary-action" type="button">Previous</button><span id="resultsPageLabel"></span><button id="nextResultsButton" class="secondary-action" type="button">Next</button></div>
-        <p class="results-note">Only quizzes completed while signed in are saved here. “Tab hidden” counts when the quiz tab became hidden, including a browser minimize. Older attempts show “Not recorded.”</p>
+        <p class="results-note">Only quizzes completed while signed in are saved here. “Tab hidden” counts when the quiz tab became hidden, including a browser minimize. “Focus lost” counts when the quiz window lost focus. Browsers cannot identify a new tab opened in the background. Older attempts show “Not recorded.”</p>
       </div>
       <div id="resultsDenied" class="access-message" hidden><p>This page is available only to the site administrator.</p><a class="primary-action link-action" href="index.html">Return home</a></div>
     </section>
