@@ -1,0 +1,89 @@
+.share-instagram {
+  background: linear-gradient(135deg, #8134af, #c13584 45%, #e14c42 78%, #d68e36);
+}
+
+.instagram-mark { flex: 0 0 22px; }
+
+.home-page .share-panel {
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+  text-align: left;
+}
+
+.share-video-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #365172;
+  border-radius: 18px;
+  background: #06162f;
+}
+
+.share-video-content .share-links { justify-content: flex-start; }
+.share-video-content .share-title { font-size: 1.9rem; line-height: 1.2; }
+.share-eyebrow, .video-eyebrow { color: #67e8f9; font-size: .8rem; font-weight: 800; letter-spacing: .13em; }
+.home-page .share-panel .share-eyebrow { margin-bottom: 12px; }
+.home-page .share-panel .share-copy { margin-top: 14px; font-size: 1rem; }
+.home-page .share-panel .share-watch-link { margin-top: 20px; }
+
+.video-page { min-height: 100vh; }
+.video-page-header { max-width: 1120px; margin: auto; padding: 28px 24px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.video-home-link { color: #b8d7f1; text-underline-offset: 4px; }
+.video-tour { max-width: 1100px; margin: auto; padding: 20px 24px 64px; }
+.video-intro { display: grid; grid-template-columns: minmax(0, 390px) minmax(0, 1fr); gap: clamp(30px, 5vw, 72px); align-items: center; }
+.video-stage { padding: 9px; border: 1px solid #365172; border-radius: 25px; background: #0b1d35; box-shadow: 0 24px 70px #02091470; }
+.video-stage video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; border-radius: 17px; background: #06162f; }
+.video-intro-copy h1 { margin: 18px 0; color: #f1f7ff; font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: -.05em; line-height: 1.05; }
+.video-intro-copy h1 span { color: #67e8f9; }
+.video-lede { color: #e1eefa; font-size: 1.3rem; line-height: 1.6; }
+.video-intro-copy #video-description, .video-sharing > p, .instagram-instructions p { color: #b5c7dc; line-height: 1.65; }
+.video-highlights { margin: 24px 0; padding-left: 22px; color: #d5e6f6; line-height: 2; }
+.video-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+.video-page .button { cursor: pointer; font: inherit; font-weight: 700; text-decoration: none; }
+.video-page .button:disabled { opacity: .65; cursor: wait; }
+.video-format { color: #9db2cb; font-size: .9rem; margin-top: 18px; }
+.video-sharing { margin-top: 64px; padding: clamp(22px, 4vw, 40px); border: 1px solid #2c4666; border-radius: 22px; background: #0a1d34; }
+.video-sharing h2 { margin: 12px 0; color: #f1f7ff; font-size: 2rem; }
+.video-sharing .share-links { justify-content: flex-start; }
+.video-link-copy { margin-top: 30px; }
+.video-link-copy label { display: block; margin-bottom: 8px; color: #c6d9ed; font-size: .95rem; }
+.copy-video-row { display: flex; gap: 10px; }
+.copy-video-row input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #3d5879; border-radius: 10px; background: #06162f; color: #e1eefa; font: inherit; }
+.copy-video-row button { flex: 0 0 auto; padding: 12px 16px; border: 1px solid #5683ae; border-radius: 10px; background: #173c61; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+.instagram-instructions { margin-top: 26px; padding: 24px; border: 1px solid #5f4579; border-radius: 15px; background: linear-gradient(125deg, #38244555, #112b4555); scroll-margin-top: 24px; }
+.instagram-instructions h3 { margin: 0; color: #f1f7ff; font-size: 1.3rem; }
+.video-instagram-open { color: #c4b5fd; text-underline-offset: 4px; }
+.video-share-status { min-height: 1.5em; margin: 12px 0 0; color: #a5e7f5; line-height: 1.6; }
+.video-transcript { margin-top: 32px; padding: 20px; border: 1px solid #2c4666; border-radius: 15px; color: #c6d9ed; line-height: 1.7; }
+.video-transcript summary { cursor: pointer; font-weight: 700; color: #e1eefa; }
+.video-transcript li { margin: 8px 0; }
+.video-page :is(a, button, input, summary):focus-visible { outline: 3px solid #67e8f9; outline-offset: 4px; }
+
+@media (max-width: 700px) {
+  .home-page .hero-text, .home-page .hero-visual-card { min-width: 0; }
+  .home-page .share-panel { grid-template-columns: 1fr; gap: 26px; text-align: center; }
+  .share-video-preview { max-width: 240px; margin: auto; }
+  .share-video-content .share-links { justify-content: center; }
+  .video-page-header { padding: 20px; flex-wrap: wrap; }
+  .video-home-link { font-size: .95rem; }
+  .video-tour { padding: 12px 18px 40px; }
+  .video-intro { display: flex; flex-direction: column-reverse; gap: 24px; }
+  .video-intro-copy { width: 100%; }
+  .video-stage { width: min(100%, 390px); }
+  .video-intro-copy h1 { font-size: 3rem; }
+  .video-highlights { margin: 18px 0; }
+  .video-sharing { margin-top: 36px; }
+  .video-sharing .share-links { display: grid; grid-template-columns: 1fr 1fr; }
+  .video-sharing .share-link { min-width: 0; }
+  .copy-video-row { flex-direction: column; }
+  .instagram-instructions { padding: 18px; }
+  .video-actions .button { text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-page { scroll-behavior: auto; }
+  .share-link { transition: none; }
+}
