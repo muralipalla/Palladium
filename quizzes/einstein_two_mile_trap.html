@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Max Wertheimer’s hill puzzle with three optional hints and a worked solution about average speed.">
+  <title>The Hill Puzzle That Delighted Einstein | Palladium</title>
+  <link rel="stylesheet" href="../styles/maths_vector_quiz.css?v=2">
+  <style>
+    :root {
+      --accent: #215b9c;
+      --accent-strong: #174678;
+      --accent-soft: #edf5fc;
+    }
+
+    .quiz-heading h1 {
+      text-wrap: balance;
+    }
+
+    .trip-figure {
+      margin: 0;
+      border-bottom: 1px solid var(--border);
+      background: #fcf7ee;
+    }
+
+    .trip-scene {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 1;
+    }
+
+    .trip-artwork {
+      position: absolute;
+      inset-inline: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .trip-hill {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .trip-car {
+      position: absolute;
+      left: 6%;
+      top: 76.6%;
+      width: 10%;
+      height: auto;
+      translate: -50% -98%;
+      rotate: -6deg;
+      transform-origin: 50% 98%;
+    }
+
+    .trip-caption {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 22px;
+      padding: clamp(16px, 3vw, 24px) clamp(22px, 5vw, 42px);
+      border-top: 1px solid #ebdfce;
+    }
+
+    .trip-details {
+      flex: 1 1 440px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 20px;
+      margin: 0;
+    }
+
+    .trip-details dt {
+      margin-bottom: 4px;
+      color: var(--accent-strong);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .trip-details dd {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .route-position {
+      display: grid;
+      flex: 1 1 100%;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .route-position input {
+      width: 100%;
+      min-height: 32px;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
+    .figure-note {
+      flex: 1 1 100%;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .problem-statement {
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+      line-height: 1.65;
+    }
+
+    .problem-statement p:last-child {
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+
+    .source-note {
+      margin: 16px 0 24px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .hint, .solution, .history {
+      margin-top: 12px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .solution {
+      background: var(--accent-soft);
+    }
+
+    .history {
+      margin-top: 20px;
+    }
+
+    summary {
+      color: var(--accent-strong);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    details > :last-child {
+      margin-bottom: 0;
+    }
+
+    details p {
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    .calculation {
+      padding: 12px 14px;
+      border-radius: 6px;
+      background: white;
+      overflow-wrap: anywhere;
+    }
+
+    .fraction {
+      display: inline-flex;
+      flex-direction: column;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .fraction > span {
+      padding: 0 0.2em;
+    }
+
+    .fraction > span:first-child {
+      border-bottom: 1px solid currentColor;
+    }
+
+    input:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    h2 {
+      margin: 0 0 20px;
+    }
+
+    @media (max-width: 440px) {
+      .trip-details {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .trip-details > div:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="quiz-topbar" aria-label="Quiz navigation">
+      <a class="palladium-brand" href="../index.html" aria-label="Palladium learning lab — Home">
+        <span class="palladium-mark" aria-hidden="true"><span class="palladium-number">46</span><span class="palladium-symbol">Pd</span></span>
+        <span class="palladium-name">Palla<span class="palladium-dium">dium</span></span>
+      </a>
+      <a class="back-link" href="../index.html#physics">← Physics quizzes</a>
+    </nav>
+  </header>
+
+  <main class="quiz-shell">
+    <header class="quiz-heading">
+      <h1 id="quizTitle">The Hill Puzzle That Delighted Einstein</h1>
+    </header>
+
+    <section class="quiz-card" aria-labelledby="quizTitle">
+      <figure class="trip-figure">
+        <div class="trip-scene" id="tripScene">
+          <div class="trip-artwork">
+            <img class="trip-hill" src="../assets/images/einstein-hill-profile.webp" width="1800" height="600"
+              alt="Side-view sketch of a road climbing a hill from the left and descending to the right.">
+            <img class="trip-car" id="tripCar" src="../assets/images/einstein-touring-car.webp" width="480" height="240" alt="">
+          </div>
+        </div>
+        <figcaption class="trip-caption">
+          <dl class="trip-details" id="tripDetails" aria-label="The car’s trip">
+            <div><dt>Uphill road distance</dt><dd>1 mile, average ≤ 15 mph</dd></div>
+            <div><dt>Downhill road distance</dt><dd>1 mile</dd></div>
+            <div><dt>Target average speed</dt><dd>30 mph over 2 miles</dd></div>
+          </dl>
+          <label class="route-position" id="routePositionControl" hidden>
+            Car position on the sketch
+            <input id="routePosition" type="range" min="0" max="100" value="0" aria-controls="tripScene" aria-valuetext="Start of the uphill mile">
+          </label>
+          <p class="figure-note">Schematic route. Both one-mile distances are measured along the road.</p>
+        </figcaption>
+      </figure>
+
+      <section class="screen" aria-labelledby="problemTitle">
+        <h2 id="problemTitle">The problem</h2>
+        <div class="problem-statement" id="problemStatement">
+          <p>An old car has to travel a two-mile road over a hill. The first mile is uphill, and the second mile is downhill.</p>
+          <p>Because of the car’s condition, its <strong>average speed over the uphill mile cannot exceed 15 miles per hour</strong>. It can travel faster downhill.</p>
+          <p>How fast must it travel on the downhill mile to average 30 miles per hour over the entire two-mile journey?</p>
+        </div>
+        <p class="source-note">English restatement of the published problem. The original speed limit on the uphill average is preserved. <a href="https://fs.blog/einstein-wertheimer-car-problem/">Published English version</a></p>
+
+        <details class="hint" id="hint1">
+          <summary>Hint 1</summary>
+          <p>Average speed for the whole journey is total road distance divided by total elapsed time. How much time would the target average allow for the two miles?</p>
+        </details>
+
+        <details class="hint" id="hint2">
+          <summary>Hint 2</summary>
+          <p>The uphill average is at most 15 mph. Use that limit to find the shortest possible climb time for one mile. A slower climb would take longer.</p>
+        </details>
+
+        <details class="hint" id="hint3">
+          <summary>Hint 3</summary>
+          <p>The target allows exactly four minutes for the whole journey. The climb alone takes at least four minutes. The downhill mile still requires a positive amount of time at every finite speed.</p>
+        </details>
+
+        <details class="solution" id="solution">
+          <summary>Show worked solution</summary>
+          <p><strong>The target cannot be achieved at any finite downhill speed.</strong></p>
+          <p>A whole-trip average of 30 mph would require a total time of</p>
+          <p class="calculation" role="math" aria-label="Target total time equals 2 miles divided by 30 miles per hour, which equals one fifteenth of an hour, or four minutes.">
+            <span aria-hidden="true"><span class="fraction"><span>2 miles</span><span>30 miles/hour</span></span> = <span class="fraction"><span>1</span><span>15</span></span> hour = 4 minutes</span>
+          </p>
+          <p>The uphill average is at most 15 mph, so the uphill time must satisfy</p>
+          <p class="calculation" role="math" aria-label="Uphill time is greater than or equal to 1 mile divided by 15 miles per hour, which equals four minutes.">
+            <span aria-hidden="true">uphill time ≥ <span class="fraction"><span>1 mile</span><span>15 miles/hour</span></span> = 4 minutes</span>
+          </p>
+          <p>At any finite downhill speed, travelling the remaining mile takes additional positive time. The total trip therefore takes more than four minutes, and its average speed is below 30 mph.</p>
+          <p>With an uphill average of exactly 15 mph, the overall average approaches 30 mph as downhill speed increases without bound. That is an unattained mathematical limit.</p>
+        </details>
+      </section>
+    </section>
+
+    <details class="history">
+      <summary>Did Einstein really get this puzzle?</summary>
+      <p>The University of Würzburg catalogues a summer-1934 letter from Max Wertheimer to Albert Einstein containing a car-speed puzzle, along with Einstein’s reply about the brainteasers. <a href="https://www.uni-wuerzburg.de/fileadmin/42050000/2023/FA-Max_Wertheimer_Collection_Viktor_Sarris.pdf#page=126">Archive catalog, box 22, folder 10</a></p>
+      <p>Abraham and Edith Luchins’s study of their correspondence describes Einstein enjoying the puzzles. <a href="https://link.springer.com/article/10.1007/BF03024003">Study of the correspondence, 1990</a></p>
+      <p>The English statement above follows a published translation. The archive catalog establishes the exchange, while its listing supplies a description of the letters. <a href="https://fs.blog/einstein-wertheimer-car-problem/">Published English version</a></p>
+    </details>
+  </main>
+
+  <script>
+    function setupRoutePosition() {
+      const car = document.getElementById("tripCar");
+      const slider = document.getElementById("routePosition");
+      // Points follow the road in the artwork. Each gives x%, y%, and the road angle in degrees.
+      const road = [
+        [6, 76.6, -6],
+        [12, 73.5, -14],
+        [18, 67.5, -21],
+        [24, 59.8, -24],
+        [30, 51.5, -24],
+        [36, 43.9, -20],
+        [42, 38.3, -13],
+        [48, 35.4, -8],
+        [50, 35.1, 0],
+        [52, 35.4, 8],
+        [58, 38.4, 14],
+        [64, 44.2, 21],
+        [70, 51.9, 24],
+        [76, 60.2, 24],
+        [82, 67.8, 20],
+        [88, 73.6, 14],
+        [94, 76.6, 6]
+      ];
+      slider.addEventListener("input", () => {
+        const x = road[0][0] + (road[road.length - 1][0] - road[0][0]) * slider.valueAsNumber / 100;
+        const nextIndex = Math.max(1, road.findIndex(point => point[0] >= x));
+        const [startX, startY, startAngle] = road[nextIndex - 1];
+        const [endX, endY, endAngle] = road[nextIndex];
+        const fraction = (x - startX) / (endX - startX);
+        car.style.left = `${x}%`;
+        car.style.top = `${startY + (endY - startY) * fraction}%`;
+        car.style.rotate = `${startAngle + (endAngle - startAngle) * fraction}deg`;
+        slider.setAttribute("aria-valuetext", `Sketch position ${slider.value}% from left to right`);
+      });
+      document.getElementById("routePositionControl").hidden = false;
+    }
+
+    setupRoutePosition();
+  </script>
+</body>
+</html>
