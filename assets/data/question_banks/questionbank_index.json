@@ -18,6 +18,14 @@
       "format": "latex",
       "file": "../assets/data/question_banks/physics_motion.json",
       "description": "Introductory questions on distance, displacement, average speed and average velocity."
+    },
+    {
+      "id": "physics-equations-of-motion",
+      "title": "Equations of motion with constant acceleration",
+      "subject": "Physics",
+      "format": "latex",
+      "file": "../assets/data/question_banks/physics_equations_of_motion.json",
+      "description": "Level 1 and Level 2 practice with the three equations for straight-line motion at constant acceleration."
     }
   ]
 }

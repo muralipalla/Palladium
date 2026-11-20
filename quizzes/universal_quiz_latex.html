@@ -7935,7 +7935,7 @@
             max="${group.questions.length}"
             value="0"
             data-index="${index}"
-            aria-label="Number of questions from ${escapeHtml(group.topic)}"
+            aria-label="Number of questions from ${escapeHtml(group.topic)}${group.difficulty ? ` (${escapeHtml(group.difficulty)})` : ""}"
           >
         </div>
       `).join("");
