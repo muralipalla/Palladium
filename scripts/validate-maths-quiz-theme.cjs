@@ -156,7 +156,7 @@ expect(
 expect(!mathsSection.includes("Foundations") && !mathsSection.includes("Maths Skill Builders"), "Mathematics retains a duplicate navigation layer.");
 
 for (const [category, children] of [
-  ["trigonometry_skill_builder.html", ["trig_angles_quiz_v1.html", "pythagorean_identities_quiz.html"]],
+  ["trigonometry_skill_builder.html", ["trig_angles_quiz_v1.html", "pythagorean_identities_quiz.html", "sum_difference_identities_quiz.html", "double_triple_identities_quiz.html"]],
   ["basic_arithmetic_skill_builder.html", ["multiplication_practice_v1.html"]]
 ]) {
   const html = read(path.join("quizzes", category));

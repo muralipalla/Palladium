@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A 20-mark MCQ quiz on double-angle and triple-angle identities involving 2A and 3A, with ten Level 2 and ten Level 3 questions and worked solutions.">
+  <meta name="theme-color" content="#ffffff">
+  <title>Double and Triple Angles Quiz | Palladium</title>
+  <link rel="stylesheet" href="../styles/maths_vector_quiz.css?v=2">
+  <link rel="stylesheet" href="../styles/maths_trigonometry_quiz.css?v=1">
+</head>
+<body data-quiz-topic="double-triple-identities" data-quiz-bank="../assets/data/question_banks/maths_double_triple_identities.json">
+  <header>
+    <nav class="quiz-topbar" aria-label="Quiz navigation">
+      <a class="palladium-brand" href="../index.html" aria-label="Palladium learning lab — Home">
+        <span class="palladium-mark" aria-hidden="true"><span class="palladium-number">46</span><span class="palladium-symbol">Pd</span></span>
+        <span class="palladium-name">Palla<span class="palladium-dium">dium</span></span>
+      </a>
+      <a class="back-link" href="trigonometry_skill_builder.html">Trigonometry</a>
+    </nav>
+  </header>
+  <main class="quiz-shell">
+    <header class="quiz-heading">
+      <p class="eyebrow">Skill Builders · Trigonometry</p>
+      <h1>Double and Triple Angles</h1>
+      <div class="quiz-instructions">
+        <p><strong>20 MCQs · 20 marks.</strong> Answer 10 Level 2 questions, then 10 Level 3 questions. Each correct answer earns 1 mark. There is no negative marking. Answers and worked solutions appear after submission.</p>
+        <p>All angles are measured in degrees. Acute means strictly between 0° and 90°. In simplification questions, choose an identity valid for all real values of the angles where all displayed terms are defined. The notation sin 2A means sin(2A), sin² A means (sin A)², and cot A means cos A/sin A.</p>
+      </div>
+    </header>
+    <section class="quiz-card" aria-label="Double and Triple Angles quiz">
+      <p id="loadStatus" class="screen" role="status">Loading quiz…</p>
+      <p id="loadError" class="bank-error" role="alert" hidden></p>
+      <section id="quizScreen" class="screen" hidden>
+        <div class="quiz-meta"><span id="progress" aria-live="polite">Question 1 of 20</span><span id="timer">00:00</span></div>
+        <div class="progress-track" aria-hidden="true"><div id="progressBar" class="progress-bar"></div></div>
+        <p class="question-level" data-question-level>Level 2 · 1 mark</p>
+        <h2 id="question" tabindex="-1">Loading question…</h2>
+        <div id="options" class="options" role="group" aria-labelledby="question"></div>
+        <p id="quizStatus" class="quiz-status" aria-live="polite"></p>
+        <div class="quiz-navigation">
+          <div class="nav-side"><button id="prevBtn" class="action-button secondary" type="button">Previous</button><button id="nextBtn" class="action-button secondary" type="button">Next</button></div>
+          <button id="submitBtn" class="action-button" type="button" hidden>Submit</button>
+        </div>
+      </section>
+      <section id="resultScreen" class="screen result-screen" hidden>
+        <h2 id="resultTitle" tabindex="-1">Result</h2>
+        <div class="result-grid">
+          <div class="result-box"><strong id="finalScore">0/20</strong><span>marks</span></div>
+          <div class="result-box"><strong id="finalPercent">0%</strong><span>accuracy</span></div>
+          <div class="result-box"><strong id="finalTime">00:00</strong><span>time</span></div>
+        </div>
+        <h3>Answers and Worked Solutions</h3>
+        <div id="reviewList" class="review-list"></div>
+        <div class="result-actions"><button id="againBtn" class="action-button" type="button">New quiz</button><a class="all-quizzes-link" href="trigonometry_skill_builder.html">All trigonometry quizzes</a></div>
+      </section>
+    </section>
+  </main>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
+  <script defer src="../js/supabase-client.js"></script>
+  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/maths-vector-quiz.js?v=pythagorean-1"></script>
+</body>
+</html>
