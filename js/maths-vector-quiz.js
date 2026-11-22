@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const DATA_URL = "../assets/data/question_banks/maths_vectors_matrices.json";
+  const DATA_URL = document.body.dataset.quizBank || "../assets/data/question_banks/maths_vectors_matrices.json";
   const optionLetters = ["A", "B", "C", "D"];
 
   const elements = {
@@ -109,6 +109,8 @@
     const selectedAnswer = answers[current];
 
     elements.question.textContent = item.prompt;
+    const levelLabel = document.querySelector("[data-question-level]");
+    if (levelLabel) levelLabel.textContent = "Level " + String(item.level) + " · 1 mark";
     elements.options.replaceChildren(
       ...item.options.map((option, index) => createOptionButton(option, index, selectedAnswer))
     );
@@ -131,6 +133,7 @@
     quiz = shuffle(topic.questions)
       .slice(0, topic.questionCount)
       .map(question => ({ ...question, options: shuffle(question.options) }));
+    if (topic.orderByLevel) quiz.sort((a, b) => a.level - b.level);
     current = 0;
     answers = Array(quiz.length).fill(null);
     cloudAttemptId = window.ProgressStore?.createAttemptId?.() || null;
@@ -169,6 +172,12 @@
     userLine.textContent = "Your answer: " + (answer || "Not answered");
     correctLine.textContent = "Correct answer: " + item.answer;
     container.append(heading, userLine, correctLine);
+    if (topic.showExplanations && item.explanation) {
+      const explanation = document.createElement("p");
+      explanation.className = "review-explanation";
+      explanation.textContent = item.explanation;
+      container.append(explanation);
+    }
     return container;
   }
 

@@ -1,0 +1,13 @@
+.builder-topic { margin-top: 32px; }
+.builder-topic h2 { margin-bottom: 16px; font-size: 1.5rem; }
+.builder-topic .quiz-links { grid-template-columns: 1fr; }
+.quiz-instructions { margin: 20px 0 0; padding: 18px 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel-soft); line-height: 1.6; }
+.quiz-instructions p { margin: 0; }
+.quiz-instructions p + p { margin-top: 10px; }
+.question-level { display: inline-block; margin-bottom: 16px; padding: 7px 12px; border-radius: 7px; background: var(--accent-soft); color: var(--accent-strong); font-weight: 750; }
+.review-explanation { margin: 8px 0 0; line-height: 1.6; }
+.skill-symbol { flex-shrink: 0; }
+@media (max-width: 480px) {
+  .skill-title { align-items: flex-start; }
+  .skill-symbol { font-size: 1rem; }
+}
