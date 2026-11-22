@@ -60,25 +60,27 @@ function evaluateOption(option, theta) {
 const firstQuadrant = [epsilon, Math.PI / 2 - epsilon];
 const secondQuadrant = [Math.PI / 2 + epsilon, Math.PI - epsilon];
 const belowFortyFive = [epsilon, Math.PI / 4];
+const fourthPowerSum = theta => 3 * s(theta) ** 4 + 2 * c(theta) ** 4;
+const minimumAngle = angleFor(theta => s(theta) ** 2, 2 / 5);
 const cases = {
-  "pythagorean-L2-01": { identity: x => (1 - c(x) ** 2) / s(x) ** 2 },
+  "pythagorean-L2-01": { identity: x => ((1 - c(x) ** 2) * (1 + cot(x) ** 2)) / (sec(x) ** 2 - t(x) ** 2) },
   "pythagorean-L2-02": { identity: x => (sec(x) ** 2 - 1) / sec(x) ** 2 },
   "pythagorean-L2-03": { theta: angleFor(t, 3 / 4), value: x => s(x) ** 2 },
   "pythagorean-L2-04": { theta: angleFor(c, -5 / 13, ...secondQuadrant), value: t },
   "pythagorean-L2-05": { identity: x => sec(x) ** 2 + cosec(x) ** 2 - t(x) ** 2 - cot(x) ** 2 },
-  "pythagorean-L2-06": { theta: angleFor(sec, 13 / 5), value: x => t(x) ** 2 },
+  "pythagorean-L2-06": { theta: angleFor(s, 12 / 13), value: x => sec(x) ** 2 - 1 },
   "pythagorean-L2-07": { identity: x => (1 - s(x) ** 4) / c(x) ** 2 },
   "pythagorean-L2-08": { identity: x => s(x) ** 2 * (1 + t(x) ** 2) },
   "pythagorean-L2-09": { theta: angleFor(x => s(x) ** 2, 2 / 5), value: x => t(x) ** 2 + cot(x) ** 2 },
   "pythagorean-L2-10": { theta: angleFor(x => sec(x) + t(x), 4), value: x => sec(x) - t(x) },
-  "pythagorean-L3-01": { theta: angleFor(x => s(x) + c(x), 1 / 2, ...secondQuadrant), value: x => s(x) * c(x) },
-  "pythagorean-L3-02": { theta: angleFor(x => t(x) + cot(x), 5, ...belowFortyFive), value: x => sec(x) ** 2 + cosec(x) ** 2 },
+  "pythagorean-L3-01": { theta: angleFor(x => s(x) + c(x), 1 / 2, ...secondQuadrant), value: x => 1 / (1 + s(x)) + 1 / (1 + c(x)) },
+  "pythagorean-L3-02": { theta: angleFor(x => t(x) + cot(x), 5, ...belowFortyFive), value: x => (sec(x) ** 2 - cosec(x) ** 2) ** 2 },
   "pythagorean-L3-03": { theta: angleFor(x => s(x) * c(x), 1 / 3, ...belowFortyFive), value: x => s(x) ** 6 + c(x) ** 6 },
   "pythagorean-L3-04": { theta: angleFor(x => sec(x) + t(x), 3), value: s },
   "pythagorean-L3-05": { theta: angleFor(x => cosec(x) - cot(x), 2, ...secondQuadrant), value: c },
   "pythagorean-L3-06": { identity: x => (s(x) ** 6 + c(x) ** 6 - 1) / (s(x) ** 2 * c(x) ** 2) },
   "pythagorean-L3-07": { theta: angleFor(x => t(x) ** 2 + cot(x) ** 2, 7, ...belowFortyFive), value: x => s(x) ** 2 * c(x) ** 2 },
-  "pythagorean-L3-08": { theta: Math.PI / 4, value: x => s(x) ** 2 * c(x) ** 2 },
+  "pythagorean-L3-08": { theta: minimumAngle, value: fourthPowerSum },
   "pythagorean-L3-09": { theta: angleFor(x => s(x) ** 4 + c(x) ** 4, 5 / 8, ...belowFortyFive), value: x => (t(x) + cot(x)) ** 2 },
   "pythagorean-L3-10": { theta: angleFor(x => t(x) - cot(x), 2, ...firstQuadrant), value: x => s(x) ** 4 + c(x) ** 4 }
 };
@@ -104,12 +106,12 @@ for (const question of topic.questions) {
   assert.equal(question.answer, correctOptions[0], question.id + " has an incorrect key");
 }
 
-// Check the claimed maximum throughout a complete revolution and its attainer.
+// Check the claimed minimum at an attaining angle and sample a full revolution.
+const minimum = fourthPowerSum(minimumAngle);
 for (let step = 0; step <= 4096; step++) {
   const theta = step * 2 * Math.PI / 4096;
-  assert.ok(s(theta) ** 2 * c(theta) ** 2 <= .25 + 1e-12);
+  assert.ok(fourthPowerSum(theta) >= minimum - 1e-12);
 }
-assert.ok(near(s(Math.PI / 4) ** 2 * c(Math.PI / 4) ** 2, .25));
 assert.match(page, /where all displayed terms are defined/);
 assert.match(page, /Each correct answer earns 1 mark/);
 assert.ok(page.includes('data-quiz-bank="' + bankPath + '"'));
