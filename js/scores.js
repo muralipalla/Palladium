@@ -15,6 +15,8 @@
     "pythagorean-identities-v1": "Pythagorean Identities · Levels 2 and 3",
     "sum-difference-identities-v1": "Sum and Difference of Angles · Levels 2 and 3",
     "double-triple-identities-v1": "Double and Triple Angles · Levels 2 and 3",
+    "sum-difference-identities-v2": "Sum and Difference of Angles · 40 marks",
+    "double-triple-identities-v2": "Double and Triple Angles · 38 marks",
     "vector-addition-v1": "Vector Addition", "vector-subtraction-v1": "Vector Subtraction",
     "dot-product-v1": "Dot Product", "determinants-2x2-v1": "2 × 2 Determinants",
     "cross-product-v1": "Cross Product of Two Vectors",

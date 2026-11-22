@@ -51,6 +51,8 @@
     "pythagorean-identities-v1": "Pythagorean Identities · Levels 2 and 3",
     "sum-difference-identities-v1": "Sum and Difference of Angles · Levels 2 and 3",
     "double-triple-identities-v1": "Double and Triple Angles · Levels 2 and 3",
+    "sum-difference-identities-v2": "Sum and Difference of Angles · 40 marks",
+    "double-triple-identities-v2": "Double and Triple Angles · 38 marks",
     "units-and-dimensions-v1": "Units and Dimensions",
     "vector-addition-v1": "Vector Addition",
     "vector-subtraction-v1": "Vector Subtraction",

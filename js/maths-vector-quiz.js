@@ -30,6 +30,7 @@
   let quiz = [];
   let current = 0;
   let answers = [];
+  let totalMarks = 0;
   let timerInterval = null;
   let startedAt = 0;
   let elapsedSeconds = 0;
@@ -48,6 +49,10 @@
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+  }
+
+  function questionMarks(item) {
+    return topic.marksByLevel?.[item.level] ?? topic.marksPerQuestion ?? 1;
   }
 
   function currentElapsedSeconds() {
@@ -110,7 +115,10 @@
 
     elements.question.textContent = item.prompt;
     const levelLabel = document.querySelector("[data-question-level]");
-    if (levelLabel) levelLabel.textContent = "Level " + String(item.level) + " · 1 mark";
+    if (levelLabel) {
+      const marks = questionMarks(item);
+      levelLabel.textContent = "Level " + String(item.level) + " · " + String(marks) + (marks === 1 ? " mark" : " marks");
+    }
     elements.options.replaceChildren(
       ...item.options.map((option, index) => createOptionButton(option, index, selectedAnswer))
     );
@@ -134,6 +142,7 @@
       .slice(0, topic.questionCount)
       .map(question => ({ ...question, options: shuffle(question.options) }));
     if (topic.orderByLevel) quiz.sort((a, b) => a.level - b.level);
+    totalMarks = quiz.reduce((total, item) => total + questionMarks(item), 0);
     current = 0;
     answers = Array(quiz.length).fill(null);
     cloudAttemptId = window.ProgressStore?.createAttemptId?.() || null;
@@ -172,6 +181,12 @@
     userLine.textContent = "Your answer: " + (answer || "Not answered");
     correctLine.textContent = "Correct answer: " + item.answer;
     container.append(heading, userLine, correctLine);
+    if (topic.marksByLevel) {
+      const marksLine = document.createElement("span");
+      const marks = questionMarks(item);
+      marksLine.textContent = "Level " + String(item.level) + " · " + String(marks) + (marks === 1 ? " mark" : " marks") + " · Earned " + String(isCorrect ? marks : 0) + "/" + String(marks);
+      container.append(marksLine);
+    }
     if (topic.showExplanations && item.explanation) {
       const explanation = document.createElement("p");
       explanation.className = "review-explanation";
@@ -189,12 +204,12 @@
 
     stopTimer();
     const score = quiz.reduce(
-      (total, item, index) => total + (answers[index] === item.answer ? 1 : 0),
+      (total, item, index) => total + (answers[index] === item.answer ? questionMarks(item) : 0),
       0
     );
-    const percent = Math.round((score / quiz.length) * 100);
+    const percent = Math.round((score / totalMarks) * 100);
 
-    elements.finalScore.textContent = String(score) + "/" + String(quiz.length);
+    elements.finalScore.textContent = String(score) + "/" + String(totalMarks);
     elements.finalPercent.textContent = String(percent) + "%";
     elements.finalTime.textContent = formatTime(elapsedSeconds);
     elements.reviewList.replaceChildren(
@@ -209,12 +224,18 @@
         clientAttemptId: cloudAttemptId,
         quizId: topic.quizId,
         score,
-        total: quiz.length,
+        total: totalMarks,
         durationSeconds: elapsedSeconds,
         details: {
           percent,
           topicId: topic.id,
           questionIds: quiz.map(item => item.id),
+          ...(topic.marksByLevel ? {
+            questionCount: quiz.length,
+            correctCount: quiz.filter((item, index) => answers[index] === item.answer).length,
+            marksByLevel: { ...topic.marksByLevel },
+            questionMarks: quiz.map(questionMarks)
+          } : {}),
           ...window.ProgressStore.finishTabTracking()
         }
       }).catch(error => {
