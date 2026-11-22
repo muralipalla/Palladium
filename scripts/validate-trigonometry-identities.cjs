@@ -134,7 +134,7 @@ const engineIds = [...engine.matchAll(/getElementById\("([^"]+)"\)/g)].map(m => 
 const topics = [];
 
 for (const config of configurations) {
-  const bankPath = `../assets/data/question_banks/maths_${config.slug}_identities.json`;
+  const bankPath = `../assets/data/question_banks/maths_${config.slug}_identities_v2.json`;
   const bank = JSON.parse(read(bankPath.slice(3)));
   const topic = bank[0];
   assert.equal(bank.length, 1);
@@ -274,6 +274,29 @@ async function finish(session, topic, wrong = new Set()) {
   assert.deepEqual(Array.from(record.details.questionMarks), ordered.map(q => q.level));
 }
 
+async function checkLegacyBank(config) {
+  const bankPath = `../assets/data/question_banks/maths_${config.slug}_identities.json`;
+  const bank = JSON.parse(read(bankPath.slice(3)));
+  const topic = bank[0];
+  assert.equal(topic.quizId, config.topicId + "-v1");
+  assert.equal(topic.marksPerQuestion, 1);
+  assert.equal(topic.marksByLevel, undefined);
+  const session = await boot({ bank, topic, bankPath });
+  for (let index = 0; index < 20; index++) {
+    const question = topic.questions.find(q => q.prompt === session.nodes.question.textContent);
+    assert.ok(question);
+    assert.equal(session.level.textContent, `Level ${question.level} · 1 mark`);
+    session.nodes.options.children.find(button => button.children[1].textContent === question.answer).click();
+    if (index < 19) session.nodes.nextBtn.click();
+  }
+  session.nodes.submitBtn.click();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(session.nodes.finalScore.textContent, "20/20");
+  assert.equal(session.records.at(-1).total, 20);
+  assert.equal(session.records.at(-1).quizId, config.topicId + "-v1");
+  assert.equal(session.records.at(-1).details.questionMarks, undefined);
+}
+
 (async () => {
   for (const config of topics) {
     const session = await boot(config);
@@ -289,5 +312,6 @@ async function finish(session, topic, wrong = new Set()) {
     session.nodes.againBtn.click();
     await finish(session, config.topic, new Set([19]));
   }
-  console.log("PASS: all 40 reviewed keys and unique choices, revised angle-equation branches and attainable maxima; 40/38-mark totals, 1/2/3 level weights, partial and zero scores, weighted percentages, review marks, navigation, retakes and separate v2 score records.");
+  for (const config of configurations) await checkLegacyBank(config);
+  console.log("PASS: all 40 reviewed keys and unique choices, revised branches and maxima; 40/38-mark totals, 1/2/3 weights, partial/zero scores, percentages, review marks and v2 records. Cached v1 banks still grade 20/20 under their original IDs.");
 })().catch(error => { console.error(error); process.exitCode = 1; });
