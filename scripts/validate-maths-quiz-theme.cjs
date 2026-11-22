@@ -137,15 +137,50 @@ expect(foundationTheme.includes("color: #6b6b6b"), "Input placeholder text needs
 const index = read("index.html");
 for (const route of [
   "quizzes/vectors_skill_builder.html",
-  "quizzes/trig_angles_quiz_v1.html",
-  "quizzes/multiplication_practice_v1.html"
+  "quizzes/trigonometry_skill_builder.html",
+  "quizzes/basic_arithmetic_skill_builder.html"
 ]) {
   expect(index.includes(`href="${route}"`), `Mathematics section is missing active route: ${route}`);
 }
+
+const mathsSection = index.match(/<article class="subject-card mathematics"[\s\S]*?<\/article>/)?.[0] || "";
+const categoryRoutes = [...mathsSection.matchAll(/class="app-link" href="([^"]+)"/g)].map(match => match[1]);
+expect(
+  JSON.stringify(categoryRoutes) === JSON.stringify([
+    "quizzes/vectors_skill_builder.html",
+    "quizzes/trigonometry_skill_builder.html",
+    "quizzes/basic_arithmetic_skill_builder.html"
+  ]),
+  "Mathematics must show Vectors, Trigonometry and Basic Arithmetic once each, in that order."
+);
+expect(!mathsSection.includes("Foundations") && !mathsSection.includes("Maths Skill Builders"), "Mathematics retains a duplicate navigation layer.");
+
+for (const [category, children] of [
+  ["trigonometry_skill_builder.html", ["trig_angles_quiz_v1.html", "pythagorean_identities_quiz.html"]],
+  ["basic_arithmetic_skill_builder.html", ["multiplication_practice_v1.html"]]
+]) {
+  const html = read(path.join("quizzes", category));
+  const childRoutes = [...html.matchAll(/class="skill-card" href="([^"]+)"/g)].map(match => match[1]);
+  expect(JSON.stringify(childRoutes) === JSON.stringify(children), `${category} must list its quizzes exactly once.`);
+  expect(html.includes('href="maths_skill_builders.html"'), `${category} must return to Skill Builders.`);
+  expect(html.includes('href="../styles/maths_vector_quiz.css?v=2"'), `${category} must use the shared maths theme.`);
+  for (const child of children) {
+    expect(read(path.join("quizzes", child)).includes(`class="back-link" href="${category}"`), `${child} must return to its own category.`);
+  }
+}
+
+const skillBuilders = read(path.join("quizzes", "maths_skill_builders.html"));
+expect(skillBuilders.includes("<h1>Skill Builders</h1>"), "The category overview has the wrong title.");
+expect(
+  JSON.stringify([...skillBuilders.matchAll(/class="skill-card" href="([^"]+)"/g)].map(match => match[1])) === JSON.stringify([
+    "vectors_skill_builder.html", "trigonometry_skill_builder.html", "basic_arithmetic_skill_builder.html"
+  ]),
+  "The Skill Builders overview must contain only the three category links."
+);
 
 if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log("Maths quiz theme: 9 quizzes plus the vector hub use the light Chemistry-compatible palette.");
+  console.log("Maths theme and navigation passed: three categories, correct quiz parents, and the light quiz palette.");
 }

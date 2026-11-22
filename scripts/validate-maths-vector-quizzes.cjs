@@ -90,7 +90,8 @@ assert.match(
   "Answer choices must be shuffled for every sampled question."
 );
 assert.ok(index.includes('href="quizzes/vectors_skill_builder.html"'), "Maths must link to the skill-builder hub.");
-assert.ok(hub.includes("Vectors Skill Builder"), "The skill-builder hub is missing its title.");
+assert.ok(hub.includes("<h1>Vectors</h1>"), "The Vectors category is missing its title.");
+assert.ok(hub.includes('href="maths_skill_builders.html"'), "Vectors must link back to Skill Builders.");
 
 const questionIds = new Set();
 let totalQuestions = 0;

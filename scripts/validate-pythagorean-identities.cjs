@@ -9,7 +9,7 @@ const bank = JSON.parse(fs.readFileSync(path.join(root, "assets/data/question_ba
 const topic = bank[0];
 const engine = fs.readFileSync(path.join(root, "js/maths-vector-quiz.js"), "utf8");
 const page = fs.readFileSync(path.join(root, "quizzes/pythagorean_identities_quiz.html"), "utf8");
-const hub = fs.readFileSync(path.join(root, "quizzes/maths_skill_builders.html"), "utf8");
+const hub = fs.readFileSync(path.join(root, "quizzes/trigonometry_skill_builder.html"), "utf8");
 const sampleAngles = [0.13, 0.38, 0.71, 1.11, 1.44, 1.9, 2.3, 2.9, 3.4, 3.9, 4.4, 4.9, 5.3, 5.9, 6.2];
 const epsilon = 1e-6;
 
@@ -114,7 +114,8 @@ assert.match(page, /where all displayed terms are defined/);
 assert.match(page, /Each correct answer earns 1 mark/);
 assert.ok(page.includes('data-quiz-bank="' + bankPath + '"'));
 assert.ok(hub.includes('href="pythagorean_identities_quiz.html"'));
-assert.ok(fs.readFileSync(path.join(root, "index.html"), "utf8").includes('href="quizzes/maths_skill_builders.html"'));
+assert.ok(fs.readFileSync(path.join(root, "index.html"), "utf8").includes('href="quizzes/trigonometry_skill_builder.html"'));
+assert.ok(page.includes('href="trigonometry_skill_builder.html"'));
 for (const file of ["js/account.js", "js/scores.js"]) {
   assert.ok(fs.readFileSync(path.join(root, file), "utf8").includes('"pythagorean-identities-v1"'));
 }
