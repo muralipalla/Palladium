@@ -4,8 +4,10 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
-const bankPath = "../assets/data/question_banks/maths_pythagorean_identities.json";
-const bank = JSON.parse(fs.readFileSync(path.join(root, "assets/data/question_banks/maths_pythagorean_identities.json"), "utf8"));
+const bankPath = "../assets/data/question_banks/maths_pythagorean_identities_v2.json";
+const legacyBankPath = "../assets/data/question_banks/maths_pythagorean_identities.json";
+const bank = JSON.parse(fs.readFileSync(path.join(root, bankPath.slice(3)), "utf8"));
+const legacyBank = JSON.parse(fs.readFileSync(path.join(root, legacyBankPath.slice(3)), "utf8"));
 const topic = bank[0];
 const engine = fs.readFileSync(path.join(root, "js/maths-vector-quiz.js"), "utf8");
 const page = fs.readFileSync(path.join(root, "quizzes/pythagorean_identities_quiz.html"), "utf8");
@@ -87,7 +89,14 @@ const cases = {
 
 assert.equal(bank.length, 1);
 assert.equal(topic.questionCount, 20);
-assert.equal(topic.marksPerQuestion, 1);
+assert.equal(topic.quizId, "pythagorean-identities-v2");
+assert.deepEqual(topic.marksByLevel, { 2: 2, 3: 3 });
+assert.equal(topic.marksPerQuestion, undefined);
+assert.equal(topic.totalMarks, 50);
+assert.equal(topic.questions.reduce((total, question) => total + question.level, 0), 50);
+assert.deepEqual(topic.questions, legacyBank[0].questions, "Question wording, options, keys, levels and worked solutions must remain unchanged");
+assert.equal(legacyBank[0].quizId, "pythagorean-identities-v1");
+assert.equal(legacyBank[0].marksPerQuestion, 1);
 assert.equal(topic.questions.length, 20);
 assert.equal(new Set(topic.questions.map(q => q.id)).size, 20);
 for (const level of [2, 3]) assert.equal(topic.questions.filter(q => q.level === level).length, 10);
@@ -113,13 +122,19 @@ for (let step = 0; step <= 4096; step++) {
   assert.ok(fourthPowerSum(theta) >= minimum - 1e-12);
 }
 assert.match(page, /where all displayed terms are defined/);
-assert.match(page, /Each correct answer earns 1 mark/);
+assert.match(page, /Each correct answer earns 2 marks at Level 2 and 3 marks at Level 3/);
+assert.match(page, /20 MCQs · 50 marks/);
+assert.match(page, /id="finalScore">0\/50/);
+assert.match(page, /score percentage/);
+assert.match(page, /maths-vector-quiz\.js\?v=level-marks-2/);
 assert.ok(page.includes('data-quiz-bank="' + bankPath + '"'));
 assert.ok(hub.includes('href="pythagorean_identities_quiz.html"'));
+assert.match(hub, /href="pythagorean_identities_quiz.html">[\s\S]*?20 MCQs · 50 marks/);
 assert.ok(fs.readFileSync(path.join(root, "index.html"), "utf8").includes('href="quizzes/trigonometry_skill_builder.html"'));
 assert.ok(page.includes('href="trigonometry_skill_builder.html"'));
 for (const file of ["js/account.js", "js/scores.js"]) {
   assert.ok(fs.readFileSync(path.join(root, file), "utf8").includes('"pythagorean-identities-v1"'));
+  assert.ok(fs.readFileSync(path.join(root, file), "utf8").includes('"pythagorean-identities-v2"'));
 }
 const engineIds = [...engine.matchAll(/getElementById\("([^"]+)"\)/g)].map(m => m[1]);
 for (const id of engineIds) assert.ok(page.includes('id="' + id + '"'), "Missing quiz control: " + id);
@@ -136,12 +151,13 @@ class Element {
 }
 
 async function boot(data, activeTopic, customBank) {
+  const requestedBank = typeof customBank === "string" ? customBank : bankPath;
   const nodes = Object.fromEntries(engineIds.map(id => [id, new Element()]));
   for (const id of ["quizScreen", "resultScreen", "loadError"]) nodes[id].hidden = true;
   const level = customBank ? new Element() : null;
   const records = [];
   const document = {
-    body: { dataset: { quizTopic: activeTopic, ...(customBank ? { quizBank: bankPath } : {}) } },
+    body: { dataset: { quizTopic: activeTopic, ...(customBank ? { quizBank: requestedBank } : {}) } },
     getElementById: id => nodes[id],
     querySelector: () => level,
     createElement: () => new Element()
@@ -159,7 +175,7 @@ async function boot(data, activeTopic, customBank) {
   vm.runInNewContext(engine, {
     document, window, console, clearInterval() {},
     fetch: async url => {
-      assert.equal(url, customBank ? bankPath : "../assets/data/question_banks/maths_vectors_matrices.json");
+      assert.equal(url, customBank ? requestedBank : "../assets/data/question_banks/maths_vectors_matrices.json");
       return { ok: true, json: async () => structuredClone(data) };
     }
   });
@@ -178,14 +194,21 @@ function answerCurrent(session, question, correct) {
 
 async function complete(session, activeTopic, wrongIndices = new Set()) {
   const seen = new Set();
+  const ordered = [];
+  let maximum = 0;
+  let score = 0;
   for (let index = 0; index < activeTopic.questionCount; index++) {
     const question = activeTopic.questions.find(q => q.prompt === session.nodes.question.textContent);
     assert.ok(question);
     assert.ok(!seen.has(question.id));
     seen.add(question.id);
+    ordered.push(question);
+    const marks = activeTopic.marksByLevel ? question.level : 1;
+    maximum += marks;
+    if (!wrongIndices.has(index)) score += marks;
     if (session.level) {
       assert.equal(question.level, index < 10 ? 2 : 3);
-      assert.equal(session.level.textContent, `Level ${question.level} · 1 mark`);
+      assert.equal(session.level.textContent, `Level ${question.level} · ${marks} ${marks === 1 ? "mark" : "marks"}`);
     }
     answerCurrent(session, question, !wrongIndices.has(index));
     if (index === 1) {
@@ -198,17 +221,28 @@ async function complete(session, activeTopic, wrongIndices = new Set()) {
   assert.equal(session.nodes.submitBtn.disabled, false);
   session.nodes.submitBtn.click();
   await new Promise(resolve => setImmediate(resolve));
-  const score = activeTopic.questionCount - wrongIndices.size;
-  assert.equal(session.nodes.finalScore.textContent, score + "/" + activeTopic.questionCount);
-  assert.equal(session.nodes.finalPercent.textContent, Math.round(score / activeTopic.questionCount * 100) + "%");
+  assert.equal(session.nodes.finalScore.textContent, score + "/" + maximum);
+  assert.equal(session.nodes.finalPercent.textContent, Math.round(score / maximum * 100) + "%");
   assert.equal(session.nodes.reviewList.children.length, activeTopic.questionCount);
   const explanationCount = session.nodes.reviewList.children.filter(item => item.children.some(child => child.className === "review-explanation")).length;
   assert.equal(explanationCount, activeTopic.showExplanations ? activeTopic.questionCount : 0);
   const record = session.records.at(-1);
   assert.equal(record.quizId, activeTopic.quizId);
   assert.equal(record.score, score);
-  assert.equal(record.total, activeTopic.questionCount);
+  assert.equal(record.total, maximum);
   assert.equal(new Set(record.details.questionIds).size, activeTopic.questionCount);
+  if (activeTopic.marksByLevel) {
+    assert.equal(record.details.questionCount, 20);
+    assert.equal(record.details.correctCount, 20 - wrongIndices.size);
+    assert.equal(record.details.percent, Math.round(score / maximum * 100));
+    assert.deepEqual(Array.from(record.details.questionMarks), ordered.map(question => question.level));
+    for (const [index, item] of session.nodes.reviewList.children.entries()) {
+      const marks = ordered[index].level;
+      assert.ok(item.children.some(child => child.textContent === `Level ${marks} · ${marks} marks · Earned ${wrongIndices.has(index) ? 0 : marks}/${marks}`));
+    }
+  } else {
+    assert.equal(record.details.questionMarks, undefined);
+  }
 }
 
 (async () => {
@@ -221,10 +255,16 @@ async function complete(session, activeTopic, wrongIndices = new Set()) {
   await complete(session, topic);
   session.nodes.againBtn.click();
   await complete(session, topic, new Set(Array.from({ length: 20 }, (_, n) => n)));
+  session.nodes.againBtn.click();
+  await complete(session, topic, new Set([0]));
+  session.nodes.againBtn.click();
+  await complete(session, topic, new Set([19]));
+
+  await complete(await boot(legacyBank, legacyBank[0].id, legacyBankPath), legacyBank[0]);
 
   const vectorBank = JSON.parse(fs.readFileSync(path.join(root, "assets/data/question_banks/maths_vectors_matrices.json"), "utf8"));
   for (const existing of vectorBank) {
     await complete(await boot(vectorBank, existing.id, false), existing);
   }
-  console.log("PASS: all 20 keys independently solved; one valid choice per question; 10 questions per level; 20-mark scoring, navigation, retakes, explanations and score payloads; all 7 existing vector quizzes retain their behavior.");
+  console.log("PASS: all 20 question objects unchanged and keys verified; ten Level 2 questions at 2 marks and ten Level 3 at 3 marks; 50-mark full/partial/zero scoring, weighted percentages, review marks and v2 score records. Cached v1 pages and all 7 vector quizzes retain their original scoring.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

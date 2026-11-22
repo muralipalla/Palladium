@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A 20-mark MCQ quiz on Pythagorean trigonometric identities, with ten Level 2 and ten Level 3 questions and worked solutions after submission.">
+  <meta name="description" content="A 50-mark MCQ quiz on Pythagorean trigonometric identities, with ten Level 2 and ten Level 3 questions and worked solutions after submission.">
   <meta name="theme-color" content="#ffffff">
   <title>Pythagorean Identities Quiz | Palladium</title>
   <link rel="stylesheet" href="../styles/maths_vector_quiz.css?v=2">
   <link rel="stylesheet" href="../styles/maths_trigonometry_quiz.css?v=1">
 </head>
-<body data-quiz-topic="pythagorean-identities" data-quiz-bank="../assets/data/question_banks/maths_pythagorean_identities.json">
+<body data-quiz-topic="pythagorean-identities" data-quiz-bank="../assets/data/question_banks/maths_pythagorean_identities_v2.json">
   <header>
     <nav class="quiz-topbar" aria-label="Quiz navigation">
       <a class="palladium-brand" href="../index.html" aria-label="Palladium learning lab — Home">
@@ -24,7 +24,7 @@
       <p class="eyebrow">Skill Builders · Trigonometry</p>
       <h1>Pythagorean Identities</h1>
       <div class="quiz-instructions">
-        <p><strong>20 MCQs · 20 marks.</strong> Answer 10 Level 2 questions, then 10 Level 3 questions. Each correct answer earns 1 mark. There is no negative marking. Answers and worked solutions appear after submission.</p>
+        <p><strong>20 MCQs · 50 marks.</strong> Answer 10 Level 2 questions, then 10 Level 3 questions. Each correct answer earns 2 marks at Level 2 and 3 marks at Level 3. There is no negative marking. Answers and worked solutions appear after submission.</p>
         <p>For simplification questions, choose an expression equal to the original for every real θ where all displayed terms are defined. Acute means 0° &lt; θ &lt; 90°. The notation cosec θ means 1/sin θ, and sin² θ means (sin θ)².</p>
       </div>
     </header>
@@ -34,7 +34,7 @@
       <section id="quizScreen" class="screen" hidden>
         <div class="quiz-meta"><span id="progress" aria-live="polite">Question 1 of 20</span><span id="timer">00:00</span></div>
         <div class="progress-track" aria-hidden="true"><div id="progressBar" class="progress-bar"></div></div>
-        <p class="question-level" data-question-level>Level 2 · 1 mark</p>
+        <p class="question-level" data-question-level>Level 2 · 2 marks</p>
         <h2 id="question" tabindex="-1">Loading question…</h2>
         <div id="options" class="options" role="group" aria-labelledby="question"></div>
         <p id="quizStatus" class="quiz-status" aria-live="polite"></p>
@@ -46,8 +46,8 @@
       <section id="resultScreen" class="screen result-screen" hidden>
         <h2 id="resultTitle" tabindex="-1">Result</h2>
         <div class="result-grid">
-          <div class="result-box"><strong id="finalScore">0/20</strong><span>marks</span></div>
-          <div class="result-box"><strong id="finalPercent">0%</strong><span>accuracy</span></div>
+          <div class="result-box"><strong id="finalScore">0/50</strong><span>marks</span></div>
+          <div class="result-box"><strong id="finalPercent">0%</strong><span>score percentage</span></div>
           <div class="result-box"><strong id="finalTime">00:00</strong><span>time</span></div>
         </div>
         <h3>Answers and Worked Solutions</h3>
@@ -59,6 +59,6 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
   <script defer src="../js/progress-store.js"></script>
-  <script defer src="../js/maths-vector-quiz.js?v=pythagorean-1"></script>
+  <script defer src="../js/maths-vector-quiz.js?v=level-marks-2"></script>
 </body>
 </html>

@@ -49,6 +49,7 @@
     "oxidation-numbers-v1": "Oxidation Numbers",
     "trig-angles-v1": "Trigonometric Angles",
     "pythagorean-identities-v1": "Pythagorean Identities · Levels 2 and 3",
+    "pythagorean-identities-v2": "Pythagorean Identities · 50 marks",
     "sum-difference-identities-v1": "Sum and Difference of Angles · Levels 2 and 3",
     "double-triple-identities-v1": "Double and Triple Angles · Levels 2 and 3",
     "sum-difference-identities-v2": "Sum and Difference of Angles · 40 marks",

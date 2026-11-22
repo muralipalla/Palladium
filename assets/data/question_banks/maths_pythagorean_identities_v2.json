@@ -1,0 +1,195 @@
+[
+  {
+    "id": "pythagorean-identities",
+    "quizId": "pythagorean-identities-v2",
+    "title": "Pythagorean Identities",
+    "questionCount": 20,
+    "marksByLevel": { "2": 2, "3": 3 },
+    "totalMarks": 50,
+    "orderByLevel": true,
+    "showExplanations": true,
+    "description": "Ten Level 2 applications followed by ten Level 3 problems on Pythagorean trigonometric identities.",
+    "questions": [
+      {
+        "id": "pythagorean-L2-01",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "For sin θ cos θ ≠ 0, simplify [(1 − cos² θ)(1 + cot² θ)]/(sec² θ − tan² θ).",
+        "options": ["sin² θ", "1", "cos² θ", "cot² θ"],
+        "answer": "1",
+        "explanation": "Use 1 − cos² θ = sin² θ and 1 + cot² θ = cosec² θ = 1/sin² θ. The numerator is sin² θ × (1/sin² θ) = 1. The denominator sec² θ − tan² θ is also 1, so the quotient is 1."
+      },
+      {
+        "id": "pythagorean-L2-02",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "Which expression is identically equal to (sec² θ − 1)/sec² θ?",
+        "options": ["cos² θ", "tan² θ", "sin² θ", "1"],
+        "answer": "sin² θ",
+        "explanation": "Use sec² θ − 1 = tan² θ. Then tan² θ/sec² θ = (sin² θ/cos² θ)/(1/cos² θ) = sin² θ."
+      },
+      {
+        "id": "pythagorean-L2-03",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "If tan θ = 3/4 and θ is acute, what is sin² θ?",
+        "options": ["9/16", "3/5", "9/25", "16/25"],
+        "answer": "9/25",
+        "explanation": "sec² θ = 1 + tan² θ = 25/16, so cos² θ = 16/25. Hence sin² θ = 1 − 16/25 = 9/25."
+      },
+      {
+        "id": "pythagorean-L2-04",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "If cos θ = −5/13 and 90° < θ < 180°, what is tan θ?",
+        "options": ["12/5", "−5/12", "−12/13", "−12/5"],
+        "answer": "−12/5",
+        "explanation": "sin² θ = 1 − 25/169 = 144/169. Sine is positive in quadrant II, so sin θ = 12/13. Therefore tan θ = (12/13)/(−5/13) = −12/5."
+      },
+      {
+        "id": "pythagorean-L2-05",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "Simplify sec² θ + cosec² θ − tan² θ − cot² θ.",
+        "options": ["0", "1", "2", "sec² θ + cosec² θ"],
+        "answer": "2",
+        "explanation": "Group the terms as (sec² θ − tan² θ) + (cosec² θ − cot² θ). Each bracket equals 1, giving 2."
+      },
+      {
+        "id": "pythagorean-L2-06",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "If sin θ = 12/13 and θ is acute, what is sec² θ − 1?",
+        "options": ["144/25", "25/144", "12/5", "169/25"],
+        "answer": "144/25",
+        "explanation": "cos² θ = 1 − sin² θ = 1 − 144/169 = 25/169. Taking the reciprocal gives sec² θ = 169/25. Subtracting 1 gives 144/25."
+      },
+      {
+        "id": "pythagorean-L2-07",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "Which expression is identically equal to (1 − sin⁴ θ)/cos² θ?",
+        "options": ["1 − sin² θ", "1 + sin² θ", "sin² θ", "1 + cos² θ"],
+        "answer": "1 + sin² θ",
+        "explanation": "Factor 1 − sin⁴ θ as (1 − sin² θ)(1 + sin² θ). Since 1 − sin² θ = cos² θ, the nonzero factor cos² θ cancels, leaving 1 + sin² θ."
+      },
+      {
+        "id": "pythagorean-L2-08",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "Which expression is identically equal to sin² θ(1 + tan² θ)?",
+        "options": ["sin² θ", "sec² θ", "cos² θ", "tan² θ"],
+        "answer": "tan² θ",
+        "explanation": "Replace 1 + tan² θ with sec² θ. The product becomes sin² θ sec² θ = sin² θ/cos² θ = tan² θ."
+      },
+      {
+        "id": "pythagorean-L2-09",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "If sin² θ = 2/5, what is tan² θ + cot² θ?",
+        "options": ["5/6", "1", "13/6", "6/13"],
+        "answer": "13/6",
+        "explanation": "cos² θ = 1 − 2/5 = 3/5. Thus tan² θ = 2/3 and cot² θ = 3/2. Their sum is 4/6 + 9/6 = 13/6."
+      },
+      {
+        "id": "pythagorean-L2-10",
+        "level": 2,
+        "difficulty": "medium",
+        "prompt": "If sec θ + tan θ = 4 and θ is acute, what is sec θ − tan θ?",
+        "options": ["1/4", "4", "1/16", "3"],
+        "answer": "1/4",
+        "explanation": "(sec θ + tan θ)(sec θ − tan θ) = sec² θ − tan² θ = 1. The first factor is 4, so the second is 1/4."
+      },
+      {
+        "id": "pythagorean-L3-01",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If sin θ + cos θ = 1/2, what is 1/(1 + sin θ) + 1/(1 + cos θ)?",
+        "options": ["20/9", "16/9", "8/3", "10/9"],
+        "answer": "20/9",
+        "explanation": "Write s = sin θ and c = cos θ. Squaring s + c = 1/2 gives 1 + 2sc = 1/4, so sc = −3/8. The common denominator (1 + s)(1 + c) = 1 + 1/2 − 3/8 = 9/8 is nonzero. The sum is (2 + s + c)/(9/8) = (5/2)/(9/8) = 20/9."
+      },
+      {
+        "id": "pythagorean-L3-02",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If tan θ + cot θ = 5, what is (sec² θ − cosec² θ)²?",
+        "options": ["525", "575", "625", "25"],
+        "answer": "525",
+        "explanation": "Let t = tan θ and u = cot θ. Then t + u = 5 and tu = 1. The Pythagorean identities give sec² θ − cosec² θ = t² − u². Squaring gives (t + u)²(t − u)² = 25(25 − 4tu) = 525."
+      },
+      {
+        "id": "pythagorean-L3-03",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If sin θ cos θ = 1/3, what is sin⁶ θ + cos⁶ θ?",
+        "options": ["7/9", "1/3", "8/9", "2/3"],
+        "answer": "2/3",
+        "explanation": "Let x = sin² θ and y = cos² θ. Then x + y = 1 and xy = 1/9. Hence x³ + y³ = (x + y)³ − 3xy(x + y) = 1 − 3/9 = 2/3."
+      },
+      {
+        "id": "pythagorean-L3-04",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If sec θ + tan θ = 3 and θ is acute, what is sin θ?",
+        "options": ["3/5", "5/4", "4/5", "1/3"],
+        "answer": "4/5",
+        "explanation": "Since sec² θ − tan² θ = 1, sec θ − tan θ = 1/3. Adding and subtracting the two equations gives sec θ = 5/3 and tan θ = 4/3. Therefore sin θ = tan θ/sec θ = 4/5."
+      },
+      {
+        "id": "pythagorean-L3-05",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If cosec θ − cot θ = 2 and 90° < θ < 180°, what is cos θ?",
+        "options": ["−3/5", "3/5", "−4/5", "−3/4"],
+        "answer": "−3/5",
+        "explanation": "The product (cosec θ − cot θ)(cosec θ + cot θ) equals 1, so cosec θ + cot θ = 1/2. Adding gives cosec θ = 5/4, and subtracting gives cot θ = −3/4. Thus cos θ = cot θ/cosec θ = −3/5, consistent with quadrant II."
+      },
+      {
+        "id": "pythagorean-L3-06",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "Simplify (sin⁶ θ + cos⁶ θ − 1)/(sin² θ cos² θ).",
+        "options": ["−2", "3", "0", "−3"],
+        "answer": "−3",
+        "explanation": "Using sin² θ + cos² θ = 1, the sum sin⁶ θ + cos⁶ θ is 1 − 3 sin² θ cos² θ. The numerator is therefore −3 sin² θ cos² θ. Its nonzero denominator cancels to give −3."
+      },
+      {
+        "id": "pythagorean-L3-07",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If tan² θ + cot² θ = 7, what is sin² θ cos² θ?",
+        "options": ["1/7", "1/9", "1/5", "1/49"],
+        "answer": "1/9",
+        "explanation": "Let p = sin² θ cos² θ. Then tan² θ + cot² θ = (sin⁴ θ + cos⁴ θ)/p = (1 − 2p)/p. Hence 7 = 1/p − 2, giving p = 1/9."
+      },
+      {
+        "id": "pythagorean-L3-08",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "For real θ, what is the minimum of 3 sin⁴ θ + 2 cos⁴ θ?",
+        "options": ["6/5", "5/4", "1", "3/2"],
+        "answer": "6/5",
+        "explanation": "Let x = sin² θ, so 0 ≤ x ≤ 1 and cos² θ = 1 − x. Completing the square gives 3x² + 2(1 − x)² = 5(x − 2/5)² + 6/5. The minimum is 6/5 and is attained when sin² θ = 2/5."
+      },
+      {
+        "id": "pythagorean-L3-09",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If sin⁴ θ + cos⁴ θ = 5/8, what is (tan θ + cot θ)²?",
+        "options": ["16/3", "3/16", "8/3", "5/8"],
+        "answer": "16/3",
+        "explanation": "Squaring sin² θ + cos² θ = 1 gives 1 = 5/8 + 2 sin² θ cos² θ, so sin² θ cos² θ = 3/16. Also tan θ + cot θ = (sin² θ + cos² θ)/(sin θ cos θ) = 1/(sin θ cos θ). Squaring gives 16/3."
+      },
+      {
+        "id": "pythagorean-L3-10",
+        "level": 3,
+        "difficulty": "hard",
+        "prompt": "If tan θ − cot θ = 2, what is sin⁴ θ + cos⁴ θ?",
+        "options": ["1/2", "7/8", "1/4", "3/4"],
+        "answer": "3/4",
+        "explanation": "Squaring the given difference and using tan θ cot θ = 1 gives tan² θ + cot² θ = 6. Therefore (tan θ + cot θ)² = 6 + 2 = 8. Since tan θ + cot θ = 1/(sin θ cos θ), we obtain sin² θ cos² θ = 1/8. Hence sin⁴ θ + cos⁴ θ = 1 − 2(1/8) = 3/4."
+      }
+    ]
+  }
+]
