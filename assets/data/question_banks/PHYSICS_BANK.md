@@ -13,6 +13,10 @@ together in one selection row. `answerLatex` must match one of the option
 strings exactly. The text fields accept plain text or MathJax/LaTeX, as in
 the Chemistry Custom Quiz.
 
+A bank can optionally specify `selectionGroup` in the index with `id`, `title`
+and `difficulty`. This combines its questions into one selection row without
+changing their individual topic IDs or difficulty levels.
+
 Physics practice initially selects up to 10 questions, distributed across the
 available topic rows. Learners can change each count or use the quick-selection
 buttons before starting. A completed signed-in attempt appears as Physics Daily
@@ -24,6 +28,10 @@ Practice Quiz in account scores.
 ten velocity–time questions. Each type has five Level 1 and five Level 2
 questions. The graph image is part of `promptLatex`, so it also appears in the
 existing question review. Alternative text provides the plotted coordinates.
+All 20 questions appear together in the **Graphical questions** selection row,
+labelled **Levels 1–2**. Learners can select any count up to 20 from that row.
+An **Enlarge graph** button in each question and its review opens the SVG at
+full size, with horizontal scrolling on small screens.
 
 The `graph` field stores the exact SI coordinates and axis scales used to draw
 the SVG in `assets/graphs/physics_motion/`. The curved x–t question uses an exact

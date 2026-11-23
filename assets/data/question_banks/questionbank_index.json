@@ -30,10 +30,15 @@
     },
     {
       "id": "physics-motion-graphs",
-      "title": "Motion Graphs: Displacement, Velocity and Acceleration",
+      "title": "Graphical questions",
       "subject": "Physics",
       "format": "latex",
       "file": "../assets/data/question_banks/physics_motion_graphs.json",
+      "selectionGroup": {
+        "id": "PH-M1-GRAPHS",
+        "title": "Graphical questions",
+        "difficulty": "Levels 1–2"
+      },
       "instructions": "Motion is along one straight line. The coordinate x is signed position (displacement from a fixed origin); displacement over an interval is the change in x. Treat the labelled graph values as exact. Straight segments are linear. In the curved x–t graph, use the marked tangent for instantaneous velocity.",
       "description": "Twenty graph-based MCQs: ten x–t and ten v–t questions on velocity, acceleration, displacement and average velocity, with hints and worked solutions."
     }

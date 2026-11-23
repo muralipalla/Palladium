@@ -135,12 +135,42 @@ for (const question of bank) {
 const graphBank = index.banks.find(item => item.id === "physics-motion-graphs");
 assert.ok(graphBank && graphBank.subject === "Physics");
 assert.equal(graphBank.file, "../assets/data/question_banks/physics_motion_graphs.json");
+assert.deepEqual(graphBank.selectionGroup, { id: "PH-M1-GRAPHS", title: "Graphical questions", difficulty: "Levels 1–2" });
 assert.ok(graphBank.instructions.includes("fixed origin") && graphBank.instructions.includes("exact"));
 const physicsQuestions = index.banks.filter(item => item.subject === "Physics").flatMap(item => {
   const data = JSON.parse(read(item.file.slice(3)));
-  return Array.isArray(data) ? data : data.questions;
+  return (Array.isArray(data) ? data : data.questions).map(q => ({ ...q, bankId: item.id, selectionGroup: item.selectionGroup || null }));
 });
 assert.equal(physicsQuestions.length, 80);
 assert.equal(new Set(physicsQuestions.map(q => q.id)).size, 80);
 assert.equal(index.banks.filter(item => item.subject === "Chemistry").length, 1);
-console.log("PASS: 20 independently solved graph questions, unique correct choices and SI units; all 20 SVGs match their labelled axes, points and exact tangent; four selectable groups of five; all three Physics banks load with 80 unique questions.");
+
+// Exercise the actual selection function rather than duplicating its grouping rules.
+const quizPage = read("quizzes/universal_quiz_latex.html");
+const groupFunction = quizPage.slice(quizPage.indexOf("    function buildTopicGroups()"), quizPage.indexOf("    function renderTopicList()"));
+assert.ok(groupFunction.startsWith("    function buildTopicGroups()"));
+assert.ok(quizPage.includes("selectionGroup: bank.selectionGroup || null"));
+const buildGroups = new Function("allQuestions", "let topicGroups = [];\n" + groupFunction + "\nbuildTopicGroups(); return topicGroups;");
+const groups = buildGroups(physicsQuestions);
+assert.equal(groups.length, 5, "Four existing Physics rows plus one graphical row");
+const graphical = groups.filter(group => group.bankId === graphBank.id);
+assert.equal(graphical.length, 1);
+assert.equal(graphical[0].topic, "Graphical questions");
+assert.equal(graphical[0].difficulty, "Levels 1–2");
+assert.equal(graphical[0].questions.length, 20);
+assert.deepEqual(graphical[0].questions.map(q => q.id).sort(), bank.map(q => q.id).sort());
+for (const question of graphical[0].questions) {
+  const original = bank.find(q => q.id === question.id);
+  assert.equal(question.topic, original.topic);
+  assert.equal(question.difficulty, original.difficulty);
+  assert.equal(question.answerLatex, original.answerLatex);
+}
+const legacy = physicsQuestions.filter(q => q.bankId !== graphBank.id);
+assert.deepEqual(groups.filter(group => group.bankId !== graphBank.id), buildGroups(legacy), "Existing Physics groups stay unchanged");
+assert.deepEqual(groups.filter(group => group.bankId !== graphBank.id).map(group => group.questions.length), [10, 10, 20, 20]);
+const chemistryBank = index.banks.find(item => item.subject === "Chemistry");
+const chemistryData = JSON.parse(read(chemistryBank.file.slice(3)));
+const chemistryQuestions = (Array.isArray(chemistryData) ? chemistryData : chemistryData.questions).map(q => ({ ...q, bankId: chemistryBank.id }));
+const groupSummary = source => buildGroups(source).map(({ questions, ...group }) => ({ ...group, questionIds: questions.map(q => q.id) }));
+assert.deepEqual(groupSummary(chemistryQuestions), groupSummary(chemistryQuestions.map(q => ({ ...q, selectionGroup: null }))), "Optional grouping leaves Chemistry unchanged");
+console.log("PASS: 20 independently solved graph questions, unique correct choices and SI units; all 20 SVGs match their labelled axes, points and exact tangent; one Graphical questions group of 20; all three Physics banks load with 80 unique questions; existing Physics and Chemistry groups unchanged.");

@@ -24,6 +24,53 @@
   </script>
 
   <style>
+    .motion-graph-open {
+      display: block;
+      margin: 0 auto 14px;
+      padding: 9px 14px;
+      font-size: 1rem;
+    }
+
+    .motion-graph-dialog {
+      box-sizing: border-box;
+      width: 610px;
+      max-width: calc(100vw - 24px);
+      max-height: calc(100vh - 24px);
+      padding: 16px;
+      border: 2px solid #94a3b8;
+      border-radius: 12px;
+      background: white;
+      color: #14213d;
+    }
+
+    .motion-graph-dialog::backdrop {
+      background: rgb(15 23 42 / 65%);
+    }
+
+    .motion-graph-dialog form {
+      display: flex;
+      justify-content: flex-end;
+      margin: 0;
+    }
+
+    .motion-graph-dialog p {
+      margin: 12px 0;
+      line-height: 1.5;
+    }
+
+    .motion-graph-scroll {
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .motion-graph-scroll img {
+      display: block;
+      width: 560px;
+      max-width: none;
+      height: auto;
+    }
+
     .physics-review {
       display: grid;
       gap: 10px;
@@ -477,6 +524,14 @@
 
     <div id="resultArea" style="display:none;"></div>
   </div>
+
+  <dialog id="motionGraphDialog" class="motion-graph-dialog" aria-label="Enlarged motion graph">
+    <form method="dialog"><button type="submit">Close graph</button></form>
+    <p>Graph at full size. Scroll sideways on smaller screens to see the whole graph.</p>
+    <div class="motion-graph-scroll" tabindex="0" role="region" aria-label="Full-size graph, scroll horizontally">
+      <img id="enlargedMotionGraph" width="560" height="390" alt="">
+    </div>
+  </dialog>
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
@@ -7805,7 +7860,27 @@
 
     async function renderLatexText(text, element) {
       element.innerHTML = String(text || "");
+      addMotionGraphControls(element);
       await typesetElement(element);
+    }
+
+    function addMotionGraphControls(element) {
+      element.querySelectorAll("img.motion-question-graph").forEach(image => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "motion-graph-open";
+        button.textContent = "Enlarge graph";
+        button.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          const enlarged = document.getElementById("enlargedMotionGraph");
+          enlarged.src = image.src;
+          enlarged.alt = image.alt;
+          document.getElementById("motionGraphDialog").showModal();
+          document.querySelector(".motion-graph-scroll").scrollLeft = 0;
+        });
+        image.insertAdjacentElement("afterend", button);
+      });
     }
 
     async function typesetWholePage() {
@@ -7848,6 +7923,7 @@
             bankId: bank.id,
             bankTitle: bank.title,
             bankInstructions: bank.instructions || "",
+            selectionGroup: bank.selectionGroup || null,
             uniqueId: bank.id + ":" + q.id
           }));
         }));
@@ -7896,14 +7972,17 @@
       const map = new Map();
 
       allQuestions.forEach(q => {
+        const topicId = q.selectionGroup?.id || q.topicId || "";
+        const topic = q.selectionGroup?.title || q.topic || "";
+        const difficulty = q.selectionGroup?.difficulty || q.difficulty || "";
         const key = [
           q.bankId,
           q.subject || "",
           q.chapterId || "",
           q.chapterName || "",
-          q.topicId || "",
-          q.topic || "",
-          q.difficulty || ""
+          topicId,
+          topic,
+          difficulty
         ].join("||");
 
         if (!map.has(key)) {
@@ -7913,9 +7992,9 @@
             subject: q.subject || "",
             chapterId: q.chapterId || "",
             chapterName: q.chapterName || "",
-            topicId: q.topicId || "",
-            topic: q.topic || "",
-            difficulty: q.difficulty || "",
+            topicId,
+            topic,
+            difficulty,
             questions: []
           });
         }
@@ -8470,6 +8549,7 @@
       }
 
       resultArea.innerHTML = summary;
+      addMotionGraphControls(resultArea);
 
       await typesetWholePage();
     }
@@ -8720,6 +8800,7 @@
 
     document.addEventListener("keydown", event => {
       if (!quizActive) return;
+      if (document.getElementById("motionGraphDialog").open || document.activeElement?.classList.contains("motion-graph-open")) return;
 
       const tag = document.activeElement?.tagName?.toLowerCase();
       if (tag === "input" || tag === "select" || tag === "textarea") return;
