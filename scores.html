@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0f172a">
   <title>My Scores | Palladium</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/account.css">
+  <link rel="stylesheet" href="css/account.css?v=timing-cleanup-1">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-97Q24MY5MH"></script>
   <script>
@@ -32,16 +32,24 @@
     </div>
     <section class="dashboard-card" aria-live="polite">
       <p id="scoresStatus" class="dashboard-status">Checking your account&hellip;</p>
-      <div id="scoresTableWrap" class="score-table-wrap" hidden>
-        <table class="data-table"><thead><tr><th>Activity</th><th>Score</th><th>Percentage</th><th>Completed</th></tr></thead><tbody id="scoresBody"></tbody></table>
+      <div id="scoreControls" class="record-controls" hidden>
+        <label>Quiz <select id="scoreQuizFilter"><option value="">All quizzes</option></select></label>
+        <button id="deleteScoresButton" class="danger-action" type="button" disabled>Delete selected scores</button>
+        <span id="scoreSelectionCount">0 selected</span>
       </div>
+      <p id="scoreActionStatus" class="dashboard-status" role="status" hidden></p>
+      <div id="scoresTableWrap" class="score-table-wrap" hidden>
+        <table class="data-table"><thead><tr><th><input id="selectAllScores" type="checkbox" aria-label="Select all shown scores"></th><th>Activity</th><th>Score</th><th>Percentage</th><th>Time taken</th><th>Completed</th></tr></thead><tbody id="scoresBody"></tbody></table>
+      </div>
+      <div id="scoresPagination" class="results-pagination" hidden><button id="previousScoresButton" class="secondary-action" type="button">Previous</button><span id="scoresPageLabel"></span><button id="nextScoresButton" class="secondary-action" type="button">Next</button></div>
       <div id="scoresSignIn" class="access-message" hidden><p>Sign in to view your saved scores.</p><a class="primary-action link-action" href="account.html">Go to sign in</a></div>
     </section>
   </main>
   <footer class="site-footer"><p>Palladium &middot; Your progress belongs to your account.</p></footer>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="js/supabase-client.js"></script>
-  <script defer src="js/progress-store.js"></script>
-  <script defer src="js/scores.js"></script>
+  <script defer src="js/quiz-timer.js?v=1"></script>
+  <script defer src="js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="js/scores.js?v=timing-cleanup-1"></script>
 </body>
 </html>

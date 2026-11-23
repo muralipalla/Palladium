@@ -8,6 +8,7 @@
   <title>Pythagorean Identities Quiz | Palladium</title>
   <link rel="stylesheet" href="../styles/maths_vector_quiz.css?v=2">
   <link rel="stylesheet" href="../styles/maths_trigonometry_quiz.css?v=1">
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 <body data-quiz-topic="pythagorean-identities" data-quiz-bank="../assets/data/question_banks/maths_pythagorean_identities_v2.json">
   <header>
@@ -28,6 +29,7 @@
         <p>For simplification questions, choose an expression equal to the original for every real θ where all displayed terms are defined. Acute means 0° &lt; θ &lt; 90°. The notation cosec θ means 1/sin θ, and sin² θ means (sin θ)².</p>
       </div>
     </header>
+      <div data-quiz-timer></div>
     <section class="quiz-card" aria-label="Pythagorean Identities quiz">
       <p id="loadStatus" class="screen" role="status">Loading quiz…</p>
       <p id="loadError" class="bank-error" role="alert" hidden></p>
@@ -58,7 +60,8 @@
   </main>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
-  <script defer src="../js/maths-vector-quiz.js?v=level-marks-2"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/maths-vector-quiz.js?v=optional-timing-1"></script>
 </body>
 </html>

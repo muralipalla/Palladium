@@ -8,6 +8,7 @@
   <title>Double and Triple Angles Quiz | Palladium</title>
   <link rel="stylesheet" href="../styles/maths_vector_quiz.css?v=2">
   <link rel="stylesheet" href="../styles/maths_trigonometry_quiz.css?v=1">
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 <body data-quiz-topic="double-triple-identities" data-quiz-bank="../assets/data/question_banks/maths_double_triple_identities_v2.json">
   <header>
@@ -28,6 +29,7 @@
         <p>All angles are measured in degrees. Acute means strictly between 0° and 90°. In simplification questions, choose an expression equal to the original wherever the original is defined. Retain all original restrictions on the angles after simplifying. The notation sin 2A means sin(2A), sin² A means (sin A)², and cot A means cos A/sin A.</p>
       </div>
     </header>
+      <div data-quiz-timer></div>
     <section class="quiz-card" aria-label="Double and Triple Angles quiz">
       <p id="loadStatus" class="screen" role="status">Loading quiz…</p>
       <p id="loadError" class="bank-error" role="alert" hidden></p>
@@ -58,7 +60,8 @@
   </main>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
-  <script defer src="../js/maths-vector-quiz.js?v=level-marks-2"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/maths-vector-quiz.js?v=optional-timing-1"></script>
 </body>
 </html>

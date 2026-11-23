@@ -17,10 +17,11 @@
 
   function startTabTracking() {
     tabTracking = { tabHiddenCount: 0, focusLossCount: 0 };
+    window.QuizTimer?.start();
   }
 
   function finishTabTracking() {
-    const result = tabTracking ? { ...tabTracking } : {};
+    const result = { ...(tabTracking || {}), ...(window.QuizTimer?.finish() || {}) };
     tabTracking = null;
     return result;
   }
@@ -172,6 +173,9 @@
     expectedUserId = null
   }) {
     if (!quizId || typeof quizId !== "string") throw new Error("A quizId is required.");
+    if (typeof details?.timerEnabled === "boolean") {
+      durationSeconds = details.timerEnabled ? details.durationSeconds : null;
+    }
     if (!Number.isInteger(score) || !Number.isInteger(total) || total <= 0 || score < 0 || score > total) {
       throw new Error("Attempt scores must be whole numbers with 0 <= score <= total.");
     }
@@ -217,20 +221,53 @@
     return { saved: true, attempt: data, clientAttemptId, userId: user.id };
   }
 
-  async function listAttempts({ quizId = null, limit = 20 } = {}) {
+  async function listAttempts({ quizId = null, limit = 20, offset = 0 } = {}) {
     const user = await currentUser();
     if (!user) return [];
 
     let query = client()
       .from("quiz_attempts")
       .select("id, quiz_id, score, total, duration_seconds, details, completed_at")
+      .eq("user_id", user.id)
       .order("completed_at", { ascending: false })
-      .limit(Math.min(100, Math.max(1, Number(limit) || 20)));
+      .order("id", { ascending: false })
+      .range(Math.max(0, Math.floor(Number(offset) || 0)), Math.max(0, Math.floor(Number(offset) || 0)) + Math.min(100, Math.max(1, Math.floor(Number(limit) || 20))) - 1);
 
     if (quizId) query = query.eq("quiz_id", quizId);
     const { data, error } = await query;
     if (error) throw error;
+    await requireExpectedUser(user.id);
     return data || [];
+  }
+
+  async function deleteAttempts(attemptIds) {
+    if (!Array.isArray(attemptIds) || !attemptIds.length || attemptIds.length > 100) throw new Error("Select between 1 and 100 scores to delete.");
+    const ids = [...new Set(attemptIds)];
+    if (ids.some(id => typeof id !== "string" || !/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id))) throw new Error("Invalid score selection.");
+    const user = await requireUser();
+    const { data, error } = await client().from("quiz_attempts").delete().eq("user_id", user.id).in("id", ids).select("id, client_attempt_id");
+    if (error) throw error;
+    await requireExpectedUser(user.id);
+    const deleted = new Set((data || []).map(row => row.client_attempt_id));
+    if (deleted.size) {
+      try {
+        for (const key of [MULTIPLICATION_KEY, OXIDATION_KEY]) {
+          const entries = readLocalJson(key, []);
+          if (Array.isArray(entries)) writeLocalJson(key, entries.filter(entry => !(belongsToUserOrGuest(entry, user.id) && deleted.has(entry.clientAttemptId))));
+        }
+        for (const prefix of [VOCABULARY_KEY, ADVANCED_VOCABULARY_KEY]) {
+          for (const key of [prefix, `${prefix}:${user.id}`]) {
+            const state = readLocalJson(key, null);
+            if (!state || (state.ownerId && state.ownerId !== user.id) || !Array.isArray(state.logs)) continue;
+            state.logs = state.logs.filter(log => !deleted.has(log.clientAttemptId));
+            writeLocalJson(key, state);
+          }
+        }
+      } catch (cacheError) {
+        console.warn("Scores were deleted; this browser's cached history could not be refreshed.", cacheError);
+      }
+    }
+    return { deletedCount: (data || []).length };
   }
 
   async function saveActivityState(activityId, state, expectedUserId = null) {
@@ -316,7 +353,15 @@
     for (const key of ["tabHiddenCount", "focusLossCount"]) {
       if (Number.isInteger(entry[key]) && entry[key] >= 0) details[key] = entry[key];
     }
+    if (typeof entry.timerEnabled === "boolean") {
+      details.timerEnabled = entry.timerEnabled;
+      details.durationSeconds = storedDuration(entry);
+    }
     return details;
+  }
+
+  function storedDuration(entry) {
+    return entry.timerEnabled !== false && Number.isInteger(entry.durationSeconds) && entry.durationSeconds >= 0 ? entry.durationSeconds : null;
   }
 
   function multiplicationRows(history, userId) {
@@ -333,7 +378,7 @@
         quiz_id: "multiplication-practice-v1",
         score: boundedInteger((accuracy / 100) * total, 0, total),
         total,
-        duration_seconds: null,
+        duration_seconds: storedDuration(entry),
         completed_at: entry.completedAt,
         details: {
           averageSeconds: Number(entry.speed) || null,
@@ -362,7 +407,7 @@
         quiz_id: "oxidation-numbers-v1",
         score: boundedInteger(entry.score, 0, total),
         total,
-        duration_seconds: null,
+        duration_seconds: storedDuration(entry),
         completed_at: entry.completedAt,
         details: {
           percent: boundedInteger(entry.percent, 0, 100),
@@ -393,7 +438,7 @@
         quiz_id: "vocabulary-daily-v1",
         score: boundedInteger(log.score, 0, total),
         total,
-        duration_seconds: null,
+        duration_seconds: storedDuration(log),
         completed_at: log.completedAt,
         details: {
           mode: log.mode || "Daily",
@@ -426,7 +471,7 @@
         quiz_id: "gre-vocabulary-v1",
         score: boundedInteger(log.score, 0, total),
         total,
-        duration_seconds: boundedInteger(log.durationSeconds, 0, 86400) || null,
+        duration_seconds: storedDuration(log),
         completed_at: log.completedAt,
         details: {
           mode: log.mode || "mixed",
@@ -685,6 +730,7 @@
     otherOwnerEntries,
     recordAttempt,
     listAttempts,
+    deleteAttempts,
     saveActivityState,
     loadActivityState,
     deleteActivityState,

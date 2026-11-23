@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0f172a">
   <title>Quiz results | Palladium</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/account.css">
+  <link rel="stylesheet" href="css/account.css?v=timing-cleanup-1">
 </head>
 <body class="account-page">
   <header class="account-header">
@@ -20,8 +20,19 @@
     <div class="dashboard-heading"><div><p class="section-kicker">Administrator</p><h1>Quiz results</h1><p>Completed quizzes across Palladium. Times are shown in your local time zone.</p></div><button id="refreshResultsButton" class="secondary-action" type="button" hidden>Refresh</button></div>
     <section class="dashboard-card" aria-live="polite">
       <p id="resultsStatus" class="dashboard-status">Checking administrator access&hellip;</p>
+      <form id="resultsFilters" class="record-controls" hidden>
+        <label>Student <input id="studentFilter" type="search" maxlength="200" placeholder="Name or email"></label>
+        <label>Quiz <select id="resultsQuizFilter"><option value="">All quizzes</option></select></label>
+        <label>Completed before (local date) <input id="resultsBeforeDate" type="date"></label>
+        <button class="secondary-action" type="submit">Apply filters</button>
+      </form>
+      <div id="resultDeleteControls" class="record-controls" hidden>
+        <button id="deleteResultsButton" class="danger-action" type="button" disabled>Delete selected records</button>
+        <span id="resultSelectionCount">0 selected</span>
+      </div>
+      <p id="resultActionStatus" class="dashboard-status" role="status" hidden></p>
       <div id="resultsTableWrap" class="score-table-wrap" hidden>
-        <table class="data-table"><thead><tr><th>Student</th><th>Email</th><th>Quiz</th><th>Date</th><th>Time</th><th>Score</th><th>Tab hidden</th><th>Focus lost</th></tr></thead><tbody id="resultsBody"></tbody></table>
+        <table class="data-table"><thead><tr><th><input id="selectAllResults" type="checkbox" aria-label="Select all shown records"></th><th>Student</th><th>Email</th><th>Quiz</th><th>Date</th><th>Time</th><th>Score</th><th>Time taken</th><th>Tab hidden</th><th>Focus lost</th></tr></thead><tbody id="resultsBody"></tbody></table>
         <div class="results-pagination"><button id="previousResultsButton" class="secondary-action" type="button">Previous</button><span id="resultsPageLabel"></span><button id="nextResultsButton" class="secondary-action" type="button">Next</button></div>
         <p class="results-note">Only quizzes completed while signed in are saved here. “Tab hidden” counts when the quiz tab became hidden, including a browser minimize. “Focus lost” counts when the quiz window lost focus. Browsers cannot identify a new tab opened in the background. Older attempts show “Not recorded.”</p>
       </div>
@@ -31,6 +42,7 @@
   <footer class="site-footer"><p>Palladium &middot; Administrator access only.</p></footer>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="js/supabase-client.js"></script>
-  <script defer src="js/admin-results.js"></script>
+  <script defer src="js/quiz-timer.js?v=1"></script>
+  <script defer src="js/admin-results.js?v=timing-cleanup-1"></script>
 </body>
 </html>

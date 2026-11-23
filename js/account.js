@@ -316,6 +316,7 @@
     const date = document.createElement("span");
     date.className = "progress-date";
     date.textContent = new Date(attempt.completed_at).toLocaleString();
+    if (Number.isInteger(attempt.duration_seconds)) date.textContent += ` · Time taken: ${window.QuizTimer.formatDuration(attempt.duration_seconds)}`;
 
     item.append(title, score, date);
     return item;

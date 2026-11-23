@@ -31,9 +31,7 @@
   let current = 0;
   let answers = [];
   let totalMarks = 0;
-  let timerInterval = null;
-  let startedAt = 0;
-  let elapsedSeconds = 0;
+  let elapsedSeconds = null;
   let cloudAttemptId = null;
 
   function shuffle(items) {
@@ -46,36 +44,19 @@
   }
 
   function formatTime(totalSeconds) {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    return window.QuizTimer?.formatDuration(totalSeconds) || "Not timed";
   }
 
   function questionMarks(item) {
     return topic.marksByLevel?.[item.level] ?? topic.marksPerQuestion ?? 1;
   }
 
-  function currentElapsedSeconds() {
-    if (!startedAt) return elapsedSeconds;
-    return Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
-  }
-
   function startTimer() {
-    clearInterval(timerInterval);
-    startedAt = Date.now();
-    elapsedSeconds = 0;
-    elements.timer.textContent = "00:00";
-    timerInterval = window.setInterval(() => {
-      elapsedSeconds = currentElapsedSeconds();
-      elements.timer.textContent = formatTime(elapsedSeconds);
-    }, 1000);
+    elapsedSeconds = null;
   }
 
   function stopTimer() {
-    elapsedSeconds = currentElapsedSeconds();
-    startedAt = 0;
-    clearInterval(timerInterval);
-    timerInterval = null;
+    elapsedSeconds = window.QuizTimer?.finish().durationSeconds ?? null;
     elements.timer.textContent = formatTime(elapsedSeconds);
   }
 
@@ -269,7 +250,6 @@
   elements.prevBtn.addEventListener("click", previousQuestion);
   elements.nextBtn.addEventListener("click", nextQuestion);
   elements.submitBtn.addEventListener("click", submitQuiz);
-  window.addEventListener("beforeunload", () => clearInterval(timerInterval));
 
   void loadTopic();
 })();

@@ -262,3 +262,176 @@ grant select, insert, update, delete on table public.activity_state to authentic
 grant execute on function public.is_site_admin() to authenticated;
 grant execute on function public.admin_list_users() to authenticated;
 grant execute on function public.admin_list_quiz_attempts(integer, integer) to authenticated;
+
+-- Optional quiz timing and selected-score cleanup (upgrade existing projects
+-- by applying this section). No existing attempts are deleted by this setup.
+create schema if not exists palladium_private;
+revoke all on schema palladium_private from public, anon;
+grant usage on schema palladium_private to authenticated;
+
+-- Small ID-only markers prevent offline/imported copies from recreating a
+-- deleted score. Scores and their detailed JSON are removed, not archived.
+create table if not exists public.quiz_attempt_deletions (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  client_attempt_id uuid not null,
+  primary key (user_id, client_attempt_id)
+);
+alter table public.quiz_attempt_deletions enable row level security;
+revoke all on table public.quiz_attempt_deletions from anon, authenticated;
+grant select, insert on table public.quiz_attempt_deletions to authenticated;
+drop policy if exists quiz_attempt_deletions_select_own on public.quiz_attempt_deletions;
+create policy quiz_attempt_deletions_select_own on public.quiz_attempt_deletions
+for select to authenticated using ((select auth.uid()) = user_id);
+drop policy if exists quiz_attempt_deletions_insert_own on public.quiz_attempt_deletions;
+create policy quiz_attempt_deletions_insert_own on public.quiz_attempt_deletions
+for insert to authenticated with check ((select auth.uid()) = user_id);
+
+create or replace function palladium_private.remember_deleted_quiz_attempt()
+returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  -- This trigger runs only after a permitted row deletion. Auth/system account
+  -- removal may have no user JWT and must not recreate an orphaned marker.
+  if (select auth.uid()) is null and current_setting('role', true) not in ('none', 'postgres', 'service_role', 'supabase_auth_admin') then
+    raise exception 'Authenticated score deletion required' using errcode = '42501';
+  end if;
+  if not exists (select 1 from auth.users where id = old.user_id) then return old; end if;
+  insert into public.quiz_attempt_deletions (user_id, client_attempt_id)
+  values (old.user_id, old.client_attempt_id) on conflict do nothing;
+  update public.activity_state as activity
+  set state = jsonb_set(activity.state, '{logs}', (
+    select coalesce(jsonb_agg(log_entry), '[]'::jsonb)
+    from jsonb_array_elements(activity.state -> 'logs') as log_entry
+    where log_entry ->> 'clientAttemptId' is distinct from old.client_attempt_id::text
+  ))
+  where activity.user_id = old.user_id
+    and activity.activity_id = old.quiz_id
+    and jsonb_typeof(activity.state -> 'logs') = 'array'
+    and activity.state -> 'logs' @> jsonb_build_array(jsonb_build_object('clientAttemptId', old.client_attempt_id::text));
+  return old;
+end;
+$$;
+
+create or replace function public.reject_deleted_quiz_attempt()
+returns trigger language plpgsql security invoker set search_path = '' as $$
+begin
+  if exists (select 1 from public.quiz_attempt_deletions
+    where user_id = new.user_id and client_attempt_id = new.client_attempt_id) then
+    return null;
+  end if;
+  return new;
+end;
+$$;
+
+create or replace function public.filter_deleted_quiz_logs()
+returns trigger language plpgsql security invoker set search_path = '' as $$
+begin
+  if jsonb_typeof(new.state -> 'logs') = 'array' then
+    new.state = jsonb_set(new.state, '{logs}', (
+      select coalesce(jsonb_agg(log_entry), '[]'::jsonb)
+      from jsonb_array_elements(new.state -> 'logs') as log_entry
+      where not exists (
+        select 1 from public.quiz_attempt_deletions as deleted
+        where deleted.user_id = new.user_id
+          and deleted.client_attempt_id::text = log_entry ->> 'clientAttemptId'
+      )
+    ));
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists quiz_attempt_remember_deletion on public.quiz_attempts;
+create trigger quiz_attempt_remember_deletion after delete on public.quiz_attempts
+for each row execute function palladium_private.remember_deleted_quiz_attempt();
+drop trigger if exists quiz_attempt_reject_deleted on public.quiz_attempts;
+create trigger quiz_attempt_reject_deleted before insert on public.quiz_attempts
+for each row execute function public.reject_deleted_quiz_attempt();
+drop trigger if exists activity_state_filter_deleted_logs on public.activity_state;
+create trigger activity_state_filter_deleted_logs before insert or update of state on public.activity_state
+for each row execute function public.filter_deleted_quiz_logs();
+
+-- The privileged functions live outside the exposed API schema. Each checks
+-- the signed-in caller against the existing server-owned administrator list.
+create or replace function palladium_private.admin_list_quiz_attempts_v2(
+  p_limit integer default 100, p_offset integer default 0,
+  p_before timestamptz default null, p_student text default null,
+  p_quiz_id text default null
+)
+returns table (
+  attempt_id uuid, user_id uuid, display_name text, email text, quiz_id text,
+  score integer, total integer, duration_seconds integer,
+  completed_at timestamptz, details jsonb
+)
+language plpgsql stable security definer set search_path = '' as $$
+begin
+  if (select auth.uid()) is null or not public.is_site_admin() then
+    raise exception 'Administrator access required' using errcode = '42501';
+  end if;
+  return query
+  select attempts.id, attempts.user_id, profiles.display_name, users.email::text,
+    attempts.quiz_id, attempts.score, attempts.total, attempts.duration_seconds,
+    attempts.completed_at, attempts.details
+  from public.quiz_attempts as attempts
+  join auth.users as users on users.id = attempts.user_id
+  left join public.profiles as profiles on profiles.user_id = attempts.user_id
+  where (p_before is null or attempts.completed_at < p_before)
+    and (nullif(btrim(p_quiz_id), '') is null or attempts.quiz_id = p_quiz_id)
+    and (nullif(btrim(p_student), '') is null or position(lower(left(btrim(p_student), 200)) in lower(coalesce(profiles.display_name, '') || ' ' || users.email::text)) > 0)
+  order by attempts.completed_at desc, attempts.id desc
+  limit least(greatest(coalesce(p_limit, 101), 1), 101)
+  offset greatest(coalesce(p_offset, 0), 0);
+end;
+$$;
+
+create or replace function palladium_private.admin_delete_quiz_attempts(p_attempt_ids uuid[])
+returns integer language plpgsql security definer set search_path = '' as $$
+declare deleted_count integer;
+begin
+  if (select auth.uid()) is null or not public.is_site_admin() then
+    raise exception 'Administrator access required' using errcode = '42501';
+  end if;
+  if p_attempt_ids is null or cardinality(p_attempt_ids) not between 1 and 100
+    or array_position(p_attempt_ids, null) is not null then
+    raise exception 'Select between 1 and 100 quiz records' using errcode = '22023';
+  end if;
+  delete from public.quiz_attempts where id = any(p_attempt_ids);
+  get diagnostics deleted_count = row_count;
+  return deleted_count;
+end;
+$$;
+
+create or replace function public.admin_list_quiz_attempts_v2(
+  p_limit integer default 100, p_offset integer default 0,
+  p_before timestamptz default null, p_student text default null,
+  p_quiz_id text default null
+)
+returns table (
+  attempt_id uuid, user_id uuid, display_name text, email text, quiz_id text,
+  score integer, total integer, duration_seconds integer,
+  completed_at timestamptz, details jsonb
+)
+language sql stable security invoker set search_path = '' as $$
+  select * from palladium_private.admin_list_quiz_attempts_v2(p_limit, p_offset, p_before, p_student, p_quiz_id);
+$$;
+
+create or replace function public.admin_delete_quiz_attempts(p_attempt_ids uuid[])
+returns integer language sql security invoker set search_path = '' as $$
+  select palladium_private.admin_delete_quiz_attempts(p_attempt_ids);
+$$;
+
+revoke all on function palladium_private.remember_deleted_quiz_attempt() from public, anon, authenticated;
+revoke all on function public.reject_deleted_quiz_attempt() from public, anon, authenticated;
+revoke all on function public.filter_deleted_quiz_logs() from public, anon, authenticated;
+revoke all on function palladium_private.admin_list_quiz_attempts_v2(integer, integer, timestamptz, text, text) from public, anon, authenticated;
+revoke all on function palladium_private.admin_delete_quiz_attempts(uuid[]) from public, anon, authenticated;
+revoke all on function public.admin_list_quiz_attempts_v2(integer, integer, timestamptz, text, text) from public, anon, authenticated;
+revoke all on function public.admin_delete_quiz_attempts(uuid[]) from public, anon, authenticated;
+grant execute on function palladium_private.admin_list_quiz_attempts_v2(integer, integer, timestamptz, text, text) to authenticated;
+grant execute on function palladium_private.admin_delete_quiz_attempts(uuid[]) to authenticated;
+grant execute on function public.admin_list_quiz_attempts_v2(integer, integer, timestamptz, text, text) to authenticated;
+grant execute on function public.admin_delete_quiz_attempts(uuid[]) to authenticated;
+
+-- Remove legacy explicit anonymous grants as well as the PUBLIC grant.
+revoke all on function public.is_site_admin() from public, anon;
+revoke all on function public.admin_list_users() from public, anon;
+revoke all on function public.handle_new_user() from public, anon, authenticated;

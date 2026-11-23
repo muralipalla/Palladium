@@ -554,6 +554,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body>
@@ -573,6 +574,7 @@
   <main>
     <section class="practice-card">
       <div class="quiz-panel">
+      <div data-quiz-timer></div>
         <section id="start-screen" class="screen active">
           <div class="challenge-badge">🚀 Day <span id="day-display">1</span> of 21</div>
           <h2 class="start-title">Ready for today’s practice?</h2>
@@ -592,7 +594,7 @@
               <strong>Progress</strong>
               <span id="progress">0/20</span>
             </div>
-            <div class="stat">
+            <div class="stat" data-legacy-quiz-timer>
               <strong>Time</strong>
               <span id="timer">0.0s</span>
             </div>
@@ -718,7 +720,8 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script>
     const defaultTables = [3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     let selectedTables = new Set(defaultTables);
@@ -728,7 +731,6 @@
     let correctCount = 0;
     let wrongAnswers = [];
     let startTime = 0;
-    let timerInterval = null;
     let streak = 0;
     let bestStreak = 0;
     let currentAttemptWrong = false;
@@ -743,7 +745,6 @@
     const feedbackEl = document.getElementById("feedback");
 
     const progressEl = document.getElementById("progress");
-    const timerEl = document.getElementById("timer");
     const correctStat = document.getElementById("correctStat");
     const streakStat = document.getElementById("streakStat");
 
@@ -847,16 +848,8 @@
       showScreen(quizScreen);
       startTime = Date.now();
 
-      clearInterval(timerInterval);
-      timerInterval = setInterval(updateTimer, 100);
-
       showQuestion();
       answerInput.focus();
-    }
-
-    function updateTimer() {
-      const elapsed = (Date.now() - startTime) / 1000;
-      timerEl.textContent = `${elapsed.toFixed(1)}s`;
     }
 
     function showQuestion({ announceQuestion = false } = {}) {
@@ -929,17 +922,17 @@
     }
 
     function endGame() {
-      clearInterval(timerInterval);
+      const timing = window.QuizTimer?.finish();
 
       const totalTime = (Date.now() - startTime) / 1000;
       const avgSpeed = totalTime / questions.length;
       const accuracy = (correctCount / questions.length) * 100;
 
-      finalSpeed.textContent = `${avgSpeed.toFixed(2)}s`;
+      finalSpeed.textContent = timing?.timerEnabled ? `${avgSpeed.toFixed(2)}s` : "Not timed";
       finalAccuracy.textContent = `${accuracy.toFixed(0)}%`;
       finalBestStreak.textContent = bestStreak;
 
-      saveResult(avgSpeed, accuracy, questions.length, bestStreak);
+      saveResult(timing?.timerEnabled ? avgSpeed : null, accuracy, questions.length, bestStreak);
       renderWrongList();
       updateHistoryTable();
 
@@ -983,7 +976,7 @@
         completedAt,
         ownerId: window.ProgressStore?.currentOwnerId() || null,
         date: new Date().toLocaleDateString(),
-        speed: speed.toFixed(2),
+        speed: Number.isFinite(speed) ? speed.toFixed(2) : null,
         accuracy: accuracy.toFixed(0),
         count,
         bestStreak: bestStreakValue,
@@ -999,9 +992,9 @@
           quizId: "multiplication-practice-v1",
           score: correctCount,
           total: count,
-          durationSeconds: Math.max(0, Math.round(speed * count)),
+          durationSeconds: tabDetails.durationSeconds ?? null,
           details: {
-            averageSeconds: Number(speed.toFixed(2)),
+            averageSeconds: Number.isFinite(speed) ? Number(speed.toFixed(2)) : null,
             accuracyPercent: Number(accuracy.toFixed(0)),
             bestStreak: bestStreakValue,
             ...tabDetails
@@ -1037,7 +1030,7 @@
             ${history.map(h => `
               <tr>
                 <td>${h.date}</td>
-                <td>${h.speed}s</td>
+                <td>${h.speed === null ? "Not timed" : `${h.speed}s`}</td>
                 <td>${h.accuracy}%</td>
               </tr>
             `).join("")}

@@ -298,6 +298,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body>
@@ -318,6 +319,7 @@
       Total Marks: 15 &nbsp; | &nbsp; 1 mark per question &nbsp; | &nbsp; One question at a time
     </div>
 
+      <div data-quiz-timer></div>
     <div id="quizArea">
       <div class="progress" id="progress"></div>
       <div class="category" id="category"></div>
@@ -341,7 +343,8 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script>
     const questions = [
       {

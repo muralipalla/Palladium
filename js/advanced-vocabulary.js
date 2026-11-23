@@ -639,6 +639,10 @@
     for (const key of ["tabHiddenCount", "focusLossCount"]) {
       if (Number.isInteger(log[key]) && log[key] >= 0) details[key] = log[key];
     }
+    if (typeof log.timerEnabled === "boolean") {
+      details.timerEnabled = log.timerEnabled;
+      details.durationSeconds = log.timerEnabled && Number.isInteger(log.durationSeconds) ? log.durationSeconds : null;
+    }
     return details;
   }
 

@@ -16,6 +16,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 <body data-quiz-topic="dot-product">
   <header>
@@ -29,6 +30,7 @@
   </header>
   <main class="quiz-shell">
     <header class="quiz-heading"><p class="eyebrow">Skill Builders · Vectors</p><h1>Dot Product</h1></header>
+      <div data-quiz-timer></div>
     <section class="quiz-card" aria-label="Dot Product quiz">
       <p id="loadStatus" class="screen" role="status">Loading quiz…</p>
       <p id="loadError" class="bank-error" role="alert" hidden></p>
@@ -58,7 +60,8 @@
   </main>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
-  <script defer src="../js/maths-vector-quiz.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/maths-vector-quiz.js?v=optional-timing-1"></script>
 </body>
 </html>

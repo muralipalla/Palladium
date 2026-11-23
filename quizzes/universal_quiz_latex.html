@@ -396,6 +396,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body>
@@ -411,6 +412,7 @@
       LaTeX question bank &nbsp; | &nbsp; Topic-wise selection &nbsp; | &nbsp; One question at a time
     </div>
 
+      <div data-quiz-timer></div>
     <div id="setupArea">
       <div class="setup-note" id="setupNote">
         Select the number of questions from each topic. The answer is not checked until the student clicks
@@ -535,7 +537,8 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script>
     const EMBEDDED_INDEX = {"schemaVersion":"2.0","title":"Palladium Question Bank Index","description":"Central index of available LaTeX JSON question banks.","banks":[{"id":"chapter1","title":"Chapter 1: Mole Concept","subject":"Chemistry","format":"latex","file":"../assets/data/question_banks/chapter1.json","description":"Mole concept, empirical formula, limiting reagent, POAC, equivalents, concentration terms, electrolysis, redox, n-factor, and titrations."}]};
     const EMBEDDED_BANKS = {"chapter1":[
@@ -8556,6 +8559,7 @@
 
     function restartToSelection() {
       quizActive = false;
+      window.ProgressStore?.finishTabTracking();
       document.getElementById("teacherReport").style.display = "none";
       document.getElementById("cheatWarning").style.display = "none";
       document.getElementById("quizArea").style.display = "none";
@@ -8578,6 +8582,7 @@
       document.getElementById("quizArea").style.display = "block";
 
       resetCheatLog();
+      window.ProgressStore?.startTabTracking();
       await loadQuestion();
     }
 

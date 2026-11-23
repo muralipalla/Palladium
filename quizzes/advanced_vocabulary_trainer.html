@@ -17,6 +17,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body class="advanced-vocab-page">
@@ -65,6 +66,7 @@
         <button id="progressTab" class="trainer-tab" type="button" role="tab" aria-selected="false" aria-controls="progressScreen" data-screen="progress">Progress</button>
       </div>
 
+      <div data-quiz-timer></div>
       <section id="practiceScreen" class="trainer-screen" role="tabpanel" aria-labelledby="practiceTab">
         <div id="setupPanel" class="setup-panel">
           <div class="section-heading">
@@ -262,8 +264,9 @@
   <div id="celebrationLayer" class="celebration-layer" aria-hidden="true"></div>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script defer src="../assets/data/advanced-vocabulary-bank.js"></script>
-  <script defer src="../js/advanced-vocabulary.js"></script>
+  <script defer src="../js/advanced-vocabulary.js?v=optional-timing-1"></script>
 </body>
 </html>

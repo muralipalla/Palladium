@@ -564,6 +564,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body>
@@ -584,6 +585,7 @@
   <main>
     <section class="quiz-card">
       <div class="quiz-panel">
+      <div data-quiz-timer></div>
         <section id="start-screen" class="screen active">
           <div class="challenge-badge">⚡ Randomized trig identity practice</div>
           <h2 class="start-title">Choose notation and begin</h2>
@@ -603,7 +605,7 @@
               <strong>Question</strong>
               <span id="progress">1/20</span>
             </div>
-            <div class="stat">
+            <div class="stat" data-legacy-quiz-timer>
               <strong>Time</strong>
               <span id="timer">00:00</span>
             </div>
@@ -726,7 +728,8 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script>
     const identities = [
       { deg: "sin(90° + θ)", rad: "sin(π/2 + θ)", ans: "cosθ" },
@@ -778,8 +781,6 @@
     let quiz = [];
     let current = 0;
     let answers = [];
-    let seconds = 0;
-    let timerInterval = null;
     let angleMode = "degrees";
     let cloudAttemptId = null;
 
@@ -841,13 +842,8 @@
       quiz = makeQuestionBank();
       answers = new Array(quiz.length).fill(null);
       current = 0;
-      seconds = 0;
       cloudAttemptId = window.ProgressStore?.createAttemptId() || null;
       window.ProgressStore?.startTabTracking();
-
-      clearInterval(timerInterval);
-      timerInterval = setInterval(updateTimer, 1000);
-      updateTimer();
 
       document.getElementById("modeStatus").textContent = angleMode === "degrees" ? "Degrees" : "Radians";
       feedbackEl.textContent = "";
@@ -855,16 +851,6 @@
 
       showScreen(quizScreen);
       showQuestion({ focusQuestion: true });
-    }
-
-    function updateTimer() {
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-
-      document.getElementById("timer").textContent =
-        String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
-
-      seconds++;
     }
 
     function showQuestion({ focusQuestion = false } = {}) {
@@ -923,9 +909,7 @@
         }
       }
 
-      clearInterval(timerInterval);
-
-      const elapsed = Math.max(0, seconds - 1);
+      const elapsed = window.QuizTimer?.finish().durationSeconds ?? null;
       const percent = Math.round((score / quiz.length) * 100);
 
       if (window.ProgressStore && cloudAttemptId) {
@@ -949,10 +933,8 @@
       document.getElementById("finalScore").textContent = `${score}/${quiz.length}`;
       document.getElementById("finalPercent").textContent = `${percent}%`;
 
-      const m = Math.floor(elapsed / 60);
-      const s = elapsed % 60;
       document.getElementById("finalTime").textContent =
-        String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+        window.QuizTimer?.formatDuration(elapsed) || "Not timed";
 
       buildReview();
       showScreen(resultScreen);

@@ -275,6 +275,53 @@
   font-weight: 800;
 }
 
+.record-controls {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.record-controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.record-controls input, .record-controls select {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background: white;
+  color: #1e293b;
+  font: inherit;
+}
+
+.data-table input[type="checkbox"] {
+  width: 19px;
+  height: 19px;
+  accent-color: #1d4ed8;
+  cursor: pointer;
+}
+
+.data-table tr:has(input[type="checkbox"]:checked) {
+  background: #eff6ff;
+}
+
+.record-controls .danger-action {
+  min-height: 42px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
 .google-button {
   display: flex;
   justify-content: center;

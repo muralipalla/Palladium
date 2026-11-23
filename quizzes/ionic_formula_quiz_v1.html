@@ -635,6 +635,7 @@
 
     gtag('config', 'G-97Q24MY5MH');
   </script>
+  <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
 </head>
 
 <body>
@@ -655,6 +656,7 @@
   <main>
     <section class="quiz-card">
       <div class="quiz-panel">
+      <div data-quiz-timer></div>
         <section id="start-screen" class="screen active">
           <div class="challenge-badge">🧪 CSV-powered chemistry practice</div>
           <h2 class="start-title">Choose quiz mode</h2>
@@ -833,7 +835,8 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/progress-store.js"></script>
+  <script defer src="../js/quiz-timer.js?v=1"></script>
+  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
   <script>
     const EMBEDDED_CSV = `Chemical Name,Chemical Formula
 Hydrogen Cation,H+
