@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="390" viewBox="0 0 560 390" role="img" aria-labelledby="title description">
+<title id="title">Displacement–time (x–t)</title><desc id="description">Displacement–time graph. Particle A: straight segments join (0 s, 0 m), (4 s, 8 m); Particle B: straight segments join (0 s, 12 m), (4 s, 4 m).</desc>
+<rect width="560" height="390" rx="12" fill="white"/>
+<g font-family="Arial, sans-serif" fill="#14213d">
+<text x="28" y="29" font-size="23" font-weight="700">Displacement–time (x–t)</text>
+<line x1="28" y1="53" x2="52" y2="53" stroke="#1d4ed8" stroke-width="4"/><text x="61" y="60" font-size="20">Particle A</text>
+<line x1="248" y1="53" x2="272" y2="53" stroke="#9f1239" stroke-width="4" stroke-dasharray="7 5"/><text x="281" y="60" font-size="20">Particle B</text>
+<line x1="90" y1="80" x2="90" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="0" x="90" y="338" text-anchor="middle" font-size="21">0</text>
+<line x1="178" y1="80" x2="178" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="1" x="178" y="338" text-anchor="middle" font-size="21">1</text>
+<line x1="266" y1="80" x2="266" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="2" x="266" y="338" text-anchor="middle" font-size="21">2</text>
+<line x1="354" y1="80" x2="354" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="3" x="354" y="338" text-anchor="middle" font-size="21">3</text>
+<line x1="442" y1="80" x2="442" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="4" x="442" y="338" text-anchor="middle" font-size="21">4</text>
+<line x1="530" y1="80" x2="530" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="5" x="530" y="338" text-anchor="middle" font-size="21">5</text>
+<line x1="90" y1="310" x2="530" y2="310" stroke="#475569" stroke-width="2"/>
+<text class="value-tick" data-value="0" x="78" y="317" text-anchor="end" font-size="21">0</text>
+<line x1="90" y1="277.1429" x2="530" y2="277.1429" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="2" x="78" y="284.1429" text-anchor="end" font-size="21">2</text>
+<line x1="90" y1="244.2857" x2="530" y2="244.2857" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="4" x="78" y="251.2857" text-anchor="end" font-size="21">4</text>
+<line x1="90" y1="211.4286" x2="530" y2="211.4286" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="6" x="78" y="218.4286" text-anchor="end" font-size="21">6</text>
+<line x1="90" y1="178.5714" x2="530" y2="178.5714" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="8" x="78" y="185.5714" text-anchor="end" font-size="21">8</text>
+<line x1="90" y1="145.7143" x2="530" y2="145.7143" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="10" x="78" y="152.7143" text-anchor="end" font-size="21">10</text>
+<line x1="90" y1="112.8571" x2="530" y2="112.8571" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="12" x="78" y="119.8571" text-anchor="end" font-size="21">12</text>
+<line x1="90" y1="80" x2="530" y2="80" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="14" x="78" y="87" text-anchor="end" font-size="21">14</text>
+<path d="M90,80 V310 H530" stroke="#475569" stroke-width="2" fill="none"/>
+<text x="310" y="376" font-size="22" text-anchor="middle">Time, t (s)</text>
+<text x="25" y="195" transform="rotate(-90 25 195)" font-size="22" text-anchor="middle">x (m)</text>
+<polyline class="motion-series" data-series="A" points="90,310 442,178.5714" fill="none" stroke="#1d4ed8" stroke-width="4" stroke-linejoin="round"/>
+<circle class="data-point" data-time="0" data-value="0" cx="90" cy="310" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="101" y="298" text-anchor="start" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(0, 0)</text>
+<circle class="data-point" data-time="4" data-value="8" cx="442" cy="178.5714" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="431" y="166.5714" text-anchor="end" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(4, 8)</text>
+<polyline class="motion-series" data-series="B" points="90,112.8571 442,244.2857" fill="none" stroke="#9f1239" stroke-width="4" stroke-linejoin="round" stroke-dasharray="8 6"/>
+<circle class="data-point" data-time="0" data-value="12" cx="90" cy="112.8571" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+<text x="101" y="100.8571" text-anchor="start" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#9f1239">(0, 12)</text>
+<circle class="data-point" data-time="4" data-value="4" cx="442" cy="244.2857" r="5" fill="#9f1239" stroke="white" stroke-width="1.5"/>
+<text x="431" y="232.2857" text-anchor="end" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#9f1239">(4, 4)</text>
+</g></svg>

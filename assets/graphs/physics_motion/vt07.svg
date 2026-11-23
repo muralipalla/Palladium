@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="390" viewBox="0 0 560 390" role="img" aria-labelledby="title description">
+<title id="title">Velocity–time (v–t)</title><desc id="description">Velocity–time graph. straight segments join (0 s, 0 m/s), (2 s, 6 m/s), (5 s, 6 m/s), (7 s, 0 m/s).</desc>
+<rect width="560" height="390" rx="12" fill="white"/>
+<g font-family="Arial, sans-serif" fill="#14213d">
+<text x="28" y="29" font-size="23" font-weight="700">Velocity–time (v–t)</text>
+<text x="28" y="60" font-size="20" fill="#475569">Straight-line segments</text>
+<line x1="90" y1="80" x2="90" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="0" x="90" y="338" text-anchor="middle" font-size="21">0</text>
+<line x1="152.8571" y1="80" x2="152.8571" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="1" x="152.8571" y="338" text-anchor="middle" font-size="21">1</text>
+<line x1="215.7143" y1="80" x2="215.7143" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="2" x="215.7143" y="338" text-anchor="middle" font-size="21">2</text>
+<line x1="278.5714" y1="80" x2="278.5714" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="3" x="278.5714" y="338" text-anchor="middle" font-size="21">3</text>
+<line x1="341.4286" y1="80" x2="341.4286" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="4" x="341.4286" y="338" text-anchor="middle" font-size="21">4</text>
+<line x1="404.2857" y1="80" x2="404.2857" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="5" x="404.2857" y="338" text-anchor="middle" font-size="21">5</text>
+<line x1="467.1429" y1="80" x2="467.1429" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="6" x="467.1429" y="338" text-anchor="middle" font-size="21">6</text>
+<line x1="530" y1="80" x2="530" y2="310" stroke="#d8e0eb"/>
+<text class="time-tick" data-value="7" x="530" y="338" text-anchor="middle" font-size="21">7</text>
+<line x1="90" y1="310" x2="530" y2="310" stroke="#475569" stroke-width="2"/>
+<text class="value-tick" data-value="0" x="78" y="317" text-anchor="end" font-size="21">0</text>
+<line x1="90" y1="252.5" x2="530" y2="252.5" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="2" x="78" y="259.5" text-anchor="end" font-size="21">2</text>
+<line x1="90" y1="195" x2="530" y2="195" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="4" x="78" y="202" text-anchor="end" font-size="21">4</text>
+<line x1="90" y1="137.5" x2="530" y2="137.5" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="6" x="78" y="144.5" text-anchor="end" font-size="21">6</text>
+<line x1="90" y1="80" x2="530" y2="80" stroke="#d8e0eb" stroke-width="1"/>
+<text class="value-tick" data-value="8" x="78" y="87" text-anchor="end" font-size="21">8</text>
+<path d="M90,80 V310 H530" stroke="#475569" stroke-width="2" fill="none"/>
+<text x="310" y="376" font-size="22" text-anchor="middle">Time, t (s)</text>
+<text x="25" y="195" transform="rotate(-90 25 195)" font-size="22" text-anchor="middle">v (m/s)</text>
+<polyline class="motion-series" data-series="Velocity" points="90,310 215.7143,137.5 404.2857,137.5 530,310" fill="none" stroke="#1d4ed8" stroke-width="4" stroke-linejoin="round"/>
+<circle class="data-point" data-time="0" data-value="0" cx="90" cy="310" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="101" y="298" text-anchor="start" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(0, 0)</text>
+<circle class="data-point" data-time="2" data-value="6" cx="215.7143" cy="137.5" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="226.7143" y="125.5" text-anchor="start" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(2, 6)</text>
+<circle class="data-point" data-time="5" data-value="6" cx="404.2857" cy="137.5" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="393.2857" y="125.5" text-anchor="end" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(5, 6)</text>
+<circle class="data-point" data-time="7" data-value="0" cx="530" cy="310" r="5" fill="#1d4ed8" stroke="white" stroke-width="1.5"/>
+<text x="519" y="298" text-anchor="end" font-size="19" font-weight="700" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round" fill="#1d4ed8">(7, 0)</text>
+</g></svg>

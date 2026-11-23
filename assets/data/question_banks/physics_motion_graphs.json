@@ -1,0 +1,1136 @@
+[
+  {
+    "id": "PH-M1-C4-L1-Q01",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt01.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 0 m), (4 s, 12 m).\">What is the velocity of the particle between t = 0 s and t = 4 s?",
+    "optionsLatex": [
+      "3 m/s",
+      "12 m/s",
+      "4 m/s",
+      "0.33 m/s"
+    ],
+    "answerLatex": "3 m/s",
+    "explanationLatex": "Velocity is the gradient of an x–t graph: (12 − 0)/(4 − 0) = 3 m/s. The straight line shows constant velocity.",
+    "hintsLatex": [
+      "Find the change in x and divide by the corresponding change in time."
+    ],
+    "graph": {
+      "id": "XT01",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt01.svg",
+      "timeMax": 4,
+      "valueMin": 0,
+      "valueMax": 16,
+      "valueTick": 4,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              12
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "velocity",
+      "time": 2
+    }
+  },
+  {
+    "id": "PH-M1-C4-L1-Q02",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt02.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 10 m), (5 s, 0 m).\">Taking increasing x as the positive direction, what is the velocity between t = 0 s and t = 5 s?",
+    "optionsLatex": [
+      "2 m/s",
+      "−2 m/s",
+      "−0.5 m/s",
+      "−10 m/s"
+    ],
+    "answerLatex": "−2 m/s",
+    "explanationLatex": "The gradient is (0 − 10)/(5 − 0) = −2 m/s. A falling x–t line means motion in the negative direction.",
+    "hintsLatex": [
+      "Keep the sign when you subtract the initial x from the final x."
+    ],
+    "graph": {
+      "id": "XT02",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt02.svg",
+      "timeMax": 5,
+      "valueMin": 0,
+      "valueMax": 12,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              10
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "velocity",
+      "time": 3
+    }
+  },
+  {
+    "id": "PH-M1-C4-L1-Q03",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt03.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, -4 m), (4 s, 8 m).\">What is the displacement of the particle from t = 0 s to t = 4 s?",
+    "optionsLatex": [
+      "8 m",
+      "4 m",
+      "−12 m",
+      "12 m"
+    ],
+    "answerLatex": "12 m",
+    "explanationLatex": "Displacement over the interval is x(4) − x(0) = 8 − (−4) = 12 m. The initial coordinate is not zero.",
+    "hintsLatex": [
+      "Read both endpoint coordinates, including the negative initial value."
+    ],
+    "graph": {
+      "id": "XT03",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt03.svg",
+      "timeMax": 4,
+      "valueMin": -8,
+      "valueMax": 12,
+      "valueTick": 4,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              -4
+            ],
+            [
+              4,
+              8
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        0,
+        4
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C4-L1-Q04",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt04.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 6 m), (2 s, 6 m), (5 s, 15 m).\">What is the velocity of the particle at t = 1 s?",
+    "optionsLatex": [
+      "6 m/s",
+      "3 m/s",
+      "0 m/s",
+      "2 m/s"
+    ],
+    "answerLatex": "0 m/s",
+    "explanationLatex": "At t = 1 s the graph is horizontal: x remains 6 m from t = 0 s to t = 2 s. Its gradient, and therefore its velocity, is zero.",
+    "hintsLatex": [
+      "A nonzero coordinate does not necessarily mean that the particle is moving."
+    ],
+    "graph": {
+      "id": "XT04",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt04.svg",
+      "timeMax": 5,
+      "valueMin": 0,
+      "valueMax": 18,
+      "valueTick": 3,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              6
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              5,
+              15
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "velocity",
+      "time": 1
+    }
+  },
+  {
+    "id": "PH-M1-C4-L2-Q05",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt05.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 0 m), (3 s, 9 m), (6 s, 3 m).\">What is the average velocity over the complete interval from t = 0 s to t = 6 s?",
+    "optionsLatex": [
+      "2.5 m/s",
+      "0.5 m/s",
+      "1 m/s",
+      "−0.5 m/s"
+    ],
+    "answerLatex": "0.5 m/s",
+    "explanationLatex": "The final coordinate is 3 m and the initial coordinate is 0 m, so the net displacement is 3 m. Average velocity is 3/6 = 0.5 m/s. The reversal changes the distance travelled, but average velocity uses net displacement.",
+    "hintsLatex": [
+      "Use the first and last coordinates, rather than adding the lengths of the outward and return paths."
+    ],
+    "graph": {
+      "id": "XT05",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt05.svg",
+      "timeMax": 6,
+      "valueMin": 0,
+      "valueMax": 12,
+      "valueTick": 3,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              9
+            ],
+            [
+              6,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "averageVelocity",
+      "interval": [
+        0,
+        6
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C4-L2-Q06",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt06.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 2 m), (2 s, 10 m), (4 s, 10 m), (6 s, -2 m).\">What is the displacement from t = 1 s to t = 5 s?",
+    "optionsLatex": [
+      "2 m",
+      "−4 m",
+      "−2 m",
+      "4 m"
+    ],
+    "answerLatex": "−2 m",
+    "explanationLatex": "On the first straight segment, x(1) = 6 m. On the final straight segment, x(5) = 4 m. Thus the displacement is 4 − 6 = −2 m.",
+    "hintsLatex": [
+      "The requested times lie inside different straight segments. Interpolate on each segment before subtracting."
+    ],
+    "graph": {
+      "id": "XT06",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt06.svg",
+      "timeMax": 6,
+      "valueMin": -4,
+      "valueMax": 12,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            [
+              4,
+              10
+            ],
+            [
+              6,
+              -2
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        1,
+        5
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C4-L2-Q07",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt07.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, -2 m), (2 s, 6 m), (4 s, 6 m), (6 s, 0 m).\">What is the average velocity from t = 2 s to t = 6 s?",
+    "optionsLatex": [
+      "−3 m/s",
+      "1.5 m/s",
+      "3 m/s",
+      "−1.5 m/s"
+    ],
+    "answerLatex": "−1.5 m/s",
+    "explanationLatex": "The particle is at x = 6 m at t = 2 s and x = 0 m at t = 6 s. Its displacement is −6 m over 4 s, including the stationary interval. Average velocity is −6/4 = −1.5 m/s.",
+    "hintsLatex": [
+      "Include the time spent at rest in the elapsed time."
+    ],
+    "graph": {
+      "id": "XT07",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt07.svg",
+      "timeMax": 6,
+      "valueMin": -4,
+      "valueMax": 8,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              -2
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              4,
+              6
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "averageVelocity",
+      "interval": [
+        2,
+        6
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C4-L2-Q08",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt08.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. A smooth displacement curve passes through (0 s, 0 m), (1 s, 1 m), (2 s, 4 m), (3 s, 9 m) and (4 s, 16 m). Its dashed tangent at 3 s passes through (2 s, 3 m) and (4 s, 15 m).\">The dashed line is the tangent to the x–t curve at t = 3 s. Using the two labelled points on this tangent, find the instantaneous velocity at t = 3 s.",
+    "optionsLatex": [
+      "3 m/s",
+      "6 m/s",
+      "9 m/s",
+      "12 m/s"
+    ],
+    "answerLatex": "6 m/s",
+    "explanationLatex": "Instantaneous velocity is the gradient of the tangent, not the coordinate of the point on the curve. The marked tangent points are (2 s, 3 m) and (4 s, 15 m), so the velocity is (15 − 3)/(4 − 2) = 6 m/s.",
+    "hintsLatex": [
+      "Use the rise and run of the dashed tangent line."
+    ],
+    "graph": {
+      "id": "XT08",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt08.svg",
+      "timeMax": 5,
+      "valueMin": 0,
+      "valueMax": 18,
+      "valueTick": 3,
+      "curve": {
+        "coefficients": [
+          0,
+          0,
+          1
+        ],
+        "domain": [
+          0,
+          4
+        ]
+      },
+      "tangent": {
+        "time": 3,
+        "points": [
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            15
+          ]
+        ]
+      }
+    },
+    "calculation": {
+      "quantity": "velocity",
+      "time": 3
+    }
+  },
+  {
+    "id": "PH-M1-C4-L1-Q09",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt09.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. straight segments join (0 s, 0 m), (2 s, 8 m), (5 s, -4 m), (6 s, -4 m).\">What is the displacement from t = 2 s to t = 6 s?",
+    "optionsLatex": [
+      "−4 m",
+      "12 m",
+      "−12 m",
+      "20 m"
+    ],
+    "answerLatex": "−12 m",
+    "explanationLatex": "The coordinate changes from x = 8 m at t = 2 s to x = −4 m at t = 6 s. The displacement is −4 − 8 = −12 m; it is not simply the final coordinate.",
+    "hintsLatex": [
+      "Displacement over an interval is final coordinate minus initial coordinate."
+    ],
+    "graph": {
+      "id": "XT09",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt09.svg",
+      "timeMax": 6,
+      "valueMin": -8,
+      "valueMax": 12,
+      "valueTick": 4,
+      "series": [
+        {
+          "label": "Particle",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              5,
+              -4
+            ],
+            [
+              6,
+              -4
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        2,
+        6
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C4-L2-Q10",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Displacement–time (x–t) graphs",
+    "topicId": "PH-M1-C4",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/xt10.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Displacement–time graph. Particle A: straight segments join (0 s, 0 m), (4 s, 8 m); Particle B: straight segments join (0 s, 12 m), (4 s, 4 m).\">The two lines show particles A and B moving along the same x-axis. What is the velocity of A relative to B?",
+    "optionsLatex": [
+      "0 m/s",
+      "2 m/s",
+      "−4 m/s",
+      "4 m/s"
+    ],
+    "answerLatex": "4 m/s",
+    "explanationLatex": "The gradient of A is (8 − 0)/4 = 2 m/s. The gradient of B is (4 − 12)/4 = −2 m/s. The velocity of A relative to B is the velocity of A minus the velocity of B: 2 − (−2) = 4 m/s.",
+    "hintsLatex": [
+      "Find each signed velocity from its gradient, then subtract the velocity of B from the velocity of A."
+    ],
+    "graph": {
+      "id": "XT10",
+      "type": "xt",
+      "image": "../assets/graphs/physics_motion/xt10.svg",
+      "timeMax": 5,
+      "valueMin": 0,
+      "valueMax": 14,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "A",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              8
+            ]
+          ]
+        },
+        {
+          "label": "B",
+          "points": [
+            [
+              0,
+              12
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "relativeVelocity",
+      "time": 2
+    }
+  },
+  {
+    "id": "PH-M1-C5-L1-Q01",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt01.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 4 m/s), (5 s, 4 m/s).\">What is the displacement from t = 0 s to t = 5 s?",
+    "optionsLatex": [
+      "4 m",
+      "9 m",
+      "20 m",
+      "1.25 m"
+    ],
+    "answerLatex": "20 m",
+    "explanationLatex": "Displacement is the signed area under the v–t graph. The rectangle has height 4 m/s and width 5 s, so the displacement is 4 × 5 = 20 m.",
+    "hintsLatex": [
+      "Multiply the constant velocity by the elapsed time."
+    ],
+    "graph": {
+      "id": "VT01",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt01.svg",
+      "timeMax": 5,
+      "valueMin": 0,
+      "valueMax": 6,
+      "valueTick": 1,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              4
+            ],
+            [
+              5,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        0,
+        5
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L1-Q02",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt02.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 0 m/s), (4 s, 8 m/s).\">What is the acceleration at t = 2 s?",
+    "optionsLatex": [
+      "8 m/s²",
+      "−2 m/s²",
+      "4 m/s²",
+      "2 m/s²"
+    ],
+    "answerLatex": "2 m/s²",
+    "explanationLatex": "Acceleration is the gradient of a v–t graph. The velocity changes from 0 m/s to 8 m/s in 4 s, giving (8 − 0)/4 = 2 m/s².",
+    "hintsLatex": [
+      "Use change in velocity divided by change in time."
+    ],
+    "graph": {
+      "id": "VT02",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt02.svg",
+      "timeMax": 4,
+      "valueMin": 0,
+      "valueMax": 10,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              8
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "acceleration",
+      "time": 2
+    }
+  },
+  {
+    "id": "PH-M1-C5-L1-Q03",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt03.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, -3 m/s), (4 s, -3 m/s).\">What is the displacement from t = 0 s to t = 4 s?",
+    "optionsLatex": [
+      "12 m",
+      "−12 m",
+      "−3 m",
+      "0 m"
+    ],
+    "answerLatex": "−12 m",
+    "explanationLatex": "The velocity is −3 m/s for 4 s. The signed rectangular area is (−3) × 4 = −12 m. The negative sign gives the direction of the displacement.",
+    "hintsLatex": [
+      "Area below v = 0 contributes negative displacement."
+    ],
+    "graph": {
+      "id": "VT03",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt03.svg",
+      "timeMax": 4,
+      "valueMin": -4,
+      "valueMax": 2,
+      "valueTick": 1,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              -3
+            ],
+            [
+              4,
+              -3
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        0,
+        4
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L1-Q04",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt04.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 6 m/s), (3 s, 0 m/s).\">What is the displacement from t = 0 s to t = 3 s?",
+    "optionsLatex": [
+      "18 m",
+      "6 m",
+      "9 m",
+      "−9 m"
+    ],
+    "answerLatex": "9 m",
+    "explanationLatex": "The area under the line is a triangle above v = 0. Its area is (1/2) × 3 s × 6 m/s = 9 m, so the displacement is +9 m.",
+    "hintsLatex": [
+      "Use one half times the base times the height."
+    ],
+    "graph": {
+      "id": "VT04",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt04.svg",
+      "timeMax": 3,
+      "valueMin": 0,
+      "valueMax": 8,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              6
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        0,
+        3
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L1-Q05",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 1",
+    "difficultyLevel": 1,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt05.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 2 m/s), (4 s, 10 m/s).\">What is the velocity at t = 3 s?",
+    "optionsLatex": [
+      "6 m/s",
+      "10 m/s",
+      "2 m/s",
+      "8 m/s"
+    ],
+    "answerLatex": "8 m/s",
+    "explanationLatex": "The graph is a straight line from 2 m/s at t = 0 s to 10 m/s at t = 4 s. Velocity increases by 2 m/s each second, so at t = 3 s it is 2 + 2 × 3 = 8 m/s. On a v–t graph, velocity is the vertical coordinate.",
+    "hintsLatex": [
+      "Read the vertical coordinate at t = 3 s; do not report the gradient as the velocity."
+    ],
+    "graph": {
+      "id": "VT05",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt05.svg",
+      "timeMax": 4,
+      "valueMin": 0,
+      "valueMax": 12,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              2
+            ],
+            [
+              4,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "velocity",
+      "time": 3
+    }
+  },
+  {
+    "id": "PH-M1-C5-L2-Q06",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt06.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, -4 m/s), (4 s, 4 m/s).\">What is the net displacement from t = 0 s to t = 4 s?",
+    "optionsLatex": [
+      "8 m",
+      "0 m",
+      "16 m",
+      "−8 m"
+    ],
+    "answerLatex": "0 m",
+    "explanationLatex": "The line crosses v = 0 at t = 2 s. The negative triangular area is −(1/2) × 2 × 4 = −4 m, and the positive area is +4 m. The net displacement is −4 + 4 = 0 m.",
+    "hintsLatex": [
+      "Subtract the magnitude of the area below zero from the area above zero."
+    ],
+    "graph": {
+      "id": "VT06",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt06.svg",
+      "timeMax": 4,
+      "valueMin": -6,
+      "valueMax": 6,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              -4
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        0,
+        4
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L2-Q07",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt07.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 0 m/s), (2 s, 6 m/s), (5 s, 6 m/s), (7 s, 0 m/s).\">What is the average velocity from t = 0 s to t = 7 s?",
+    "optionsLatex": [
+      "6 m/s",
+      "18/7 m/s",
+      "30/7 m/s",
+      "0 m/s"
+    ],
+    "answerLatex": "30/7 m/s",
+    "explanationLatex": "The two triangular areas are each (1/2) × 2 × 6 = 6 m. The middle rectangle contributes 3 × 6 = 18 m. Total displacement is 6 + 18 + 6 = 30 m, so average velocity is 30/7 m/s. The acceleration is not constant over the whole journey, so averaging just the initial and final velocities would be incorrect.",
+    "hintsLatex": [
+      "Add all three signed areas, then divide by the full 7 s."
+    ],
+    "graph": {
+      "id": "VT07",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt07.svg",
+      "timeMax": 7,
+      "valueMin": 0,
+      "valueMax": 8,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              7,
+              0
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "averageVelocity",
+      "interval": [
+        0,
+        7
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L2-Q08",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt08.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 6 m/s), (6 s, -6 m/s).\">What is the displacement from t = 1 s to t = 4 s?",
+    "optionsLatex": [
+      "5 m",
+      "9 m",
+      "−3 m",
+      "3 m"
+    ],
+    "answerLatex": "3 m",
+    "explanationLatex": "At t = 1 s, v = 4 m/s. The velocity reaches zero at t = 3 s and is −2 m/s at t = 4 s. The positive triangular area is (1/2) × 2 × 4 = 4 m and the negative area is −(1/2) × 1 × 2 = −1 m. The displacement is 4 − 1 = 3 m.",
+    "hintsLatex": [
+      "First find where the line crosses v = 0. Keep the sign of each area."
+    ],
+    "graph": {
+      "id": "VT08",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt08.svg",
+      "timeMax": 6,
+      "valueMin": -8,
+      "valueMax": 8,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              6
+            ],
+            [
+              6,
+              -6
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "displacement",
+      "interval": [
+        1,
+        4
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L2-Q09",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt09.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, -2 m/s), (2 s, 2 m/s), (5 s, 2 m/s).\">What is the average acceleration from t = 0 s to t = 5 s?",
+    "optionsLatex": [
+      "2 m/s²",
+      "0 m/s²",
+      "0.8 m/s²",
+      "0.4 m/s²"
+    ],
+    "answerLatex": "0.8 m/s²",
+    "explanationLatex": "Average acceleration is the total change in velocity divided by the full elapsed time. Here it is [2 − (−2)]/5 = 4/5 = 0.8 m/s². The later constant-velocity interval still contributes to the elapsed time.",
+    "hintsLatex": [
+      "Use the initial and final velocities and the entire 5 s, including the flat part."
+    ],
+    "graph": {
+      "id": "VT09",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt09.svg",
+      "timeMax": 5,
+      "valueMin": -4,
+      "valueMax": 4,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              -2
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              5,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "averageAcceleration",
+      "interval": [
+        0,
+        5
+      ]
+    }
+  },
+  {
+    "id": "PH-M1-C5-L2-Q10",
+    "subject": "Physics",
+    "chapterName": "Motion",
+    "chapterId": "PH-M1",
+    "topic": "Velocity–time (v–t) graphs",
+    "topicId": "PH-M1-C5",
+    "difficulty": "Level 2",
+    "difficultyLevel": 2,
+    "questionType": "mcq",
+    "promptLatex": "<img class=\"motion-question-graph\" src=\"../assets/graphs/physics_motion/vt10.svg\" width=\"560\" height=\"390\" style=\"display:block;width:100%;max-width:560px;height:auto;margin:12px auto;\" alt=\"Velocity–time graph. straight segments join (0 s, 0 m/s), (2 s, 4 m/s), (4 s, 4 m/s), (6 s, -4 m/s).\">The initial coordinate is x(0) = −3 m. What is the coordinate x at t = 6 s?",
+    "optionsLatex": [
+      "12 m",
+      "9 m",
+      "13 m",
+      "−3 m"
+    ],
+    "answerLatex": "9 m",
+    "explanationLatex": "The area from 0 s to 2 s is (1/2) × 2 × 4 = 4 m. From 2 s to 4 s it is 2 × 4 = 8 m. From 4 s to 6 s the positive and negative triangles cancel. The net displacement is 12 m, so x(6) = x(0) + 12 = −3 + 12 = 9 m.",
+    "hintsLatex": [
+      "Find the signed area to obtain displacement, then add the initial coordinate."
+    ],
+    "graph": {
+      "id": "VT10",
+      "type": "vt",
+      "image": "../assets/graphs/physics_motion/vt10.svg",
+      "timeMax": 6,
+      "valueMin": -6,
+      "valueMax": 6,
+      "valueTick": 2,
+      "series": [
+        {
+          "label": "Velocity",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              6,
+              -4
+            ]
+          ]
+        }
+      ]
+    },
+    "calculation": {
+      "quantity": "position",
+      "interval": [
+        0,
+        6
+      ],
+      "initialPosition": -3
+    }
+  }
+]
