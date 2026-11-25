@@ -299,6 +299,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
 </head>
 
 <body>
@@ -344,7 +345,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
   <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=1"></script>
   <script>
     const questions = [
       {
@@ -766,22 +768,6 @@
 
       let message = "";
       const percentage = (score / questions.length) * 100;
-      cloudAttemptId ||= window.ProgressStore?.createAttemptId() || null;
-
-      if (window.ProgressStore && cloudAttemptId) {
-        void window.ProgressStore.recordAttempt({
-          clientAttemptId: cloudAttemptId,
-          quizId: "units-and-dimensions-v1",
-          score,
-          total: questions.length,
-          details: {
-            percent: Math.round(percentage),
-            ...window.ProgressStore.finishTabTracking()
-          }
-        }).catch(error => {
-          console.warn("Cloud progress could not be saved.", error);
-        });
-      }
 
       if (percentage >= 85) {
         message = "Excellent work. Your dimensional analysis is strong.";
@@ -798,6 +784,7 @@
           <h2>Quiz Completed</h2>
           <p><strong>Your Score: ${score} / ${questions.length}</strong></p>
           <p>${message}</p>
+          <div data-practice-result hidden></div>
           <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
 
@@ -824,6 +811,24 @@
 
       summary += `</table>`;
       resultArea.innerHTML = summary;
+
+      cloudAttemptId ||= window.ProgressStore?.createAttemptId() || null;
+      if (window.ProgressStore && cloudAttemptId) {
+        void window.ProgressStore.recordAttempt({
+          clientAttemptId: cloudAttemptId,
+          showRewards: true,
+          quizId: "units-and-dimensions-v1",
+          score,
+          total: questions.length,
+          details: {
+            percent: Math.round(percentage),
+            answeredCount: userAnswers.filter(answer => answer !== null).length,
+            ...window.ProgressStore.finishTabTracking()
+          }
+        }).catch(error => {
+          console.warn("Cloud progress could not be saved.", error);
+        });
+      }
 
       if (window.MathJax) {
         MathJax.typesetPromise();

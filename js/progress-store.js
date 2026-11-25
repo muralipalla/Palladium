@@ -162,7 +162,22 @@
     }
   }
 
-  async function recordAttempt({
+  function recordAttempt(input) {
+    const rewards = window.PracticeRewards;
+    if (!input.showRewards || !rewards) return saveAttempt(input);
+
+    const completedAt = validIsoTimestamp(input.completedAt) || new Date().toISOString();
+    const attempt = {
+      ...input,
+      completedAt,
+      details: { ...plainObject(input.details), practiceDay: rewards.calendarDay(completedAt) }
+    };
+    const saving = saveAttempt(attempt);
+    void rewards.showResult(attempt, saving);
+    return saving;
+  }
+
+  async function saveAttempt({
     clientAttemptId = createAttemptId(),
     quizId,
     score,
@@ -221,13 +236,16 @@
     return { saved: true, attempt: data, clientAttemptId, userId: user.id };
   }
 
-  async function listAttempts({ quizId = null, limit = 20, offset = 0 } = {}) {
+  async function listAttempts({ quizId = null, limit = 20, offset = 0, expectedUserId = null } = {}) {
     const user = await currentUser();
+    if (expectedUserId && user?.id !== expectedUserId) {
+      throw new Error("The signed-in account changed while progress was loading.");
+    }
     if (!user) return [];
 
     let query = client()
       .from("quiz_attempts")
-      .select("id, quiz_id, score, total, duration_seconds, details, completed_at")
+      .select("id, client_attempt_id, quiz_id, score, total, duration_seconds, details, completed_at")
       .eq("user_id", user.id)
       .order("completed_at", { ascending: false })
       .order("id", { ascending: false })

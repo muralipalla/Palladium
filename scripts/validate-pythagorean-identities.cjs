@@ -126,7 +126,7 @@ assert.match(page, /Each correct answer earns 2 marks at Level 2 and 3 marks at 
 assert.match(page, /20 MCQs · 50 marks/);
 assert.match(page, /id="finalScore">0\/50/);
 assert.match(page, /score percentage/);
-assert.match(page, /maths-vector-quiz\.js\?v=level-marks-2/);
+assert.match(page, /maths-vector-quiz\.js\?v=[a-z0-9-]+/);
 assert.ok(page.includes('data-quiz-bank="' + bankPath + '"'));
 assert.ok(hub.includes('href="pythagorean_identities_quiz.html"'));
 assert.match(hub, /href="pythagorean_identities_quiz.html">[\s\S]*?20 MCQs · 50 marks/);
@@ -231,6 +231,10 @@ async function complete(session, activeTopic, wrongIndices = new Set()) {
   assert.equal(record.score, score);
   assert.equal(record.total, maximum);
   assert.equal(new Set(record.details.questionIds).size, activeTopic.questionCount);
+  assert.equal(record.showRewards, true);
+  assert.deepEqual(Array.from(record.details.challengeProblemIds), ordered
+    .filter((question, index) => !wrongIndices.has(index) && (question.level === 3 || question.difficulty === "hard"))
+    .map(question => `maths:${activeTopic.id}:${question.id}`));
   if (activeTopic.marksByLevel) {
     assert.equal(record.details.questionCount, 20);
     assert.equal(record.details.correctCount, 20 - wrongIndices.size);

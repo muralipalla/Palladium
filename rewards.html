@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="See your Palladium practice streak, weekly goal, and challenge badges.">
+  <meta name="theme-color" content="#0f172a">
+  <title>My Rewards | Palladium</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/account.css?v=timing-cleanup-1">
+  <link rel="stylesheet" href="css/practice-rewards.css?v=1">
+</head>
+<body class="account-page rewards-page">
+  <header class="account-header">
+    <nav class="top-nav" aria-label="Rewards navigation">
+      <a class="brand palladium-brand" href="index.html" aria-label="Palladium learning lab — Home">
+        <span class="palladium-mark" aria-hidden="true"><span class="palladium-number">46</span><span class="palladium-symbol">Pd</span></span>
+        <span class="palladium-wordmark" aria-hidden="true">
+          <span class="palladium-name"><span class="palladium-palla">Palla</span><span class="palladium-dium">dium</span></span>
+          <span class="palladium-tagline">EXPLORE · PRACTICE · LEVEL UP</span>
+        </span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Learning tools</a>
+        <a href="scores.html">My scores</a>
+        <a class="active" href="rewards.html" aria-current="page">My rewards</a>
+        <a href="account.html">Account</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dashboard-main rewards-main">
+    <div class="rewards-heading">
+      <div>
+        <h1>My rewards</h1>
+        <p>Finish a quiz with at least one answer to mark a practice day.</p>
+      </div>
+      <a class="rewards-button" href="index.html">Find a quiz <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <p id="rewardsStatus" class="rewards-message" role="status">Loading your rewards…</p>
+    <button id="retryRewards" class="rewards-button" type="button" hidden>Try again</button>
+
+    <div id="rewardsContent" hidden>
+      <div class="rewards-overview">
+        <section class="rewards-week" aria-labelledby="weeklyTitle">
+          <div class="rewards-week-heading">
+            <div>
+              <h2 id="weeklyTitle">Weekly practice goal</h2>
+              <p>Make time to practise on 3 of the last 7 days.</p>
+            </div>
+            <span class="rewards-week-total" id="weeklyCount"></span>
+          </div>
+          <ol class="rewards-week-days" id="practiceWeek" aria-label="Practice in the last seven days"></ol>
+          <p id="weeklyMessage" class="rewards-week-message"></p>
+        </section>
+
+        <dl class="rewards-stats" aria-label="Practice milestones">
+          <div><dt>Current streak</dt><dd id="currentStreak"></dd></div>
+          <div><dt>Best streak</dt><dd id="bestStreak"></dd></div>
+          <div><dt>Reward points</dt><dd id="rewardPoints"></dd></div>
+          <div><dt>Challenges solved</dt><dd id="challengeCount"></dd></div>
+        </dl>
+      </div>
+
+      <section class="rewards-badges" aria-labelledby="badgesTitle">
+        <div class="rewards-badges-heading">
+          <div><h2 id="badgesTitle">Badges</h2><p id="badgeCount"></p></div>
+          <a href="quizzes/trigonometry_skill_builder.html">Try a Level 3 quiz <span aria-hidden="true">↗</span></a>
+        </div>
+        <ul class="rewards-badge-list" id="badgeCollection"></ul>
+      </section>
+    </div>
+
+    <details class="rewards-rules">
+      <summary>How rewards work</summary>
+      <p>Earn 10 points on each practice day and 5 points for each different challenge problem you solve. A new practice day follows your local calendar.</p>
+      <p>Challenge badges count correct answers on questions marked Hard, Advanced, Difficult, Maths Level 3, or Elite in Advanced Vocabulary. Saved quiz history counts toward streaks. Challenge solves count when recorded by the rewards feature.</p>
+    </details>
+    <p id="rewardsSource" class="rewards-message" hidden></p>
+  </main>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
+  <script defer src="js/supabase-client.js"></script>
+  <script defer src="js/progress-store.js?v=practice-rewards-1"></script>
+  <script defer src="js/practice-rewards.js?v=1"></script>
+  <script defer src="js/rewards-page.js?v=1"></script>
+</body>
+</html>

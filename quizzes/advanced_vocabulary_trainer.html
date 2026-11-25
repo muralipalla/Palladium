@@ -18,6 +18,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
 </head>
 
 <body class="advanced-vocab-page">
@@ -162,6 +163,7 @@
             <div><strong id="resultAccuracy">0%</strong><span>Accuracy</span></div>
             <div><strong id="resultXp">+0</strong><span>XP earned</span></div>
           </div>
+          <div data-practice-result hidden></div>
           <div id="resultReview" class="result-review"></div>
           <div class="result-actions">
             <button id="practiceAgainButton" class="primary-trainer-button" type="button">Practice again</button>
@@ -265,8 +267,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
   <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=1"></script>
   <script defer src="../assets/data/advanced-vocabulary-bank.js"></script>
-  <script defer src="../js/advanced-vocabulary.js?v=optional-timing-1"></script>
+  <script defer src="../js/advanced-vocabulary.js?v=practice-rewards-1"></script>
 </body>
 </html>

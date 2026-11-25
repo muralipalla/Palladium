@@ -661,6 +661,8 @@
         bestCombo: Number(log.bestCombo) || 0,
         endedEarly: Boolean(log.endedEarly),
         wrongWords: Array.isArray(log.mistakes) ? log.mistakes : [],
+        practiceDay: log.practiceDay,
+        challengeProblemIds: log.challengeProblemIds,
         ...tabDetailsFromLog(log)
       }
     };
@@ -735,7 +737,7 @@
     const tabDetails = window.ProgressStore?.finishTabTracking() || {};
     updateStreak();
 
-    state.logs.unshift({
+    const log = {
       clientAttemptId,
       ownerId: activeOwnerId || null,
       completedAt,
@@ -750,12 +752,15 @@
       xp: completedSession.xp,
       bestCombo: completedSession.bestCombo,
       mistakes: completedSession.mistakes,
+      practiceDay: window.PracticeRewards?.calendarDay(completedAt),
+      challengeProblemIds: completedSession.words
+        .filter(word => Number(word.difficulty) === 3 && completedSession.correctWords.includes(word.id))
+        .map(word => `vocabulary:${word.id}`),
       ...tabDetails
-    });
+    };
+    state.logs.unshift(log);
     state.logs = state.logs.slice(0, 100);
     saveState();
-
-    if (activeOwnerId) void queuePendingAttemptSync();
 
     elements.questionPanel.hidden = true;
     elements.setupPanel.hidden = true;
@@ -763,6 +768,14 @@
     elements.resultScore.textContent = `${completedSession.score}/${answeredCount}`;
     elements.resultAccuracy.textContent = `${accuracy}%`;
     elements.resultXp.textContent = `+${completedSession.xp}`;
+
+    const ownerId = activeOwnerId;
+    const saving = ownerId
+      ? queuePendingAttemptSync().then(() => log.cloudSaved
+        ? { saved: true, userId: ownerId, clientAttemptId }
+        : { saved: false, reason: "unavailable" })
+      : Promise.resolve({ saved: false, reason: "signed_out", clientAttemptId });
+    void window.PracticeRewards?.showResult(attemptPayload(log), saving);
 
     if (accuracy === 100) {
       elements.resultHeadline.textContent = "Flawless precision.";

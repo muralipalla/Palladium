@@ -565,6 +565,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
 </head>
 
 <body>
@@ -638,6 +639,7 @@
         <section id="result-screen" class="screen">
           <div class="challenge-badge">Quiz complete</div>
           <h2 id="trigResultTitle" class="start-title" tabindex="-1">Result</h2>
+          <div data-practice-result hidden></div>
 
           <div class="result-grid">
             <div class="result-box">
@@ -729,7 +731,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
   <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=1"></script>
   <script>
     const identities = [
       { deg: "sin(90° + θ)", rad: "sin(π/2 + θ)", ans: "cosθ" },
@@ -915,6 +918,7 @@
       if (window.ProgressStore && cloudAttemptId) {
         void window.ProgressStore.recordAttempt({
           clientAttemptId: cloudAttemptId,
+          showRewards: true,
           quizId: "trig-angles-v1",
           score,
           total: quiz.length,

@@ -178,7 +178,8 @@ for (const config of configurations) {
   assert.ok(page.includes(`data-quiz-bank="${bankPath}"`));
   assert.ok(page.includes(`data-quiz-topic="${topic.id}"`));
   for (const id of engineIds) assert.ok(page.includes(`id="${id}"`), pageName + " is missing " + id);
-  for (const text of ["1 mark at Level 1, 2 marks at Level 2 and 3 marks at Level 3", "no negative marking", "All angles are measured in degrees", "wherever the original is defined", "Retain all original restrictions", "score percentage", 'href="trigonometry_skill_builder.html"', 'maths-vector-quiz.js?v=level-marks-2', `20 MCQs · ${config.total} marks.`, `id="finalScore">0/${config.total}`]) assert.ok(page.includes(text), pageName + " is missing " + text);
+  for (const text of ["1 mark at Level 1, 2 marks at Level 2 and 3 marks at Level 3", "no negative marking", "All angles are measured in degrees", "wherever the original is defined", "Retain all original restrictions", "score percentage", 'href="trigonometry_skill_builder.html"', `20 MCQs · ${config.total} marks.`, `id="finalScore">0/${config.total}`]) assert.ok(page.includes(text), pageName + " is missing " + text);
+  assert.match(page, /maths-vector-quiz\.js\?v=[a-z0-9-]+/);
   assert.ok(read("quizzes/trigonometry_skill_builder.html").includes(`href="${pageName}"`));
   for (const file of ["js/account.js", "js/scores.js"]) {
     assert.ok(read(file).includes(`"${topic.quizId}"`));
@@ -272,6 +273,10 @@ async function finish(session, topic, wrong = new Set()) {
   assert.equal(record.details.correctCount, 20 - wrong.size);
   assert.equal(record.details.percent, Math.round(earned / maximum * 100));
   assert.deepEqual(Array.from(record.details.questionMarks), ordered.map(q => q.level));
+  assert.equal(record.showRewards, true);
+  assert.deepEqual(Array.from(record.details.challengeProblemIds), ordered
+    .filter((question, index) => question.level === 3 && !wrong.has(index))
+    .map(question => `maths:${topic.id}:${question.id}`));
 }
 
 async function checkLegacyBank(config) {

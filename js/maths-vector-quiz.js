@@ -184,10 +184,8 @@
     }
 
     stopTimer();
-    const score = quiz.reduce(
-      (total, item, index) => total + (answers[index] === item.answer ? questionMarks(item) : 0),
-      0
-    );
+    const correctQuestions = quiz.filter((item, index) => answers[index] === item.answer);
+    const score = correctQuestions.reduce((total, item) => total + questionMarks(item), 0);
     const percent = Math.round((score / totalMarks) * 100);
 
     elements.finalScore.textContent = String(score) + "/" + String(totalMarks);
@@ -203,6 +201,7 @@
     if (window.ProgressStore && cloudAttemptId) {
       void window.ProgressStore.recordAttempt({
         clientAttemptId: cloudAttemptId,
+        showRewards: true,
         quizId: topic.quizId,
         score,
         total: totalMarks,
@@ -211,9 +210,12 @@
           percent,
           topicId: topic.id,
           questionIds: quiz.map(item => item.id),
+          challengeProblemIds: correctQuestions
+            .filter(item => item.level === 3 || item.difficulty === "hard")
+            .map(item => `maths:${topic.id}:${item.id}`),
           ...(topic.marksByLevel ? {
             questionCount: quiz.length,
-            correctCount: quiz.filter((item, index) => answers[index] === item.answer).length,
+            correctCount: correctQuestions.length,
             marksByLevel: { ...topic.marksByLevel },
             questionMarks: quiz.map(questionMarks)
           } : {}),

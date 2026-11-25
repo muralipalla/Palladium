@@ -397,6 +397,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
 </head>
 
 <body>
@@ -538,7 +539,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
   <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=timing-cleanup-1"></script>
+  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=1"></script>
   <script>
     const EMBEDDED_INDEX = {"schemaVersion":"2.0","title":"Palladium Question Bank Index","description":"Central index of available LaTeX JSON question banks.","banks":[{"id":"chapter1","title":"Chapter 1: Mole Concept","subject":"Chemistry","format":"latex","file":"../assets/data/question_banks/chapter1.json","description":"Mole concept, empirical formula, limiting reagent, POAC, equivalents, concentration terms, electrolysis, redox, n-factor, and titrations."}]};
     const EMBEDDED_BANKS = {"chapter1":[
@@ -8463,30 +8465,6 @@
       const finalScore = statusObj.correct;
       const percentage = Math.round((finalScore / currentQuiz.length) * 100);
 
-      if (window.ProgressStore && cloudAttemptId) {
-        const topicIds = [...new Set(currentQuiz.map(question => question.topicId || question.topic).filter(Boolean))].slice(0, 20);
-        const difficulties = [...new Set(currentQuiz.map(question => question.difficulty || question.difficultyLevel).filter(value => value !== undefined && value !== null))].slice(0, 10);
-        const bankIds = [...new Set(currentQuiz.map(question => question.bankId || question.chapterId).filter(Boolean))].slice(0, 10);
-
-        void window.ProgressStore.recordAttempt({
-          clientAttemptId: cloudAttemptId,
-          quizId: isPhysicsQuiz ? "physics-daily-practice-v1" : "general-chemistry-v1",
-          score: finalScore,
-          total: currentQuiz.length,
-          details: {
-            percent: percentage,
-            attempted: statusObj.attempted,
-            markedForLater: marked,
-            ...window.ProgressStore.finishTabTracking(),
-            topicIds,
-            difficulties,
-            bankIds
-          }
-        }).catch(error => {
-          console.warn("Cloud progress could not be saved.", error);
-        });
-      }
-
       let message = "Good practice. Review the mistakes and try another set.";
 
       if (percentage >= 85) {
@@ -8505,6 +8483,7 @@
           <p><strong>Your Score: ${finalScore} / ${currentQuiz.length}</strong> (${percentage}%)</p>
           <p>Attempted: ${statusObj.attempted} / ${currentQuiz.length} &nbsp; | &nbsp; Marked for later: ${marked}</p>
           <p>${message}</p>
+          <div data-practice-result hidden></div>
           <button class="restart-btn" onclick="restartToSelection()">New Selection</button>
           <button class="setup-btn" onclick="restartSameSelection()">Repeat Same Selection</button>
         </div>
@@ -8552,6 +8531,34 @@
       }
 
       resultArea.innerHTML = summary;
+      if (window.ProgressStore && cloudAttemptId) {
+        const topicIds = [...new Set(currentQuiz.map(question => question.topicId || question.topic).filter(Boolean))].slice(0, 20);
+        const difficulties = [...new Set(currentQuiz.map(question => question.difficulty || question.difficultyLevel).filter(value => value !== undefined && value !== null))].slice(0, 10);
+        const bankIds = [...new Set(currentQuiz.map(question => question.bankId || question.chapterId).filter(Boolean))].slice(0, 10);
+        const challengeProblemIds = currentQuiz
+          .filter((question, index) => ["hard", "advanced"].includes(question.difficulty) && isAnswerCorrect(question, userAnswers[index]))
+          .map(question => `bank:${question.uniqueId}`);
+
+        void window.ProgressStore.recordAttempt({
+          clientAttemptId: cloudAttemptId,
+          showRewards: true,
+          quizId: isPhysicsQuiz ? "physics-daily-practice-v1" : "general-chemistry-v1",
+          score: finalScore,
+          total: currentQuiz.length,
+          details: {
+            percent: percentage,
+            attempted: statusObj.attempted,
+            markedForLater: marked,
+            ...window.ProgressStore.finishTabTracking(),
+            topicIds,
+            difficulties,
+            bankIds,
+            challengeProblemIds
+          }
+        }).catch(error => {
+          console.warn("Cloud progress could not be saved.", error);
+        });
+      }
       addMotionGraphControls(resultArea);
 
       await typesetWholePage();
