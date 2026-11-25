@@ -153,17 +153,28 @@ async function checkAccount() {
   assert.equal(mount.hidden, true, "Switching accounts clears the previous result panel");
   const clientAttemptId = randomUUID();
   const solvedIds = Array.from({ length: 5 }, (_, index) => `bank:chemistry:advanced-${index}`);
-  const attempt = { clientAttemptId, score: 5, total: 5, details: { challengeProblemIds: solvedIds } };
+  const attempt = { clientAttemptId, score: 5, total: 5, details: {
+    challengeProblemIds: solvedIds, quizCompleted: true, focusMaintained: true,
+    timerEnabled: true, durationSeconds: 600, timeTargetSeconds: 600
+  } };
   const result = await finishQuiz(attempt);
-  assert.match(result, /5 challenge problems solved!.*\+35 reward points.*3-day streak/);
+  assert.match(result, /5 challenge problems solved!.*\+45 reward points.*3-day streak/);
   assert.match(result, /Badge earned · Challenge Specialist/);
+  assert.match(result, /Badge earned · Focused Finish/);
+  assert.match(result, /Badge earned · On Target/);
   assert.equal(rows[0].details.practiceDay, rewards.calendarDay(today));
   assert.equal(rows[0].completed_at, today.toISOString());
   assert.deepEqual(offsets, [0, 100]);
   assert.doesNotMatch(await finishQuiz(attempt), /\+\d|Badge earned/, "An idempotent cloud save does not re-award badges");
-  assert.equal((await rewards.load("student-a")).points, 55);
+  const saved = await rewards.load("student-a");
+  assert.equal(saved.points, 65);
+  assert.equal(saved.focusedDays, 1);
+  assert.equal(saved.timedDays, 1);
   rows.shift();
-  assert.equal((await rewards.load("student-a")).points, 20, "Removing a score updates rewards from the saved history");
+  const afterDeletion = await rewards.load("student-a");
+  assert.equal(afterDeletion.points, 20, "Removing a score updates rewards from the saved history");
+  assert.equal(afterDeletion.focusedDays, 0);
+  assert.equal(afterDeletion.timedDays, 0);
 
   changeOwner("student-b");
   await assert.rejects(rewards.load("student-a"), /signed-in account changed/);
@@ -173,10 +184,50 @@ async function checkAccount() {
   assert.equal((await rewards.load(null)).points, 45, "Guest rewards remain in this browser");
 }
 
+async function checkFocusRewards() {
+  storage.clear();
+  clock = today;
+  const timed = { quizCompleted: true, timerEnabled: true, durationSeconds: 120, timeTargetSeconds: 120 };
+  const focus = { quizCompleted: true, focusMaintained: true };
+  const dailyBadges = /Focused Finish|On Target/;
+
+  const legacy = { timerEnabled: true, durationSeconds: 120, tabHiddenCount: 0, focusLossCount: 0 };
+  assert.doesNotMatch(await finishQuiz({ details: legacy }), dailyBadges);
+  const partial = { ...timed, ...focus, quizCompleted: false, attempted: 1 };
+  assert.doesNotMatch(await finishQuiz({ details: partial }), dailyBadges);
+  assert.doesNotMatch(await finishQuiz({ details: { ...timed, timerEnabled: false } }), dailyBadges);
+  assert.equal((await rewards.load(null)).points, 10);
+
+  const exactTarget = await finishQuiz({ details: { ...timed, focusMaintained: false } });
+  assert.match(exactTarget, /\+5 reward points.*Badge earned · On Target/);
+  assert.doesNotMatch(exactTarget, /Focused Finish/);
+  const untimedFocus = await finishQuiz({ details: focus });
+  assert.match(untimedFocus, /\+5 reward points.*Badge earned · Focused Finish/);
+  assert.doesNotMatch(untimedFocus, /On Target/);
+  const repeat = await finishQuiz({ details: { ...timed, ...focus } });
+  assert.match(repeat, /Focused Finish.*On Target/);
+  assert.doesNotMatch(repeat, /\+\d|Badge earned/);
+
+  clock = daysAfterToday(1);
+  const lateButFocused = await finishQuiz({ details: { ...timed, ...focus, durationSeconds: 121 } });
+  assert.match(lateButFocused, /\+15 reward points.*Focused Finish/);
+  assert.doesNotMatch(lateButFocused, /On Target/);
+  const beforeTarget = await finishQuiz({ details: { ...timed, durationSeconds: 119 } });
+  assert.match(beforeTarget, /\+5 reward points.*On Target/);
+  const snapshot = await rewards.load(null);
+  assert.equal(snapshot.points, 40);
+  assert.equal(snapshot.focusedDays, 2);
+  assert.equal(snapshot.timedDays, 2);
+  assert.equal(snapshot.badges.find(badge => badge.id === "on-target").earnedToday, true);
+  clock = daysAfterToday(2);
+  assert.equal((await rewards.load(null)).badges.find(badge => badge.id === "on-target").earnedToday, false);
+}
+
 (async () => {
   assert.equal(rewards.calendarDay(new Date(2026, 2, 9)) - rewards.calendarDay(new Date(2026, 2, 8)), 1);
   assert.equal(rewards.calendarDay(new Date(2026, 0, 1)) - rewards.calendarDay(new Date(2025, 11, 31)), 1);
   await checkGuest();
   await checkAccount();
-  console.log("PASS: daily points, unique challenges, badges, rolling goals, streaks across calendar boundaries, account pagination and isolation, and score deletion.");
+  await checkFocusRewards();
+  console.log("PASS: practice points, challenge badges, daily focus and optional time rewards, target boundaries, streaks, account isolation, and score deletion.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

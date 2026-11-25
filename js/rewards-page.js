@@ -44,32 +44,40 @@
     document.getElementById("practiceWeek").replaceChildren(...tiles);
   }
 
+  function badgeCard(badge) {
+    const card = element("li", "rewards-badge");
+    card.dataset.earned = String(badge.earned);
+    if (badge.metric === "challenges") card.classList.add("is-challenge");
+    const symbol = element("span", "rewards-medal", badge.symbol);
+    symbol.setAttribute("aria-hidden", "true");
+    const label = element("div", "rewards-badge-text");
+    label.append(element("h3", "", badge.title), element("p", "", badge.rule));
+    const progress = element("div", "rewards-badge-progress");
+    if (badge.daily) {
+      progress.textContent = badge.earnedToday
+        ? `✓ Earned today · ${dayCount(badge.earnedDays)} total`
+        : `${dayCount(badge.earnedDays)} earned`;
+    } else if (badge.earned) {
+      progress.textContent = "✓ Earned";
+    } else {
+      const bar = element("progress");
+      bar.max = badge.target;
+      bar.value = badge.progress;
+      bar.setAttribute("aria-label", `${badge.title} progress`);
+      progress.append(bar, element("span", "", `${badge.progress}/${badge.target}`));
+    }
+    label.append(progress);
+    card.append(symbol, label);
+    return card;
+  }
+
   function renderBadges(badges) {
-    const earned = badges.filter(badge => badge.earned).length;
-    document.getElementById("badgeCount").textContent = `${earned} of ${badges.length} earned`;
-    const cards = badges.map(badge => {
-      const card = element("li", "rewards-badge");
-      card.dataset.earned = String(badge.earned);
-      if (badge.metric === "challenges") card.classList.add("is-challenge");
-      const symbol = element("span", "rewards-medal", badge.symbol);
-      symbol.setAttribute("aria-hidden", "true");
-      const label = element("div", "rewards-badge-text");
-      label.append(element("h3", "", badge.title), element("p", "", badge.rule));
-      const progress = element("div", "rewards-badge-progress");
-      if (badge.earned) {
-        progress.textContent = "✓ Earned";
-      } else {
-        const bar = element("progress");
-        bar.max = badge.target;
-        bar.value = badge.progress;
-        bar.setAttribute("aria-label", `${badge.title} progress`);
-        progress.append(bar, element("span", "", `${badge.progress}/${badge.target}`));
-      }
-      label.append(progress);
-      card.append(symbol, label);
-      return card;
-    });
-    document.getElementById("badgeCollection").replaceChildren(...cards);
+    const practice = badges.filter(badge => !badge.daily);
+    const daily = badges.filter(badge => badge.daily);
+    const earned = practice.filter(badge => badge.earned).length;
+    document.getElementById("badgeCount").textContent = `${earned} of ${practice.length} earned`;
+    document.getElementById("badgeCollection").replaceChildren(...practice.map(badgeCard));
+    document.getElementById("focusRewards").replaceChildren(...daily.map(badgeCard));
   }
 
   function render(snapshot, ownerId) {

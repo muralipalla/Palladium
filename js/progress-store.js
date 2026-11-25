@@ -9,20 +9,52 @@
   let tabTracking = null;
 
   document.addEventListener("visibilitychange", () => {
-    if (tabTracking && document.hidden) tabTracking.tabHiddenCount++;
+    if (!tabTracking) return;
+    tabTracking.focusContinuous = false;
+    if (document.hidden) tabTracking.tabHiddenCount++;
   });
   window.addEventListener("blur", () => {
-    if (tabTracking && !document.hidden) tabTracking.focusLossCount++;
+    if (!tabTracking) return;
+    tabTracking.focusContinuous = false;
+    if (!document.hidden) tabTracking.focusLossCount++;
   });
 
-  function startTabTracking() {
-    tabTracking = { tabHiddenCount: 0, focusLossCount: 0 };
-    window.QuizTimer?.start();
+  window.addEventListener("pagehide", () => {
+    if (tabTracking) tabTracking.focusContinuous = false;
+  });
+
+  function trackNewTabLink(event) {
+    if (!tabTracking || event.defaultPrevented) return;
+    const link = event.target.closest?.("a[href]");
+    if (!link || link.hasAttribute("download")) return;
+    const opensElsewhere = link.getAttribute("target")?.toLowerCase() === "_blank" || event.ctrlKey || event.metaKey || event.shiftKey;
+    if (event.button === 1 || (event.button === 0 && opensElsewhere)) tabTracking.focusContinuous = false;
   }
 
-  function finishTabTracking() {
-    const result = { ...(tabTracking || {}), ...(window.QuizTimer?.finish() || {}) };
+  document.addEventListener("click", trackNewTabLink);
+  document.addEventListener("auxclick", trackNewTabLink);
+
+  function startTabTracking(questionCount) {
+    tabTracking = {
+      tabHiddenCount: 0,
+      focusLossCount: 0,
+      questionCount,
+      focusContinuous: !document.hidden && document.hasFocus?.() === true
+    };
+    window.QuizTimer?.start(questionCount);
+  }
+
+  function finishTabTracking(answeredCount) {
+    const timing = window.QuizTimer?.finish() || {};
+    if (!tabTracking) return timing;
+    const { tabHiddenCount, focusLossCount, questionCount, focusContinuous } = tabTracking;
     tabTracking = null;
+    const result = { tabHiddenCount, focusLossCount, ...timing };
+    if (Number.isInteger(questionCount) && questionCount > 0 && Number.isInteger(answeredCount)) {
+      result.quizCompleted = answeredCount === questionCount;
+      result.focusMaintained = focusContinuous && tabHiddenCount === 0 && focusLossCount === 0 &&
+        !document.hidden && document.hasFocus?.() === true;
+    }
     return result;
   }
 
@@ -366,14 +398,20 @@
       : entries.filter(entry => Boolean(entry.ownerId));
   }
 
-  function tabDetails(entry) {
+  function attemptActivityDetails(entry) {
     const details = {};
     for (const key of ["tabHiddenCount", "focusLossCount"]) {
       if (Number.isInteger(entry[key]) && entry[key] >= 0) details[key] = entry[key];
     }
+    for (const key of ["quizCompleted", "focusMaintained"]) {
+      if (typeof entry[key] === "boolean") details[key] = entry[key];
+    }
     if (typeof entry.timerEnabled === "boolean") {
       details.timerEnabled = entry.timerEnabled;
       details.durationSeconds = storedDuration(entry);
+      if (entry.timerEnabled && Number.isInteger(entry.timeTargetSeconds) && entry.timeTargetSeconds > 0) {
+        details.timeTargetSeconds = entry.timeTargetSeconds;
+      }
     }
     return details;
   }
@@ -402,7 +440,7 @@
           averageSeconds: Number(entry.speed) || null,
           accuracyPercent: accuracy,
           bestStreak: boundedInteger(entry.bestStreak, 0, 10000),
-          ...tabDetails(entry),
+          ...attemptActivityDetails(entry),
           originalLocalDate: entry.date || null,
           importedFromLocalStorage: true
         }
@@ -430,7 +468,7 @@
         details: {
           percent: boundedInteger(entry.percent, 0, 100),
           difficulty: entry.filter || "all",
-          ...tabDetails(entry),
+          ...attemptActivityDetails(entry),
           originalLocalDate: entry.date || null,
           importedFromLocalStorage: true
         }
@@ -464,7 +502,7 @@
           answeredCount: boundedInteger(log.answeredCount ?? log.total, 0, total),
           endedEarly: Boolean(log.endedEarly),
           wrongWords: Array.isArray(log.wrong) ? log.wrong : [],
-          ...tabDetails(log),
+          ...attemptActivityDetails(log),
           importedFromLocalStorage: true
         }
       };
@@ -497,7 +535,7 @@
           bestCombo: boundedInteger(log.bestCombo, 0, 10000),
           endedEarly: Boolean(log.endedEarly),
           wrongWords: Array.isArray(log.mistakes) ? log.mistakes : [],
-          ...tabDetails(log),
+          ...attemptActivityDetails(log),
           importedFromLocalStorage: true
         }
       }];
@@ -742,6 +780,7 @@
     createAttemptId,
     startTabTracking,
     finishTabTracking,
+    attemptActivityDetails,
     currentOwnerId,
     getCurrentUserId,
     visibleLocalEntries,

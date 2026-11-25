@@ -18,7 +18,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body class="advanced-vocab-page">
@@ -67,7 +67,7 @@
         <button id="progressTab" class="trainer-tab" type="button" role="tab" aria-selected="false" aria-controls="progressScreen" data-screen="progress">Progress</button>
       </div>
 
-      <div data-quiz-timer></div>
+      <div data-quiz-timer data-quiz-target-seconds-per-question="30"></div>
       <section id="practiceScreen" class="trainer-screen" role="tabpanel" aria-labelledby="practiceTab">
         <div id="setupPanel" class="setup-panel">
           <div class="section-heading">
@@ -266,10 +266,10 @@
   <div id="celebrationLayer" class="celebration-layer" aria-hidden="true"></div>
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script defer src="../assets/data/advanced-vocabulary-bank.js"></script>
-  <script defer src="../js/advanced-vocabulary.js?v=practice-rewards-1"></script>
+  <script defer src="../js/advanced-vocabulary.js?v=focus-rewards-1"></script>
 </body>
 </html>

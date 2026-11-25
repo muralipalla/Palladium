@@ -465,7 +465,7 @@
       typeOrder: shuffle(["meaning", "context", "synonym", "antonym"])
     };
     session.questions = words.map((word, index) => buildQuestion(word, index));
-    window.ProgressStore?.startTabTracking();
+    window.ProgressStore?.startTabTracking(session.questions.length);
 
     elements.setupPanel.hidden = true;
     elements.resultPanel.hidden = true;
@@ -634,18 +634,6 @@
     state.lastPracticeDate = today;
   }
 
-  function tabDetailsFromLog(log) {
-    const details = {};
-    for (const key of ["tabHiddenCount", "focusLossCount"]) {
-      if (Number.isInteger(log[key]) && log[key] >= 0) details[key] = log[key];
-    }
-    if (typeof log.timerEnabled === "boolean") {
-      details.timerEnabled = log.timerEnabled;
-      details.durationSeconds = log.timerEnabled && Number.isInteger(log.durationSeconds) ? log.durationSeconds : null;
-    }
-    return details;
-  }
-
   function attemptPayload(log) {
     return {
       clientAttemptId: log.clientAttemptId,
@@ -663,7 +651,7 @@
         wrongWords: Array.isArray(log.mistakes) ? log.mistakes : [],
         practiceDay: log.practiceDay,
         challengeProblemIds: log.challengeProblemIds,
-        ...tabDetailsFromLog(log)
+        ...window.ProgressStore?.attemptActivityDetails?.(log)
       }
     };
   }
@@ -734,7 +722,7 @@
     const durationSeconds = Math.max(0, Math.round((Date.now() - session.startedAt) / 1000));
     const accuracy = Math.round((session.score / answeredCount) * 100);
     const completedSession = session;
-    const tabDetails = window.ProgressStore?.finishTabTracking() || {};
+    const tabDetails = window.ProgressStore?.finishTabTracking(answeredCount) || {};
     updateStreak();
 
     const log = {

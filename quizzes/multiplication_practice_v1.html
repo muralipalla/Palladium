@@ -555,7 +555,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -575,7 +575,7 @@
   <main>
     <section class="practice-card">
       <div class="quiz-panel">
-      <div data-quiz-timer></div>
+      <div data-quiz-timer data-quiz-target-seconds-per-question="30"></div>
         <section id="start-screen" class="screen active">
           <div class="challenge-badge">🚀 Day <span id="day-display">1</span> of 21</div>
           <h2 class="start-title">Ready for today’s practice?</h2>
@@ -722,9 +722,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const defaultTables = [3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     let selectedTables = new Set(defaultTables);
@@ -837,7 +837,7 @@
 
     function startGame() {
       generateQuestions();
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(questions.length);
 
       currentIndex = 0;
       correctCount = 0;
@@ -970,7 +970,7 @@
 
     function saveResult(speed, accuracy, count, bestStreakValue) {
       const history = JSON.parse(localStorage.getItem("multiplication_practice_history_v1") || "[]");
-      const tabDetails = window.ProgressStore?.finishTabTracking() || {};
+      const tabDetails = window.ProgressStore?.finishTabTracking(count) || {};
       const clientAttemptId = window.ProgressStore?.createAttemptId();
       const completedAt = new Date().toISOString();
 

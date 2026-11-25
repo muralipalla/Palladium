@@ -299,7 +299,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -344,9 +344,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const questions = [
       {
@@ -761,6 +761,8 @@
 
     function showResult() {
       quizActive = false;
+      const answeredCount = userAnswers.filter(answer => answer !== null).length;
+      const tabDetails = window.ProgressStore?.finishTabTracking(answeredCount) || {};
 
       document.getElementById("quizArea").style.display = "none";
       const resultArea = document.getElementById("resultArea");
@@ -822,8 +824,8 @@
           total: questions.length,
           details: {
             percent: Math.round(percentage),
-            answeredCount: userAnswers.filter(answer => answer !== null).length,
-            ...window.ProgressStore.finishTabTracking()
+            answeredCount,
+            ...tabDetails
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);
@@ -842,7 +844,7 @@
       checked = false;
       quizActive = true;
       cloudAttemptId = window.ProgressStore?.createAttemptId() || null;
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(questions.length);
 
       cheatCounter = 0;
       cheatLog = [];
@@ -857,7 +859,7 @@
       loadQuestion();
     }
 
-    window.addEventListener("DOMContentLoaded", () => window.ProgressStore?.startTabTracking());
+    window.addEventListener("DOMContentLoaded", () => window.ProgressStore?.startTabTracking(questions.length));
     loadQuestion();
   </script>
 </body>

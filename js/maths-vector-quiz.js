@@ -127,7 +127,7 @@
     current = 0;
     answers = Array(quiz.length).fill(null);
     cloudAttemptId = window.ProgressStore?.createAttemptId?.() || null;
-    window.ProgressStore?.startTabTracking();
+    window.ProgressStore?.startTabTracking(quiz.length);
 
     elements.resultScreen.hidden = true;
     elements.quizScreen.hidden = false;
@@ -219,7 +219,7 @@
             marksByLevel: { ...topic.marksByLevel },
             questionMarks: quiz.map(questionMarks)
           } : {}),
-          ...window.ProgressStore.finishTabTracking()
+          ...window.ProgressStore.finishTabTracking(quiz.length)
         }
       }).catch(error => {
         console.warn("Cloud progress could not be saved.", error);

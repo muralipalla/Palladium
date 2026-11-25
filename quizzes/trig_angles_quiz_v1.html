@@ -565,7 +565,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -730,9 +730,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const identities = [
       { deg: "sin(90° + θ)", rad: "sin(π/2 + θ)", ans: "cosθ" },
@@ -846,7 +846,7 @@
       answers = new Array(quiz.length).fill(null);
       current = 0;
       cloudAttemptId = window.ProgressStore?.createAttemptId() || null;
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(quiz.length);
 
       document.getElementById("modeStatus").textContent = angleMode === "degrees" ? "Degrees" : "Radians";
       feedbackEl.textContent = "";
@@ -912,6 +912,7 @@
         }
       }
 
+      const answeredCount = answers.filter(answer => answer !== null).length;
       const elapsed = window.QuizTimer?.finish().durationSeconds ?? null;
       const percent = Math.round((score / quiz.length) * 100);
 
@@ -926,8 +927,9 @@
           details: {
             percent,
             angleMode,
+            answeredCount,
             answerStyle: document.getElementById("answerStyle").value,
-            ...window.ProgressStore.finishTabTracking()
+            ...window.ProgressStore.finishTabTracking(answeredCount)
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

@@ -397,7 +397,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -538,9 +538,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const EMBEDDED_INDEX = {"schemaVersion":"2.0","title":"Palladium Question Bank Index","description":"Central index of available LaTeX JSON question banks.","banks":[{"id":"chapter1","title":"Chapter 1: Mole Concept","subject":"Chemistry","format":"latex","file":"../assets/data/question_banks/chapter1.json","description":"Mole concept, empirical formula, limiting reagent, POAC, equivalents, concentration terms, electrolysis, redox, n-factor, and titrations."}]};
     const EMBEDDED_BANKS = {"chapter1":[
@@ -8151,7 +8151,7 @@
       hintsEnabledForAttempt = document.getElementById("enableHints").checked;
 
       if (!createQuiz()) return;
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(currentQuiz.length);
 
       document.getElementById("setupArea").style.display = "none";
       document.getElementById("resultArea").style.display = "none";
@@ -8462,6 +8462,7 @@
       resultArea.style.display = "block";
 
       const statusObj = scoreQuestionStatus();
+      const tabDetails = window.ProgressStore?.finishTabTracking(statusObj.attempted) || {};
       const finalScore = statusObj.correct;
       const percentage = Math.round((finalScore / currentQuiz.length) * 100);
 
@@ -8549,7 +8550,7 @@
             percent: percentage,
             attempted: statusObj.attempted,
             markedForLater: marked,
-            ...window.ProgressStore.finishTabTracking(),
+            ...tabDetails,
             topicIds,
             difficulties,
             bankIds,
@@ -8589,7 +8590,7 @@
       document.getElementById("quizArea").style.display = "block";
 
       resetCheatLog();
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(currentQuiz.length);
       await loadQuestion();
     }
 

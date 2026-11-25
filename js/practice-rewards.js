@@ -3,8 +3,12 @@
 
   const dayMilliseconds = 86_400_000;
   const guestPrefix = "palladium_rewards_v1:";
-  const dayPrefix = `${guestPrefix}day:`;
   const challengePrefix = `${guestPrefix}challenge:`;
+  const dayPrefixes = {
+    days: `${guestPrefix}day:`,
+    focusedDays: `${guestPrefix}focus:`,
+    timedDays: `${guestPrefix}timed:`
+  };
   const weeklyGoal = 3;
   const badgeDefinitions = [
     { id: "challenge-solver", title: "Challenge Solver", rule: "Solve your first challenge problem.", symbol: "✦", metric: "challenges", target: 1 },
@@ -14,7 +18,9 @@
     { id: "three-in-a-row", title: "Three in a Row", rule: "Practise 3 days in a row.", symbol: "⚡", metric: "bestStreak", target: 3 },
     { id: "seven-strong", title: "Seven Strong", rule: "Practise 7 days in a row.", symbol: "★", metric: "bestStreak", target: 7 },
     { id: "two-weeks", title: "Two Weeks", rule: "Practise 14 days in a row.", symbol: "◆", metric: "bestStreak", target: 14 },
-    { id: "welcome-back", title: "Welcome Back", rule: "Practise again after taking a day or more away.", symbol: "↻", metric: "returned", target: 1 }
+    { id: "welcome-back", title: "Welcome Back", rule: "Practise again after taking a day or more away.", symbol: "↻", metric: "returned", target: 1 },
+    { id: "focused-finish", title: "Focused Finish", rule: "Answer every question while the quiz tab stays visible and focused.", symbol: "◎", metric: "focusedDays", target: 1, daily: true },
+    { id: "on-target", title: "On Target", rule: "Opt in to timing and finish every question within the displayed target.", symbol: "◷", metric: "timedDays", target: 1, daily: true }
   ];
 
   function calendarDay(timestamp = new Date()) {
@@ -34,11 +40,29 @@
     const day = Number.isInteger(details.practiceDay) ? details.practiceDay : completedAt && calendarDay(completedAt);
     if (!Number.isInteger(day)) return null;
     const ids = score > 0 && Array.isArray(details.challengeProblemIds) ? details.challengeProblemIds : [];
-    return { day, challenges: new Set(ids.filter(validChallengeId)) };
+    const { quizCompleted, focusMaintained, timerEnabled, durationSeconds, timeTargetSeconds } = details;
+    const focused = quizCompleted === true && focusMaintained === true;
+    const timed = quizCompleted === true && timerEnabled === true &&
+      Number.isInteger(timeTargetSeconds) && timeTargetSeconds > 0 &&
+      Number.isInteger(durationSeconds) && durationSeconds >= 0 && durationSeconds <= timeTargetSeconds;
+    return { day, challenges: new Set(ids.filter(validChallengeId)), focused, timed };
   }
 
-  function summarize({ days, challenges }, today) {
-    const orderedDays = [...days].filter(day => day <= today).sort((a, b) => a - b);
+  function emptyFacts() {
+    return { days: new Set(), challenges: new Set(), focusedDays: new Set(), timedDays: new Set() };
+  }
+
+  function addPractice(facts, practice) {
+    facts.days.add(practice.day);
+    for (const id of practice.challenges) facts.challenges.add(id);
+    if (practice.focused) facts.focusedDays.add(practice.day);
+    if (practice.timed) facts.timedDays.add(practice.day);
+  }
+
+  function summarize(facts, today) {
+    const { days, challenges, focusedDays, timedDays } = facts;
+    const throughToday = day => day <= today;
+    const orderedDays = [...days].filter(throughToday).sort((a, b) => a - b);
     let bestStreak = 0;
     let run = 0;
     let returned = 0;
@@ -54,50 +78,58 @@
       const day = today - 6 + index;
       return { date: new Date(day * dayMilliseconds), practiced: days.has(day) };
     });
-    const metrics = { practiceDays: orderedDays.length, bestStreak, challenges: challenges.size, returned };
+    const metrics = {
+      practiceDays: orderedDays.length, bestStreak, challenges: challenges.size, returned,
+      focusedDays: [...focusedDays].filter(throughToday).length,
+      timedDays: [...timedDays].filter(throughToday).length
+    };
     return {
       ...metrics,
       currentStreak: today - previousDay <= 1 ? run : 0,
       week,
       weeklyDays: week.filter(day => day.practiced).length,
-      points: 10 * metrics.practiceDays + 5 * metrics.challenges,
+      points: 10 * metrics.practiceDays + 5 * (metrics.challenges + metrics.focusedDays + metrics.timedDays),
       badges: badgeDefinitions.map(badge => ({
         ...badge,
         progress: Math.min(badge.target, metrics[badge.metric]),
-        earned: metrics[badge.metric] >= badge.target
+        earned: metrics[badge.metric] >= badge.target,
+        ...(badge.daily ? { earnedDays: metrics[badge.metric], earnedToday: facts[badge.metric].has(today) } : {})
       }))
     };
   }
 
   function readGuestFacts() {
-    const days = new Set();
-    const challenges = new Set();
+    const facts = emptyFacts();
     const storage = window.localStorage;
+    const dateKeys = Object.entries(dayPrefixes);
     for (let index = 0; index < storage.length; index++) {
       const key = storage.key(index);
-      if (key?.startsWith(dayPrefix)) {
-        const day = Number(key.slice(dayPrefix.length));
-        if (Number.isInteger(day)) days.add(day);
+      for (const [metric, prefix] of dateKeys) {
+        if (!key?.startsWith(prefix)) continue;
+        const day = Number(key.slice(prefix.length));
+        if (Number.isInteger(day)) facts[metric].add(day);
+        break;
       }
       if (key?.startsWith(challengePrefix)) {
         const id = key.slice(challengePrefix.length);
-        if (validChallengeId(id)) challenges.add(id);
+        if (validChallengeId(id)) facts.challenges.add(id);
       }
     }
-    return { days, challenges };
+    return facts;
   }
 
   function saveGuestFacts(practice) {
     // Individual keys make repeated writes idempotent across tabs.
-    window.localStorage.setItem(`${dayPrefix}${practice.day}`, "1");
-    for (const id of practice.challenges) window.localStorage.setItem(`${challengePrefix}${id}`, "1");
+    const storage = window.localStorage;
+    storage.setItem(`${dayPrefixes.days}${practice.day}`, "1");
+    for (const id of practice.challenges) storage.setItem(`${challengePrefix}${id}`, "1");
+    if (practice.focused) storage.setItem(`${dayPrefixes.focusedDays}${practice.day}`, "1");
+    if (practice.timed) storage.setItem(`${dayPrefixes.timedDays}${practice.day}`, "1");
   }
 
   async function readAccountFacts(ownerId, today, excludeAttemptId = null) {
-    const days = new Set();
-    const challenges = new Set();
-    const previousDays = new Set();
-    const previousChallenges = new Set();
+    const currentFacts = emptyFacts();
+    const previousFacts = excludeAttemptId ? emptyFacts() : null;
     const pageSize = 100;
     for (let offset = 0; ; offset += pageSize) {
       const attempts = await window.ProgressStore.listAttempts({ limit: pageSize, offset, expectedUserId: ownerId });
@@ -106,18 +138,14 @@
           quizId: row.quiz_id, score: row.score, total: row.total, completedAt: row.completed_at, details: row.details || {}
         });
         if (!practice) continue;
-        days.add(practice.day);
-        for (const id of practice.challenges) challenges.add(id);
-        if (excludeAttemptId && row.client_attempt_id !== excludeAttemptId) {
-          previousDays.add(practice.day);
-          for (const id of practice.challenges) previousChallenges.add(id);
-        }
+        addPractice(currentFacts, practice);
+        if (previousFacts && row.client_attempt_id !== excludeAttemptId) addPractice(previousFacts, practice);
       }
       if (attempts.length < pageSize) break;
     }
     return {
-      current: summarize({ days, challenges }, today),
-      previous: excludeAttemptId ? summarize({ days: previousDays, challenges: previousChallenges }, today) : null
+      current: summarize(currentFacts, today),
+      previous: previousFacts ? summarize(previousFacts, today) : null
     };
   }
 
@@ -200,12 +228,15 @@
       const points = current.points - previous.points;
       const badges = current.badges.filter((badge, index) => badge.earned && !previous.badges[index].earned);
       const goalReached = current.weeklyDays >= weeklyGoal && previous.weeklyDays < weeklyGoal;
+      const dailyReward = current.focusedDays > previous.focusedDays || current.timedDays > previous.timedDays;
       const message = [
         points > 0 ? `+${points} reward points` : "Practice recorded",
         current.currentStreak ? `${current.currentStreak}-day streak` : null,
+        practice.focused && !badges.some(badge => badge.id === "focused-finish") ? "Focused Finish" : null,
+        practice.timed && !badges.some(badge => badge.id === "on-target") ? "On Target" : null,
         goalReached ? "Weekly goal reached!" : null
       ].filter(Boolean).join(" · ");
-      renderResult(result, title, message, badges, badges.length > 0 || goalReached);
+      renderResult(result, title, message, badges, badges.length > 0 || goalReached || dailyReward);
     } catch {
       if (isCurrent()) renderResult(result, title, "Rewards could not be updated right now.");
     } finally {

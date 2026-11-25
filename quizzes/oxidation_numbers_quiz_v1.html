@@ -633,7 +633,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -820,9 +820,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const QUESTION_BANK = [
   {
@@ -2199,8 +2199,8 @@
 
     function startQuiz() {
       const filteredBank = getFilteredBank();
-      window.ProgressStore?.startTabTracking();
       const count = getQuestionCount(filteredBank);
+      window.ProgressStore?.startTabTracking(count);
 
       currentSet = shuffle(filteredBank).slice(0, count);
       currentIndex = 0;
@@ -2345,7 +2345,7 @@
 
     function saveResult(percent, scoreValue, total, filter) {
       const history = JSON.parse(localStorage.getItem("oxidation_numbers_quiz_history_v1") || "[]");
-      const tabDetails = window.ProgressStore?.finishTabTracking() || {};
+      const tabDetails = window.ProgressStore?.finishTabTracking(attemptLog.length) || {};
       const clientAttemptId = window.ProgressStore?.createAttemptId();
       const completedAt = new Date().toISOString();
 

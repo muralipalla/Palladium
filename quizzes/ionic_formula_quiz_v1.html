@@ -636,7 +636,7 @@
     gtag('config', 'G-97Q24MY5MH');
   </script>
   <link rel="stylesheet" href="../styles/quiz-timer.css?v=1">
-  <link rel="stylesheet" href="../css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="../css/practice-rewards.css?v=focus-rewards-1">
 </head>
 
 <body>
@@ -837,9 +837,9 @@
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="../js/supabase-client.js"></script>
-  <script defer src="../js/quiz-timer.js?v=1"></script>
-  <script defer src="../js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="../js/practice-rewards.js?v=1"></script>
+  <script defer src="../js/quiz-timer.js?v=focus-rewards-1"></script>
+  <script defer src="../js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="../js/practice-rewards.js?v=focus-rewards-1"></script>
   <script>
     const EMBEDDED_CSV = `Chemical Name,Chemical Formula
 Hydrogen Cation,H+
@@ -1236,7 +1236,7 @@ Aluminate,AlO2(-)`;
       }
 
       buildQuiz();
-      window.ProgressStore?.startTabTracking();
+      window.ProgressStore?.startTabTracking(currentQuiz.length);
       showScreen(quizScreen);
       showQuestion();
     }
@@ -1347,7 +1347,7 @@ Aluminate,AlO2(-)`;
           details: {
             percent: pct,
             mode: selectedMode,
-            ...window.ProgressStore.finishTabTracking()
+            ...window.ProgressStore.finishTabTracking(attemptLog.length)
           }
         }).catch(error => {
           console.warn("Cloud progress could not be saved.", error);

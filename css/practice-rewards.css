@@ -178,6 +178,8 @@
   list-style: none;
 }
 
+.rewards-focus-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+
 .rewards-badge {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

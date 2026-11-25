@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="See your Palladium practice streak, weekly goal, and challenge badges.">
+  <meta name="description" content="See your Palladium practice streak, weekly goal, focus rewards, and challenge badges.">
   <meta name="theme-color" content="#0f172a">
   <title>My Rewards | Palladium</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/account.css?v=timing-cleanup-1">
-  <link rel="stylesheet" href="css/practice-rewards.css?v=1">
+  <link rel="stylesheet" href="css/practice-rewards.css?v=focus-rewards-1">
 </head>
 <body class="account-page rewards-page">
   <header class="account-header">
@@ -63,6 +63,13 @@
         </dl>
       </div>
 
+      <section class="rewards-badges" aria-labelledby="focusTitle">
+        <div class="rewards-badges-heading">
+          <div><h2 id="focusTitle">Focus</h2><p>Each reward earns 5 points once per day.</p></div>
+        </div>
+        <ul class="rewards-badge-list rewards-focus-list" id="focusRewards"></ul>
+      </section>
+
       <section class="rewards-badges" aria-labelledby="badgesTitle">
         <div class="rewards-badges-heading">
           <div><h2 id="badgesTitle">Badges</h2><p id="badgeCount"></p></div>
@@ -76,14 +83,16 @@
       <summary>How rewards work</summary>
       <p>Earn 10 points on each practice day and 5 points for each different challenge problem you solve. A new practice day follows your local calendar.</p>
       <p>Challenge badges count correct answers on questions marked Hard, Advanced, Difficult, Maths Level 3, or Elite in Advanced Vocabulary. Saved quiz history counts toward streaks. Challenge solves count when recorded by the rewards feature.</p>
+      <p>Focus rewards track whether the quiz tab stays visible and focused, including new tabs opened from quiz links. A background tab opened elsewhere can go undetected.</p>
+      <p>The time target is 2 minutes per maths or science question and 30 seconds per multiplication or vocabulary item. The timer counts from the start of the quiz, including time away.</p>
     </details>
     <p id="rewardsSource" class="rewards-message" hidden></p>
   </main>
 
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.2/dist/umd/supabase.min.js"></script>
   <script defer src="js/supabase-client.js"></script>
-  <script defer src="js/progress-store.js?v=practice-rewards-1"></script>
-  <script defer src="js/practice-rewards.js?v=1"></script>
-  <script defer src="js/rewards-page.js?v=1"></script>
+  <script defer src="js/progress-store.js?v=focus-rewards-1"></script>
+  <script defer src="js/practice-rewards.js?v=focus-rewards-1"></script>
+  <script defer src="js/rewards-page.js?v=focus-rewards-1"></script>
 </body>
 </html>
